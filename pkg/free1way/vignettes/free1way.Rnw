@@ -5362,6 +5362,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, @\\
+\mbox{}\verb@                    blocks = blocks,@\\
 \mbox{}\verb@                    strata_ratio = strata_ratio, delta = delta, mu = mu,@\\
 \mbox{}\verb@                    sig.level = sig.level, link = link, @\\
 \mbox{}\verb@                    alternative = alternative, @\\
@@ -5416,8 +5417,9 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n), @\\
-\mbox{}\verb@                                alloc_ratio = 1, blocks = NCOL(prob), strata_ratio = 1, @\\
+\mbox{}\verb@power.free1way.test <- function(n = NULL, prob = if (is.null(n)) NULL else rep.int(1 / n, n), @\\
+\mbox{}\verb@                                alloc_ratio = 1, blocks = if (is.null(prob)) 1 else NCOL(prob), @\\
+\mbox{}\verb@                                strata_ratio = 1, @\\
 \mbox{}\verb@                                delta = NULL, mu = 0, sig.level = .05, power = NULL,@\\
 \mbox{}\verb@                                link = c("logit", "probit", "cloglog", "loglog"),@\\
 \mbox{}\verb@                                alternative = c("two.sided", "less", "greater"), @\\
@@ -5440,7 +5442,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \mbox{}\verb@             }, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)@\\
 \mbox{}\verb@    else if (is.null(delta)) {@\\
 \mbox{}\verb@        ### 2-sample only@\\
-\mbox{}\verb@        if (K != 2L)@\\
+\mbox{}\verb@        if (length(alloc_ratio) > 1L)@\\
 \mbox{}\verb@            stop(gettextf("Effect size can only computed for two sample problems in %s",@\\
 \mbox{}\verb@                          "power.free1way.test"),@\\
 \mbox{}\verb@                          domain = NA)@\\
@@ -5453,7 +5455,9 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \mbox{}\verb@        sig.level <- uniroot(function(sig.level) {@\\
 \mbox{}\verb@                @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb79a}{79a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@            }, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root@\\
-\mbox{}\verb@    @\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    ### n is available now@\\
+\mbox{}\verb@    if (is.null(prob)) prob <- rep(1 / n, n)@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape power setup}\nobreak\ {\footnotesize \NWlink{nuweb78a}{78a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize \NWlink{nuweb78b}{78b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\

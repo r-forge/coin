@@ -3096,6 +3096,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 @d power call
 @{
 power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
+                    blocks = blocks,
                     strata_ratio = strata_ratio, delta = delta, mu = mu,
                     sig.level = sig.level, link = link, 
                     alternative = alternative, 
@@ -3124,8 +3125,9 @@ class(ret) <- "power.htest"
 
 @d power
 @{
-power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n), 
-                                alloc_ratio = 1, blocks = NCOL(prob), strata_ratio = 1, 
+power.free1way.test <- function(n = NULL, prob = if (is.null(n)) NULL else rep.int(1 / n, n), 
+                                alloc_ratio = 1, blocks = if (is.null(prob)) 1 else NCOL(prob), 
+                                strata_ratio = 1, 
                                 delta = NULL, mu = 0, sig.level = .05, power = NULL,
                                 link = c("logit", "probit", "cloglog", "loglog"),
                                 alternative = c("two.sided", "less", "greater"), 
@@ -3148,7 +3150,7 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
              }, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)
     else if (is.null(delta)) {
         ### 2-sample only
-        if (K != 2L)
+        if (length(alloc_ratio) > 1L)
             stop(gettextf("Effect size can only computed for two sample problems in %s",
                           "power.free1way.test"),
                           domain = NA)
@@ -3161,7 +3163,9 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
         sig.level <- uniroot(function(sig.level) {
                 @<power call@>
             }, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
-    
+
+    ### n is available now
+    if (is.null(prob)) prob <- rep(1 / n, n)
     @<power setup@>
     @<estimate Fisher information@>
 
