@@ -172,7 +172,7 @@ proportional-odds models in this class is available in
 \value{
 An object of class \code{free1way} with corresponding \code{logLik},
 \code{coef} (which returns \eqn{\delta_k - \mu_k}, not \eqn{\delta_k}
-whenever \code{\mu != 0}), \code{vcov}, \code{summary}, and \code{confint} methods.
+whenever \code{mu != 0}), \code{vcov}, \code{summary}, and \code{confint} methods.
 }
 \references{
   \bibshow{*}
