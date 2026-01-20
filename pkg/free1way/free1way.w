@@ -2143,6 +2143,13 @@ if (!is.null(blocks)) {
 varnames <- varnames[varnames != "NULL"]
 @}
 
+Note that the return value of \code{unique} might differ between platforms.
+Because users can decide about the unique values in the vector \code{y} (by using
+\code{round} or \code{trunc}, for example), before calling this function, we
+refrain from handling this issue internally. However, we offer an
+\code{nbins} argument for binning response observations at sample quantiles 
+in the absence of right-censoring.
+
 @d free1way numeric
 @{
 free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, nbins = 0, 
@@ -2163,13 +2170,14 @@ free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = N
     } else {
         uy <- sort(unique(y))
     }
-    if (nbins && nbins < length(uy)) {
+    if (nbins && nbins < length(uy) && is.null(event)) {
         nbins <- ceiling(nbins)
         breaks <- c(-Inf, quantile(y, probs = seq_len(nbins) / (nbins + 1L)), Inf)
     } else {
         breaks <- c(-Inf, uy, Inf)
     }
-    r <- cut(y, breaks = breaks, ordered_result = TRUE)[, drop = TRUE]
+    r <- ordered(cut(y, breaks = breaks, ordered_result = TRUE, 
+                     labels = FALSE)) ### avoids costly formatC call
     RVAL <- free1way(y = r, groups = groups, blocks = blocks, 
                      event = event, weights = weights, 
                      varnames = varnames, ...)
