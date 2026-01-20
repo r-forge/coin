@@ -1506,7 +1506,7 @@ free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = N
         breaks <- c(-Inf, uy, Inf)
     }
     r <- ordered(cut(y, breaks = breaks, ordered_result = TRUE, 
-                     labels = FALSE))# [, drop = TRUE]
+                     labels = FALSE)) ### avoids costly formatC call
     RVAL <- free1way(y = r, groups = groups, blocks = blocks, 
                      event = event, weights = weights, 
                      varnames = varnames, ...)

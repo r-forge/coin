@@ -4251,7 +4251,7 @@ in the absence of right-censoring.
 \mbox{}\verb@        breaks <- c(-Inf, uy, Inf)@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    r <- ordered(cut(y, breaks = breaks, ordered_result = TRUE, @\\
-\mbox{}\verb@                     labels = FALSE))# [, drop = TRUE]@\\
+\mbox{}\verb@                     labels = FALSE)) ### avoids costly formatC call@\\
 \mbox{}\verb@    RVAL <- free1way(y = r, groups = groups, blocks = blocks, @\\
 \mbox{}\verb@                     event = event, weights = weights, @\\
 \mbox{}\verb@                     varnames = varnames, ...)@\\
