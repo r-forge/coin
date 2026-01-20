@@ -54,7 +54,8 @@ free1way(y, ...)
     the presence of right-censoring, uniquely observed event times define
     the breaks. For large sample sizes with many unique observations,
     limiting the number of bins to less than 100, say, dramatically reduces
-    computation time while producing almost the same results as the default.}
+    computation time while producing almost the same results as the default.
+    The latter option is only available in the absence of right-censoring.}
   \item{groups}{a grouping factor with at least two non-empty levels.}
   \item{blocks}{a stratification factor, optional.}
   \item{event}{a logical vector representing events (\code{TRUE}) and
@@ -184,6 +185,13 @@ friedman.test(extra ~ group | ID, data = sleep)
 ft <- free1way(extra ~ group | ID, data = sleep)
 print(ft)
 summary(ft)
+
+### Mantel-Haenszel test
+mantelhaen.test(UCBAdmissions, correct = FALSE)
+mh <- free1way(UCBAdmissions)
+print(mh)
+exp(coef(mh))
+exp(confint(mh, test = "Rao"))
 
 ### Kruskal-Wallis test
 kruskal.test(Ozone ~ Month, data = airquality)
