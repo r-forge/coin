@@ -1499,13 +1499,14 @@ free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = N
     } else {
         uy <- sort(unique(y))
     }
-    if (nbins && nbins < length(uy)) {
+    if (nbins && nbins < length(uy) && is.null(event)) {
         nbins <- ceiling(nbins)
         breaks <- c(-Inf, quantile(y, probs = seq_len(nbins) / (nbins + 1L)), Inf)
     } else {
         breaks <- c(-Inf, uy, Inf)
     }
-    r <- cut(y, breaks = breaks, ordered_result = TRUE)[, drop = TRUE]
+    r <- ordered(cut(y, breaks = breaks, ordered_result = TRUE, 
+                     labels = FALSE))# [, drop = TRUE]
     RVAL <- free1way(y = r, groups = groups, blocks = blocks, 
                      event = event, weights = weights, 
                      varnames = varnames, ...)
