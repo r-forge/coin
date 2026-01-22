@@ -1266,10 +1266,18 @@ chi-squared = 1.06, df = 2, p-value = 0.59
 
 > example(friedman.test, echo = FALSE)
 
-> rt <- expand.grid(str = gl(22, 1), trt = gl(3, 1, 
-+     labels = c("Round Out", "Narrow Angle", "Wide Angle")))
+> boxplot(RoundingTimes, xlab = "Method", ylab = "Rounding-First-Base Time", 
++     las = 1)
 
-> rt$tm <- c(RoundingTimes)
+> matplot(t(RoundingTimes), add = TRUE, type = "l", 
++     lty = 1, lwd = 2, col = rgb(0.1, 0.1, 0.1, 0.1))
+
+> me <- colnames(RoundingTimes)
+
+> d <- expand.grid(me = factor(me, labels = me, levels = me), 
++     id = factor(seq_len(nrow(RoundingTimes))))
+
+> d$time <- c(t(RoundingTimes))
 
 > friedman.test(RoundingTimes)
 
@@ -1279,13 +1287,13 @@ data:  RoundingTimes
 Friedman chi-squared = 11.1, df = 2, p-value = 0.0038
 
 
-> (ft <- free1way(tm ~ trt | str, data = rt))
+> (ft <- free1way(time ~ me | id, data = d))
 
 	Stratified 3-sample Kruskal-Wallis test against proportional odds
 	alternatives
 
-data:  tm by trt (Round Out, Narrow Angle, Wide Angle) 
-	 stratified by str
+data:  time by me (Round Out, Narrow Angle, Wide Angle) 
+	 stratified by id
 Perm chi-squared = 11.1, df = 2, p-value = 0.0038
 alternative hypothesis: true log-odds ratio is not equal to 0
 
@@ -1293,12 +1301,40 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 > summary(ft)
 
 Call:
-free1way.formula(formula = tm ~ trt | str, data = rt)
+free1way.formula(formula = time ~ me | id, data = d)
 
 Coefficients:
-                log-odds ratio Std. Error z value P(>|z|)
-trtNarrow Angle         -1.265      0.683  -1.854    0.06
-trtWide Angle           -3.289      0.794  -4.144    0.00
+               log-odds ratio Std. Error z value P(>|z|)
+meNarrow Angle         -1.265      0.683  -1.854    0.06
+meWide Angle           -3.289      0.794  -4.144    0.00
+
+> library("multcomp")
+
+> glht(ft, linfct = mcp(me = "Tukey"))
+
+	 General Linear Hypotheses
+
+Multiple Comparisons of Means: Tukey Contrasts
+
+
+Linear Hypotheses:
+                               Estimate
+Narrow Angle - Round Out == 0     -1.27
+Wide Angle - Round Out == 0       -3.29
+Wide Angle - Narrow Angle == 0    -2.02
+
+
+> logLik(ft)
+[1] -55.857
+
+> logLik(free1way(time ~ me | id, data = d, link = "probit"))
+[1] -56.579
+
+> logLik(free1way(time ~ me | id, data = d, link = "cloglog"))
+[1] -53.993
+
+> logLik(free1way(time ~ me | id, data = d, link = "loglog"))
+[1] -55.624
 
 > tk <- free1way(Ozone ~ Month, data = airquality)
 
@@ -1712,4 +1748,4 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 32.913   0.167  33.103 
+ 36.087   0.156  36.243 
