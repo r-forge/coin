@@ -181,10 +181,17 @@ whenever \code{mu != 0}), \code{vcov}, \code{summary}, and \code{confint} method
 \examples{
 
 ### Friedman test
-friedman.test(extra ~ group | ID, data = sleep)
-ft <- free1way(extra ~ group | ID, data = sleep)
+example(friedman.test, echo = FALSE)
+me <- colnames(RoundingTimes)
+d <- expand.grid(me = factor(me, labels = me, levels = me),
+                 id = factor(seq_len(nrow(RoundingTimes))))
+d$time <- c(t(RoundingTimes))
+friedman.test(RoundingTimes)
+ft <- free1way(time ~ me | id, data = d)
 print(ft)
 summary(ft)
+coef(ft)
+confint(ft, test = "Wald")
 
 ### Mantel-Haenszel test
 mantelhaen.test(UCBAdmissions, correct = FALSE)
