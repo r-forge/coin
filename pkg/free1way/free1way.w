@@ -2407,34 +2407,34 @@ confint.free1way <- function(object, parm,
         parm <- seq_along(cf)
 
     CINT <- confint.default(object, level = level)
-    if (test == "Wald")
-        return(CINT)
-    wlevel <- level
-    wlevel <- 1 - (1 - level) / 10
-    CINT[] <- confint.default(object, level = wlevel)
+    if (test != "Wald") {
+        wlevel <- level
+        wlevel <- 1 - (1 - level) / 10
+        CINT[] <- confint.default(object, level = wlevel)
 
-    sfun <- function(value, parm, quantile) {
-        x <- object
-        alternative <- "two.sided"
-        tol <- .Machine$double.eps
-        @<statistics@>
-        ### we also could invert p-values, but the
-        ### p-value function might be discrete for permutation
-        ### tests, in contrast to the test statistic
-        return(STATISTIC - quantile)
-    }
+        sfun <- function(value, parm, quantile) {
+            x <- object
+            alternative <- "two.sided"
+            tol <- .Machine$double.eps
+            @<statistics@>
+            ### we also could invert p-values, but the
+            ### p-value function might be discrete for permutation
+            ### tests, in contrast to the test statistic
+            return(STATISTIC - quantile)
+        }
 
-    if (test == "Permutation") {
-        @<permutation confint@>
-    } else {
-        qu <- rep.int(qchisq(level, df = 1), 2) ### always two.sided
-    }
+        if (test == "Permutation") {
+            @<permutation confint@>
+        } else {
+            qu <- rep.int(qchisq(level, df = 1), 2) ### always two.sided
+        }
 
-    for (p in parm) {
-        CINT[p, 1] <- uniroot(sfun, interval = c(CINT[p,1], cf[p]), 
-                              parm = p, quantile = qu[2])$root
-        CINT[p, 2] <- uniroot(sfun, interval = c(cf[p], CINT[p, 2]), 
-                              parm = p, quantile = qu[1])$root
+        for (p in parm) {
+            CINT[p, 1] <- uniroot(sfun, interval = c(CINT[p,1], cf[p]), 
+                                  parm = p, quantile = qu[2])$root
+            CINT[p, 2] <- uniroot(sfun, interval = c(cf[p], CINT[p, 2]), 
+                                  parm = p, quantile = qu[1])$root
+        }
     }
 
     what <- match.arg(what)
@@ -2681,17 +2681,43 @@ independence_test(y ~ g | s, data = nd, ytrafo = function(...)
 
 Each observation is a block
 
-<<friedman>>=
+\begin{figure}
+<<friedman-data, fig = TRUE>>=
 example(friedman.test, echo = FALSE)
-rt <- expand.grid(str = gl(22, 1),
-                  trt = gl(3, 1, labels = c("Round Out", 
-                                            "Narrow Angle", 
-                                            "Wide Angle")))
-rt$tm <- c(RoundingTimes)
-friedman.test(RoundingTimes)
-(ft <- free1way(tm ~ trt | str, data = rt))
-summary(ft)
+
+### Myles Hollander & Wolfe (2014, Example 7.1, page 294)
+boxplot(RoundingTimes, xlab = "Method", ylab = "Rounding-First-Base Time", 
+        las = 1)
+matplot(t(RoundingTimes), add = TRUE, type = "l", 
+        lty = 1, lwd = 2, col = rgb(.1, .1, .1, .1))
+
+me <- colnames(RoundingTimes)
+d <- expand.grid(me = factor(me, labels = me, levels = me),
+                 id = factor(seq_len(nrow(RoundingTimes))))
+d$time <- c(t(RoundingTimes))
 @@
+\caption{Rounding-first-base time data.}
+\end{figure}
+
+<<friedman>>=
+friedman.test(RoundingTimes)
+(ft <- free1way(time ~ me | id, data = d))
+@@
+
+<<friedman-add>>=
+summary(ft)
+library("multcomp")
+glht(ft, linfct = mcp(me = "Tukey"))
+@@
+
+<<friedman-link>>=
+logLik(ft)
+logLik(free1way(time ~ me | id, data = d, link = "probit"))
+logLik(free1way(time ~ me | id, data = d, link = "cloglog"))
+logLik(free1way(time ~ me | id, data = d, link = "loglog"))
+@@
+
+Maybe proportional-hazards model better?
 
 \section{Contrast Tests}
 
