@@ -1266,122 +1266,122 @@ confint.free1way <- function(object, parm,
         parm <- seq_along(cf)
 
     CINT <- confint.default(object, level = level)
-    if (test == "Wald")
-        return(CINT)
-    wlevel <- level
-    wlevel <- 1 - (1 - level) / 10
-    CINT[] <- confint.default(object, level = wlevel)
+    if (test != "Wald") {
+        wlevel <- level
+        wlevel <- 1 - (1 - level) / 10
+        CINT[] <- confint.default(object, level = wlevel)
 
-    sfun <- function(value, parm, quantile) {
-        x <- object
-        alternative <- "two.sided"
-        tol <- .Machine$double.eps
-        # statistics
-        
-        if (test == "Wald") {
-            # Wald statistic
+        sfun <- function(value, parm, quantile) {
+            x <- object
+            alternative <- "two.sided"
+            tol <- .Machine$double.eps
+            # statistics
             
-            if (alternative == "two.sided") {
-                STATISTIC <- c("Wald chi-squared" = c(crossprod(cf, x$hessian %*% cf)))
-                DF <- c("df" = length(parm))
-                PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
-            } else {
-                STATISTIC <- c("Wald Z" = unname(c(cf * sqrt(c(x$hessian)))))
-                PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
-            }
-            
-        } else if (test == "LRT") {
-            # LRT
-            
-            par <- x$par
-            par[parm] <- value
-            unll <- x$value ### neg logLik
-            rnll <- x$profile(par, parm)$value ### neg logLik
-            STATISTIC <- c("logLR chi-squared" = - 2 * (unll - rnll))
-            DF <- c("df" = length(parm))
-            PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
-            
-        } else if (test == "Rao") {
-            # Rao
-            
-            par <- x$par
-            par[parm] <- value
-            ret <- x$profile(par, parm)
-            if (alternative == "two.sided") {
-                STATISTIC <- c("Rao chi-squared" = c(crossprod(ret$negscore, ret$vcov %*% ret$negscore)))
-                DF <- c("df" = length(parm))
-                PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
-            } else {
-                STATISTIC <- c("Rao Z" = unname(- ret$negscore * sqrt(c(ret$vcov))))
-                PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
-            }
-            
-        } else if (test == "Permutation") {
-            # Permutation statistics
-            
-            par <- x$par
-            par[parm] <- value
-            ret <- x$profile(par, parm)
-            sc <- - ret$negscore
-            if (length(cf) == 1L)
-                sc <- sc / sqrt(c(ret$hessian))
-            if (!is.null(x$exact)) {
-                STATISTIC = c("W" = sc)
-            } else {
-                Esc <- sc - x$perm$Expectation
-
-                if (alternative == "two.sided" && length(cf) > 1L) {
-                    STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))
+            if (test == "Wald") {
+                # Wald statistic
+                
+                if (alternative == "two.sided") {
+                    STATISTIC <- c("Wald chi-squared" = c(crossprod(cf, x$hessian %*% cf)))
+                    DF <- c("df" = length(parm))
+                    PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
                 } else {
-                    STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))
+                    STATISTIC <- c("Wald Z" = unname(c(cf * sqrt(c(x$hessian)))))
+                    PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
+                }
+                
+            } else if (test == "LRT") {
+                # LRT
+                
+                par <- x$par
+                par[parm] <- value
+                unll <- x$value ### neg logLik
+                rnll <- x$profile(par, parm)$value ### neg logLik
+                STATISTIC <- c("logLR chi-squared" = - 2 * (unll - rnll))
+                DF <- c("df" = length(parm))
+                PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
+                
+            } else if (test == "Rao") {
+                # Rao
+                
+                par <- x$par
+                par[parm] <- value
+                ret <- x$profile(par, parm)
+                if (alternative == "two.sided") {
+                    STATISTIC <- c("Rao chi-squared" = c(crossprod(ret$negscore, ret$vcov %*% ret$negscore)))
+                    DF <- c("df" = length(parm))
+                    PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
+                } else {
+                    STATISTIC <- c("Rao Z" = unname(- ret$negscore * sqrt(c(ret$vcov))))
+                    PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
+                }
+                
+            } else if (test == "Permutation") {
+                # Permutation statistics
+                
+                par <- x$par
+                par[parm] <- value
+                ret <- x$profile(par, parm)
+                sc <- - ret$negscore
+                if (length(cf) == 1L)
+                    sc <- sc / sqrt(c(ret$hessian))
+                if (!is.null(x$exact)) {
+                    STATISTIC = c("W" = sc)
+                } else {
+                    Esc <- sc - x$perm$Expectation
+
+                    if (alternative == "two.sided" && length(cf) > 1L) {
+                        STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))
+                    } else {
+                        STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))
+                    }
+                }
+                
+            }
+            
+            ### we also could invert p-values, but the
+            ### p-value function might be discrete for permutation
+            ### tests, in contrast to the test statistic
+            return(STATISTIC - quantile)
+        }
+
+        if (test == "Permutation") {
+            # permutation confint
+            
+            if (length(cf) > 1L)
+                stop("Permutation confidence intervals only available for two sample comparisons")
+            if (!is.null(object$exact)) {
+                qu <- c(object$exact$qle(1 - conf.level),
+                        object$exact$qgr(1 - conf.level))
+            } else {
+                if (is.null(object$perm$permStat)) {
+                    qu <- qnorm(conf.level) * c(-1, 1)
+                } else {
+                    .pq <- function(s, alpha) {
+                        su <- sort(unique(s)) 
+                        ### F = P(T <= t), S = P(T >= t)
+                        Fs <- cumsum(st <- table(match(s, su)))
+                        Ss <- length(s) - Fs + st
+                        c(max(su[Fs <= alpha * length(s)]),
+                          min(su[Ss <= alpha * length(s)]))
+                    }
+                    ### cf PVAL computation!!!
+                    rs <- object$perm$permStat
+                    qu <- .pq(round(rs, 10), alpha = 1 - conf.level)
+                    att.level <- mean(rs > qu[1] & rs < qu[2])
+                    attr(CINT, "Attained level") <- att.level
                 }
             }
             
-        }
-        
-        ### we also could invert p-values, but the
-        ### p-value function might be discrete for permutation
-        ### tests, in contrast to the test statistic
-        return(STATISTIC - quantile)
-    }
-
-    if (test == "Permutation") {
-        # permutation confint
-        
-        if (length(cf) > 1L)
-            stop("Permutation confidence intervals only available for two sample comparisons")
-        if (!is.null(object$exact)) {
-            qu <- c(object$exact$qle(1 - conf.level),
-                    object$exact$qgr(1 - conf.level))
         } else {
-            if (is.null(object$perm$permStat)) {
-                qu <- qnorm(conf.level) * c(-1, 1)
-            } else {
-                .pq <- function(s, alpha) {
-                    su <- sort(unique(s)) 
-                    ### F = P(T <= t), S = P(T >= t)
-                    Fs <- cumsum(st <- table(match(s, su)))
-                    Ss <- length(s) - Fs + st
-                    c(max(su[Fs <= alpha * length(s)]),
-                      min(su[Ss <= alpha * length(s)]))
-                }
-                ### cf PVAL computation!!!
-                rs <- object$perm$permStat
-                qu <- .pq(round(rs, 10), alpha = 1 - conf.level)
-                att.level <- mean(rs > qu[1] & rs < qu[2])
-                attr(CINT, "Attained level") <- att.level
-            }
+            qu <- rep.int(qchisq(level, df = 1), 2) ### always two.sided
         }
-        
-    } else {
-        qu <- rep.int(qchisq(level, df = 1), 2) ### always two.sided
-    }
 
-    for (p in parm) {
-        CINT[p, 1] <- uniroot(sfun, interval = c(CINT[p,1], cf[p]), 
-                              parm = p, quantile = qu[2])$root
-        CINT[p, 2] <- uniroot(sfun, interval = c(cf[p], CINT[p, 2]), 
-                              parm = p, quantile = qu[1])$root
+        for (p in parm) {
+            CINT[p, 1] <- uniroot(sfun, interval = c(CINT[p,1], cf[p]), 
+                                  parm = p, quantile = qu[2])$root
+            CINT[p, 2] <- uniroot(sfun, interval = c(cf[p], CINT[p, 2]), 
+                                  parm = p, quantile = qu[1])$root
+        }
     }
 
     what <- match.arg(what)
