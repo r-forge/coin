@@ -6,9 +6,9 @@
 > .table2list <- function(x) {
 +     dx <- dim(x)
 +     if (length(dx) == 1) 
-+         stop("")
++         stop("Incorrect dimensions")
 +     if (length(dx) == 2) 
-+         x <- as.table(a .... [TRUNCATED] 
++     .... [TRUNCATED] 
 
 > .nll <- function(parm, x, mu = 0, rightcensored = FALSE) {
 +     bidx <- seq_len(ncol(x) - 1)
@@ -1748,4 +1748,4 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 36.641   0.128  36.804 
+ 34.786   0.155  34.948 
