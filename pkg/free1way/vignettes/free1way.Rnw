@@ -4401,7 +4401,9 @@ some special cases (\code{wilcox,kruskal,friedman.test}):
 \mbox{}\verb@    ### global@\\
 \mbox{}\verb@    cf <- coef(x)@\\
 \mbox{}\verb@    if ((length(cf) > 1L || test == "LRT") && alternative != "two.sided") @\\
-\mbox{}\verb@        stop("Cannot compute one-sided p-values")@\\
+\mbox{}\verb@        stop(gettextf("Cannot compute one-sided p-values in %sError computing the Hessian in %s",@\\
+\mbox{}\verb@                      "free1way"),@\\
+\mbox{}\verb@                     domain = NA)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    DF <- NULL@\\
 \mbox{}\verb@    parm <- seq_along(cf)@\\
@@ -4503,7 +4505,9 @@ the confidence intervals will be in line with one- and two-sided p-values:
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@if (length(cf) > 1L)@\\
-\mbox{}\verb@    stop("Permutation confidence intervals only available for two sample comparisons")@\\
+\mbox{}\verb@    stop(gettextf("Permutation confidence intervals only available for 2-sample comparisons in %s",@\\
+\mbox{}\verb@                  "confint.free1way"),@\\
+\mbox{}\verb@         domain = NA)@\\
 \mbox{}\verb@if (!is.null(object$exact)) {@\\
 \mbox{}\verb@    qu <- c(object$exact$qle(1 - conf.level),@\\
 \mbox{}\verb@            object$exact$qgr(1 - conf.level))@\\
@@ -4538,10 +4542,118 @@ the confidence intervals will be in line with one- and two-sided p-values:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 The \code{confint} method starts with Wald intervals, which are either returned or used as starting
-values for the inversion:
+values for the inversion. We start with the lower bound. Sometimes (for
+example in case of complete separation), the information is very low so the
+Wald intervals are extremely wide and the profile log-likelihood cannot be
+computed. So we try to make the starting interval wider in a step-wise
+manner. However, this may still fail and we thus exit gently, returning
+\code{NA} and issuing a warning.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap57}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape confint lower}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@CINT[p,1] <- max(CINT[p, 1], cf[p] - 1)@\\
+\mbox{}\verb@sdlwr <- sign(sfun(cf[p], parm = p, quantile = qu[2]))@\\
+\mbox{}\verb@slwr <- try(sfun(CINT[p,1], parm = p, quantile = qu[2]))@\\
+\mbox{}\verb@k <- 1@\\
+\mbox{}\verb@if (inherits(slwr, "try-error")) {@\\
+\mbox{}\verb@    CINT[p,1] <- NA@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    while ((is.na(slwr) || @\\
+\mbox{}\verb@            sign(slwr) == sdlwr) && k < 30) {@\\
+\mbox{}\verb@        CINT[p,1] <- CINT[p,1] - 1@\\
+\mbox{}\verb@        slwr <- try(sfun(CINT[p,1], parm = p, quantile = qu[2]))@\\
+\mbox{}\verb@        if (inherits(slwr, "try-error")) {@\\
+\mbox{}\verb@            CINT[p,1] <- NA@\\
+\mbox{}\verb@            break()@\\
+\mbox{}\verb@        }@\\
+\mbox{}\verb@        k <- k + 1@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@if (k == 30) {@\\
+\mbox{}\verb@    CINT[p,1] <- NA@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    lwr <- try(uniroot(sfun, interval = c(CINT[p,1], cf[p]), @\\
+\mbox{}\verb@                       parm = p, quantile = qu[2])$root)@\\
+\mbox{}\verb@    if (inherits(lwr, "try-error")) {@\\
+\mbox{}\verb@        CINT[p,1] <- NA@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        CINT[p,1] <- lwr@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@if (is.na(CINT[p,1]))@\\
+\mbox{}\verb@    warning(gettextf("Failed to compute confidence interval in %s",@\\
+\mbox{}\verb@                     "confint.free1way"),@\\
+\mbox{}\verb@            domain = NA)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+The upper bound works in the very same way.
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap58}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape confint upper}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@CINT[p,2] <- min(CINT[p, 2], cf[p] + 1)@\\
+\mbox{}\verb@sdupr <- sign(sfun(cf[p], parm = p, quantile = qu[1]))@\\
+\mbox{}\verb@supr <- try(sfun(CINT[p,2], parm = p, quantile = qu[1]))@\\
+\mbox{}\verb@k <- 1@\\
+\mbox{}\verb@if (inherits(supr, "try-error")) {@\\
+\mbox{}\verb@    CINT[p,2] <- NA@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    while ((is.na(supr) || @\\
+\mbox{}\verb@            sign(supr) == sdupr) && k < 30) {@\\
+\mbox{}\verb@        CINT[p,2] <- CINT[p,2] + 1@\\
+\mbox{}\verb@        supr <- try(sfun(CINT[p,2], parm = p, quantile = qu[1]))@\\
+\mbox{}\verb@        if (inherits(supr, "try-error")) {@\\
+\mbox{}\verb@            CINT[p,2] <- NA@\\
+\mbox{}\verb@            break()@\\
+\mbox{}\verb@        }@\\
+\mbox{}\verb@        k <- k + 1@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@if (k == 30) {@\\
+\mbox{}\verb@    CINT[p,2] <- NA @\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    upr <- try(uniroot(sfun, interval = c(cf[p], CINT[p, 2]), @\\
+\mbox{}\verb@                       parm = p, quantile = qu[1])$root)@\\
+\mbox{}\verb@    if (inherits(upr, "try-error")) {@\\
+\mbox{}\verb@        CINT[p, 2] <- NA@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        CINT[p, 2] <- upr@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@if (is.na(CINT[p,2]))@\\
+\mbox{}\verb@    warning(gettextf("Failed to compute confidence interval in %s",@\\
+\mbox{}\verb@                     "confint.free1way"),@\\
+\mbox{}\verb@            domain = NA)@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap59}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way confint}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4561,7 +4673,7 @@ values for the inversion:
 \mbox{}\verb@    CINT <- confint.default(object, level = level)@\\
 \mbox{}\verb@    if (test != "Wald") {@\\
 \mbox{}\verb@        wlevel <- level@\\
-\mbox{}\verb@        wlevel <- 1 - (1 - level) / 10@\\
+\mbox{}\verb@        wlevel <- 1 - (1 - level) / 2@\\
 \mbox{}\verb@        CINT[] <- confint.default(object, level = wlevel)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@        sfun <- function(value, parm, quantile) {@\\
@@ -4582,10 +4694,8 @@ values for the inversion:
 \mbox{}\verb@        }@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@        for (p in parm) {@\\
-\mbox{}\verb@            CINT[p, 1] <- uniroot(sfun, interval = c(CINT[p,1], cf[p]), @\\
-\mbox{}\verb@                                  parm = p, quantile = qu[2])$root@\\
-\mbox{}\verb@            CINT[p, 2] <- uniroot(sfun, interval = c(cf[p], CINT[p, 2]), @\\
-\mbox{}\verb@                                  parm = p, quantile = qu[1])$root@\\
+\mbox{}\verb@            @\hbox{$\langle\,${\itshape confint lower}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@            @\hbox{$\langle\,${\itshape confint upper}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
@@ -4905,7 +5015,7 @@ confidence \emph{band} can be obtained from a confidence \emph{interval} for
 $\delta_2$. The PP-plot is, up to rescalings, identical to the ROC curve.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap58}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap60}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ROC bands}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4949,7 +5059,7 @@ corresponding model-based \citep{SewakHothorn2023} probability-probability plot,
 the latter for a certain choice of link function:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap59}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap61}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ppplot}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5045,7 +5155,7 @@ observations by the same quantile function changes the outcome distributions
 but not the shift effects.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap60}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap62}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape design args}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5076,7 +5186,7 @@ but not the shift effects.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap61}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap63}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape rfree1way}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5193,7 +5303,7 @@ essence, we draw samples from the multinomial distribution after computing
 the relevant discrete density.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap62}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap64}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5272,7 +5382,7 @@ directly. Nevertheless, this is a random experiment, so we first make
 computations reproducible:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap63}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap65}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape random seed}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5299,7 +5409,7 @@ computations reproducible:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap64}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap66}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power setup}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5346,7 +5456,7 @@ $1000$) and adjust the obtained Fisher information accordingly to reduce
 sampling error.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap65}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap67}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5390,7 +5500,7 @@ control:treatment = 1:2) and the sample size ratios between strata.
 The treatment effects are contained in $K - 1$ vector \code{delta}:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap66}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap68}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power call}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5413,7 +5523,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap67}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap69}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power htest output}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5446,7 +5556,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap68}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap70}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5720,6 +5830,8 @@ free1way(y ~ w, link = "probit", correctFirth = TRUE)
 
 {\small\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item $\langle\,$cloglog\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$confint lower\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$confint upper\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$density prob ratio\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
 \item $\langle\,$design args\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.

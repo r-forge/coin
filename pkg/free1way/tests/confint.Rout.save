@@ -77,13 +77,13 @@ Wald chi-squared
 > 
 > (ci <- confint(ft, test = "LRT", level = level))
         5 %   95 %
-w2 -0.54758 1.5797
+w2 -0.54755 1.5797
 > summary(ft12 <- free1way(y ~ w, mu = ci[1]), test = "LRT")$p.value
 logLR chi-squared 
-              0.1 
+          0.10001 
 > summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "LRT")$p.value
 logLR chi-squared 
-              0.1 
+         0.099993 
 > 
 > all.equal(ci, confint(ft12, test = "LRT", level = level) + ci[1],
 +           tolerance = tol)
@@ -95,13 +95,13 @@ logLR chi-squared
 > 
 > (ci <- confint(ft, test = "Rao", level = level))
         5 %   95 %
-w2 -0.54237 1.5555
+w2 -0.54235 1.5555
 > summary(ft12 <- free1way(y ~ w, mu = ci[1]), test = "Rao")$p.value
 Rao chi-squared 
-            0.1 
+        0.10001 
 > summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "Rao")$p.value
 Rao chi-squared 
-            0.1 
+        0.10001 
 > 
 > all.equal(ci, confint(ft12, test = "Rao", level = level) + ci[1],
 +           tolerance = tol)
@@ -240,4 +240,4 @@ attr(,"Attained level")
 > 
 > proc.time()
    user  system elapsed 
-  2.625   0.068   2.689 
+  3.078   0.068   3.142 

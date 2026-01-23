@@ -252,7 +252,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
       2.5 % 97.5 %
-xB -0.15036  1.292
+xB -0.15037 1.2921
 attr(,"Attained level")
 [1] 0.9527
 > 
@@ -360,7 +360,7 @@ alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
       2.5 % 97.5 %
-xB -0.26358  1.055
+xB -0.26357  1.055
 attr(,"Attained level")
 [1] 0.9535
 > 
@@ -445,7 +445,7 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
 
 > confint(ft, test = "Rao")
       2.5 % 97.5 %
-xB -0.16683  1.069
+xB -0.16682  1.069
 > perm_test(m, parm = "xB", distribution = approximate(nresample = 10000))
 
 	Approximative Permutation Transformation Score Test
@@ -476,4 +476,4 @@ attr(,"Attained level")
 > 
 > proc.time()
    user  system elapsed 
-  3.966   0.088   4.049 
+  4.318   0.084   4.401 

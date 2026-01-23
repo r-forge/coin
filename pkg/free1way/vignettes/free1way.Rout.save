@@ -603,13 +603,13 @@ C -0.93558 1.3451
 
 > confint(ft, test = "Rao")
      2.5 % 97.5 %
-B -1.09074 1.1954
-C -0.92071 1.3301
+B -1.09075 1.1954
+C -0.92072 1.3301
 
 > confint(ft, test = "LRT")
-     2.5 % 97.5 %
-B -1.11126 1.2205
-C -0.93869 1.3573
+    2.5 % 97.5 %
+B -1.1113 1.2205
+C -0.9387 1.3573
 
 > N <- 25
 
@@ -828,9 +828,9 @@ GenderFemale 0.77234 1.0603
 
 > exp(sapply(dimnames(UCBAdmissions)[[3]], function(dept) confint(free1way(UCBAdmissions[, 
 +     , dept]), test = "Permutation")))
-           A       B      C       D       E       F
-[1,] 0.20967 0.34796 0.8547 0.68644 0.82584 0.45829
-[2,] 0.58185 1.85295 1.5021 1.23646 1.80738 1.49558
+           A       B      C       D       E      F
+[1,] 0.20967 0.34796 0.8547 0.68644 0.82584 0.4583
+[2,] 0.58184 1.85295 1.5021 1.23646 1.80738 1.4956
 
 > sapply(dimnames(UCBAdmissions)[[3]], function(dept) fisher.test(UCBAdmissions[, 
 +     , dept], conf.int = TRUE)$conf.int)
@@ -1748,4 +1748,4 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 36.087   0.156  36.243 
+ 36.641   0.128  36.804 

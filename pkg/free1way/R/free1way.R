@@ -1086,7 +1086,9 @@ model.matrix.free1way <- function (object, ...)
     ### global
     cf <- coef(x)
     if ((length(cf) > 1L || test == "LRT") && alternative != "two.sided") 
-        stop("Cannot compute one-sided p-values")
+        stop(gettextf("Cannot compute one-sided p-values in %sError computing the Hessian in %s",
+                      "free1way"),
+                     domain = NA)
 
     DF <- NULL
     parm <- seq_along(cf)
@@ -1268,7 +1270,7 @@ confint.free1way <- function(object, parm,
     CINT <- confint.default(object, level = level)
     if (test != "Wald") {
         wlevel <- level
-        wlevel <- 1 - (1 - level) / 10
+        wlevel <- 1 - (1 - level) / 2
         CINT[] <- confint.default(object, level = wlevel)
 
         sfun <- function(value, parm, quantile) {
@@ -1348,7 +1350,9 @@ confint.free1way <- function(object, parm,
             # permutation confint
             
             if (length(cf) > 1L)
-                stop("Permutation confidence intervals only available for two sample comparisons")
+                stop(gettextf("Permutation confidence intervals only available for 2-sample comparisons in %s",
+                              "confint.free1way"),
+                     domain = NA)
             if (!is.null(object$exact)) {
                 qu <- c(object$exact$qle(1 - conf.level),
                         object$exact$qgr(1 - conf.level))
@@ -1377,10 +1381,79 @@ confint.free1way <- function(object, parm,
         }
 
         for (p in parm) {
-            CINT[p, 1] <- uniroot(sfun, interval = c(CINT[p,1], cf[p]), 
-                                  parm = p, quantile = qu[2])$root
-            CINT[p, 2] <- uniroot(sfun, interval = c(cf[p], CINT[p, 2]), 
-                                  parm = p, quantile = qu[1])$root
+            # confint lower
+            
+            CINT[p,1] <- max(CINT[p, 1], cf[p] - 1)
+            sdlwr <- sign(sfun(cf[p], parm = p, quantile = qu[2]))
+            slwr <- try(sfun(CINT[p,1], parm = p, quantile = qu[2]))
+            k <- 1
+            if (inherits(slwr, "try-error")) {
+                CINT[p,1] <- NA
+            } else {
+                while ((is.na(slwr) || 
+                        sign(slwr) == sdlwr) && k < 30) {
+                    CINT[p,1] <- CINT[p,1] - 1
+                    slwr <- try(sfun(CINT[p,1], parm = p, quantile = qu[2]))
+                    if (inherits(slwr, "try-error")) {
+                        CINT[p,1] <- NA
+                        break()
+                    }
+                    k <- k + 1
+                }
+            }
+            if (k == 30) {
+                CINT[p,1] <- NA
+            } else {
+                lwr <- try(uniroot(sfun, interval = c(CINT[p,1], cf[p]), 
+                                   parm = p, quantile = qu[2])$root)
+                if (inherits(lwr, "try-error")) {
+                    CINT[p,1] <- NA
+                } else {
+                    CINT[p,1] <- lwr
+                }
+            }
+            if (is.na(CINT[p,1]))
+                warning(gettextf("Failed to compute confidence interval in %s",
+                                 "confint.free1way"),
+                        domain = NA)
+
+            
+            # confint upper
+            
+            CINT[p,2] <- min(CINT[p, 2], cf[p] + 1)
+            sdupr <- sign(sfun(cf[p], parm = p, quantile = qu[1]))
+            supr <- try(sfun(CINT[p,2], parm = p, quantile = qu[1]))
+            k <- 1
+            if (inherits(supr, "try-error")) {
+                CINT[p,2] <- NA
+            } else {
+                while ((is.na(supr) || 
+                        sign(supr) == sdupr) && k < 30) {
+                    CINT[p,2] <- CINT[p,2] + 1
+                    supr <- try(sfun(CINT[p,2], parm = p, quantile = qu[1]))
+                    if (inherits(supr, "try-error")) {
+                        CINT[p,2] <- NA
+                        break()
+                    }
+                    k <- k + 1
+                }
+            }
+            if (k == 30) {
+                CINT[p,2] <- NA 
+            } else {
+                upr <- try(uniroot(sfun, interval = c(cf[p], CINT[p, 2]), 
+                                   parm = p, quantile = qu[1])$root)
+                if (inherits(upr, "try-error")) {
+                    CINT[p, 2] <- NA
+                } else {
+                    CINT[p, 2] <- upr
+                }
+            }
+            if (is.na(CINT[p,2]))
+                warning(gettextf("Failed to compute confidence interval in %s",
+                                 "confint.free1way"),
+                        domain = NA)
+            
         }
     }
 

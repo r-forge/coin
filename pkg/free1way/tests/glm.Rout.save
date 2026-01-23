@@ -49,8 +49,8 @@ logLR chi-squared = 168, df = 1, p-value <2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "LRT")
-     2.5 % 97.5 %
-xB -2.1716 -1.563
+     2.5 %  97.5 %
+xB -2.1717 -1.5631
 > print(ft, test = "Rao")
 
 	2-sample Wilcoxon test against proportional odds alternatives
@@ -61,7 +61,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Rao")
      2.5 %  97.5 %
-xB -2.1658 -1.5589
+xB -2.1659 -1.5589
 > print(ft, test = "Wald")
 
 	2-sample Wilcoxon test against proportional odds alternatives
@@ -113,7 +113,7 @@ alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "LRT")
      2.5 % 97.5 %
-xB 0.92226 1.2621
+xB 0.92224 1.2621
 > print(ft, test = "Rao")
 
 	2-sample Lehmann test against Lehmann alternatives
@@ -123,8 +123,8 @@ Rao chi-squared = 169, df = 1, p-value <2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Rao")
-     2.5 % 97.5 %
-xB 0.92132 1.2607
+    2.5 % 97.5 %
+xB 0.9213 1.2608
 > print(ft, test = "Wald")
 
 	2-sample Lehmann test against Lehmann alternatives
@@ -145,11 +145,11 @@ Perm Z = 12.7, p-value <2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
-     2.5 % 97.5 %
-xB 0.90618 1.2759
+    2.5 % 97.5 %
+xB 0.9062 1.2759
 attr(,"Attained level")
 [1] 0.9689
 > 
 > proc.time()
    user  system elapsed 
-  0.734   0.096   0.826 
+  0.884   0.099   0.980 
