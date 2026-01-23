@@ -624,7 +624,7 @@ tables (yet still allowing zero row sums):
 @{
 dx <- dim(x)
 if (length(dx) == 1L)
-    stop("")
+    stop("Incorrect dimensions")
 if (length(dx) == 2L)
     x <- as.table(array(x, dim = c(dx, 1)))
 dx <- dim(x)
@@ -644,8 +644,8 @@ if (length(dx) == 4L) {
         x <- array(x[,,,"TRUE", drop = TRUE], dim = dx[1:3])
     } else {
         stop(gettextf("%s currently only allows independent right-censoring",
-                              "free1way"),
-                     domain = NA)
+                      "free1way"),
+             domain = NA)
     }
 }
 
@@ -844,7 +844,7 @@ and the computation of the Hessian for the shift parameters using
         if (is.null(sAH))
             stop(gettextf("Error computing the Hessian in %s",
                           "free1way"),
-                     domain = NA)
+                 domain = NA)
         ret <- ret + (H$Z - crossprod(H$X, sAH))
     }
     as.matrix(ret)
@@ -1367,7 +1367,7 @@ he <- function(par) {
     if (!all(fix %in% seq_len(K - 1)))
         stop(gettextf("Incorrect argument 'fix' in %s",
                       "free1way"),
-                     domain = NA)
+             domain = NA)
     delta <- start[fix]
     opargs <- list(start = start[-fix], 
                      objective = function(par) {
@@ -1550,7 +1550,7 @@ problem.
     if (!is.table(x))
       stop(gettextf("Incorrect argument 'x' in %s",
                     "free1way"),
-                     domain = NA)
+           domain = NA)
     dx <- dim(x)
     dn <- dimnames(x)
     if (length(dx) == 2L) {
@@ -1970,7 +1970,9 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
     @<link2fun@>
 
     if (!(length(mu) == 1L || length(mu) == d[2L] - 1L)) {
-        warning("Incompatible length of argument 'mu'")
+        warning(gettextf("Incompatible length of argument 'mu' in %s",
+                         "free1way"),
+                domain = NA)
         mu <- rep(mu, length.out = d[2L] - 1L)
     }
 
@@ -2034,7 +2036,9 @@ if (exact) {
                             w = c(y[,,1L]))
         B <- 0
     } else {
-        warning("Cannot compute exact distribution")
+        warning(gettextf("Cannot compute exact permutation distribution in %s",
+                         "free1way"),
+                domain = NA)
     }
 } 
 ret$perm <- .resample(res, y, B = B)
@@ -2088,7 +2092,7 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
         if (attr(y, "type") != "right")
             stop(gettextf("%s currently only allows independent right-censoring",
                           "free1way"),
-                          domain = NA)
+                 domain = NA)
         event <- (y[,2] > 0)
         y <- y[,1]
     }
@@ -2098,7 +2102,7 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
     if (nlevels(g) < 2L)
         stop(gettextf("Incorrect argument 'groups' in %s, at least two groups needed",
                       "free1way"),
-                      domain = NA)
+             domain = NA)
     if (stratum) {
         st <- factor(mf[[3L]])
         ### nlevels(st) == 1L is explicitly allowed
@@ -2129,7 +2133,7 @@ groups <- factor(groups)
 if (nlevels(groups) < 2L)
     stop(gettextf("Incorrect argument 'groups' in %s, at least two groups needed",
                   "free1way"),
-                  domain = NA)
+         domain = NA)
 DNAME <- paste(DNAME, paste0("(", paste0(levels(groups), collapse = ", "), ")"))
 
 if (!is.null(blocks)) {
@@ -2163,7 +2167,7 @@ free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = N
         if (!is.logical(event))
             stop(gettextf("%s currently only allows independent right-censoring",
                           "free1way"),
-                          domain = NA)
+                 domain = NA)
         uy <- sort(unique(y[event]))
         if (all(y[!event] < uy[length(uy)]))
             uy <- uy[-length(uy)]
@@ -2202,7 +2206,7 @@ free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NU
     if (nlevels(y) > 2L && !is.ordered(y))
         stop(gettextf("%s is not defined for unordered responses",
                               "free1way"),
-                     domain = NA)
+             domain = NA)
     d <- data.frame(w = 1, y = y, groups = groups)
     if (!is.null(weights)) d$w <- weights
     if (is.null(blocks)) blocks <- gl(1, nrow(d))
@@ -2211,7 +2215,7 @@ free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NU
        if (!is.logical(event))
             stop(gettextf("%s currently only allows independent right-censoring",
                           "free1way"),
-                          domain = NA)
+                domain = NA)
         d$event <- event
     }
     tab <- xtabs(w ~ ., data = d)
@@ -2290,7 +2294,7 @@ some special cases (\code{wilcox,kruskal,friedman.test}):
     if ((length(cf) > 1L || test == "LRT") && alternative != "two.sided") 
         stop(gettextf("Cannot compute one-sided p-values in %sError computing the Hessian in %s",
                       "free1way"),
-                     domain = NA)
+             domain = NA)
 
     DF <- NULL
     parm <- seq_along(cf)
@@ -3005,7 +3009,7 @@ rfree1way <- function(n, prob = NULL, alloc_ratio = 1,
     if (ncol(prob) != B)
         stop(gettextf("Incorrect number of columns for 'prob' in %s",
                       "rfree1way"),
-                      domain = NA)
+             domain = NA)
     prob <- prop.table(prob, margin = 2L)
     ret <- do.call("rbind", lapply(1:ncol(prob), function(b) {
         if (B > 1)
@@ -3271,7 +3275,7 @@ power.free1way.test <- function(n = NULL, prob = if (is.null(n)) NULL else rep.i
         if (length(alloc_ratio) > 1L)
             stop(gettextf("Effect size can only computed for two sample problems in %s",
                           "power.free1way.test"),
-                          domain = NA)
+                 domain = NA)
         delta <- uniroot(function(delta) {
                  @<power call@>
     ### <TH> interval depending on alternative, symmetry? </TH>
@@ -3300,7 +3304,7 @@ power.free1way.test <- function(n = NULL, prob = if (is.null(n)) NULL else rep.i
         if (alternative != "two.sided")
             stop(gettextf("%s only allows two-sided alternatives in the presence of more than two groups",
                           "power.free1way.test"),
-                          domain = NA)
+                 domain = NA)
         ncp <- sum((chol(he) %*% deltamu)^2)
         qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)
         power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)
