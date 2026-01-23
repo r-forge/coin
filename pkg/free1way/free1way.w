@@ -1829,13 +1829,15 @@ tables with fixed marginal distributions:
         for (j in 1:dim(xt)[3L]) {
            rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
            stat <- stat + vapply(rt, function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], 
-                                                          m = nrow(x), n = ncol(x) - 1L), 0)
+                                                          m = nrow(x), n = ncol(x) - 1L), 
+                                 FUN.VALUE = rep(0, dim(xt)[[2L]] - 1L))
         }
         if (dim(xt)[2L] == 2L) {
              ret$permStat <- (stat - ret$Expectation) / sqrt(c(ret$Covariance))
         } else {
             ES <- matrix(stat, ncol = B) - ret$Expectation
-            ret$permStat <- rowSums(crossprod(ES, solve(ret$Covariance, ES)))
+            ret$permStat <- .colSums(ES * solve(ret$Covariance, ES), 
+                                     m = dim(xt)[[2L]] - 1L, n = B)
         }
     }
     ret
@@ -2030,7 +2032,7 @@ if (length(dim(y)) == 4L) {
 
 ### exact two-sample Wilcoxon w/o stratification
 if (exact) {
-    if (!stratified && link$model == "proportional odds") {
+    if (!stratified && link$model == "proportional odds" && d[2L] == 2L) {
         @<exact proportional odds@>
         ret$exact <- .exact(c(res, res), grp = unclass(gl(2, d[1L])) - 1L,
                             w = c(y[,,1L]))
