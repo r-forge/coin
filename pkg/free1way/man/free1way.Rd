@@ -108,8 +108,8 @@ free1way(y, ...)
           confidence intervals, either a vector of numbers or a vector
           of names.  If missing, all parameters are considered.}
   \item{level}{the confidence level required.}
-  \item{\dots}{additional arguments to \code{\link{optim}}, such as a list of
-    \code{control} parameters for the \code{method = "BFGS"}.}
+  \item{\dots}{arguments passed to the \code{table} method for 
+          \code{free1way}.}
 }
 \details{
 
@@ -124,21 +124,26 @@ function \eqn{Q} defines the model
 \deqn{F_k(y) = Q^{-1}(Q(F_1(y)) - \delta_k)}
 such that positive values of the parameter \eqn{\delta_k} correspond to
 stochasically larger response values in group \eqn{k} when compared to the
-control group. Here, \eqn{\mu_k} defines the null hypothesis \eqn{H_0: \delta_k
-- \mu_k = 0} (or the one-sided equivalents thereof); 
+control group. Here, \eqn{\mu_k} defines the null hypothesis \eqn{H_0^k: \delta_k
+- \mu_k = 0, k = 2, \dots, K} (or the one-sided equivalents thereof); 
 the parameter \code{mu} can be a vector of length \eqn{K - 1} or a
 scalar value to be recycled to this length.
 
 The argument \code{link} is used to define the link function and thus
 specific models: Log-odds ratio alternatives are based on the logit link
-(\code{link = "logit"})
+(\code{link = "logit"}, with \eqn{Q} being the quantile function of the
+standard logistic distribution)
 \deqn{\log\left(\frac{F_k(y)}{1 - F_k(y)}\right) = \log\left(\frac{F_1(y)}{1 - F_1(y)}\right) - \delta_k,}
 log-hazard ratio alternatives on the complementary log-log link (\code{link =
-"cloglog"})
-\deqn{1 - F_k(y) = (1 - F_1(y))^{\exp(- \delta_k)},} Lehmann alternatives on
-the log-log link (\code{link = "loglog"})
+"cloglog"}, with \eqn{Q} being the quantile function of the Gompertz
+minimum extreme value distribution)
+\deqn{1 - F_k(y) = (1 - F_1(y))^{\exp(- \delta_k)},} Lehmann (or reverse
+time log-hazard ratio) alternatives on
+the log-log link (\code{link = "loglog"}, with \eqn{Q} being the quantile
+function of the Gumbel maximum extreme value distribution)
 \deqn{F_k(y) = F_1(y)^{\exp(- \delta_k)},} and a shift alternative on a
-latent normal scale on the probit link (\code{link = "probit"})
+latent normal scale (similar in spirit to Cohen's \eqn{d}) on the probit link (\code{link = "probit"}, with \eqn{Q}
+being the quantile function of the standard normal distribution)
 \deqn{\Phi^{-1}(F_1(Y_k)) \sim N(\delta_k, 1).}
 If strata (independent blocks) are present, the distribution functions may be stratum-specific
 but the shift parameters are assumed to be constant across strata, such that
@@ -152,9 +157,11 @@ inverse observed Fisher information can be inspected via \code{coef} and
 \code{vcov}.
 
 Several global test procedures for the null hypothesis that all distribution
-functions are identical (and thus \eqn{\delta_2 = \dots = \delta_K = 0}) 
-can be specified by the \code{test} argument. Parameter-specific confidence
-intervals are obtained via the inversion of a specific test procedure.
+functions are identical (and thus \eqn{\delta_2 = \dots = \delta_K = 0} when
+\code{mu = 0}, otherwise the global null of all \eqn{H_0^k} holding
+simultaneously is tested) can be specified by the \code{test} argument. 
+Parameter-specific confidence
+intervals are obtained via the inversion of a specific test procedure. 
 
 Parameter interpretation might be easier on transformed scales, such as
 odds-ratios or hazard ratios. In addition, probabilistic indices (\code{what
@@ -169,6 +176,18 @@ confidence intervals are locally most powerful
 proportional-odds models in this class is available in
 \bibcitet{free1way::Harrell2015RMS}.
 
+\code{free1way} allows several classical tests to be performed and enhanced
+with corresonding parameter estimates and a variety of inference
+procedures under the randomisation and population model. 
+The two-sample Wilcoxon rank sum test (implemented in
+\code{\link{wilcox.test}}) is obtained with the default \code{link =
+"logit"} as is the \eqn{K}-sample Kruskal-Wallis rank sum test (implemented in
+\code{\link{kruskal.test}}), where group differences can be quantified as
+log-odds ratios. If each observation forms its own block for
+\eqn{K}-samples, an analogue to \code{\link{friedman.test}} is obtained.
+Unlike these classical implementations, \code{free1way} allows discrete
+binary or ordered outcomes to be analysed in the same spirit.
+
 }
 \value{
 An object of class \code{free1way} with corresponding \code{logLik},
@@ -180,33 +199,53 @@ whenever \code{mu != 0}), \code{vcov}, \code{summary}, and \code{confint} method
 }
 \examples{
 
-### Friedman test
+## Kruskal-Wallis test
+kruskal.test(Ozone ~ Month, data = airquality)
+kt <- free1way(Ozone ~ Month, data = airquality)
+print(kt)
+# log-odds ratios for comparison with control
+coef(kt)
+# Wald inference
+summary(kt)
+confint(kt, test = "Wald")
+
+## Friedman test
 example(friedman.test, echo = FALSE)
 me <- colnames(RoundingTimes)
 d <- expand.grid(me = factor(me, labels = me, levels = me),
                  id = factor(seq_len(nrow(RoundingTimes))))
 d$time <- c(t(RoundingTimes))
+# global p-value identical
 friedman.test(RoundingTimes)
 ft <- free1way(time ~ me | id, data = d)
 print(ft)
-summary(ft)
 coef(ft)
+# Wald inference
+summary(ft)
 confint(ft, test = "Wald")
 
-### Mantel-Haenszel test
+## Mantel-Haenszel test, Departments are blocks
 mantelhaen.test(UCBAdmissions, correct = FALSE)
 mh <- free1way(UCBAdmissions)
 print(mh)
+# common odds-ratio, with score interval
 exp(coef(mh))
 exp(confint(mh, test = "Rao"))
+# looking at department-specific 
+# confidence intervals for log-odds ratios 
+# it seems Dept A is out of line
+apply(UCBAdmissions, MARGIN = 3,  
+      FUN = function(x) confint(free1way(as.table(x))))
 
-### Kruskal-Wallis test
-kruskal.test(Ozone ~ Month, data = airquality)
-kt <- free1way(Ozone ~ Month, data = airquality)
-print(kt)
-summary(kt)
-coef(kt)
-confint(kt, test = "Wald")
+## Mantel-Haenszel test treats variables as
+## unordered, free1way allows ordered responses
+example(mantelhaen.test, echo = FALSE)
+# Does distribution of job satisfaction (ordered) depend on income
+# in a stratified proportional odds model?
+# Job Satisfaction is second in array but needs to be first
+# for free1way to treat it as ordered response
+ft <- free1way(aperm(Satisfaction, perm = c(2, 1, 3)))
+summary(ft)
 
 }
 \keyword{htest}

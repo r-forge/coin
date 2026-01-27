@@ -6,7 +6,7 @@ Probability-probability Plots
 \description{
 \code{ppplot} produces a probabiliy-probability (PP) plot of two numerical
 variables. If \code{conf.level} is given, an estimate and corresponding 
-confidence band for the P-P curve under a 
+confidence band for the PP curve under a 
 distribution-free semiparametric model is plotted.
 }
 \usage{
@@ -42,7 +42,8 @@ ppplot(x, y, plot.it = TRUE,
 }
 \details{
 
-The function produces a probability-probability plot \bibcitep{free1way::WilkGnanadesikan1968} of pairs
+For independent two samples, denoted \eqn{x} and \eqn{y}, 
+the function produces a probability-probability plot \bibcitep{free1way::WilkGnanadesikan1968} of pairs
 \eqn{(\hat{F}_{x}(z), \hat{F}_{y}(z))} for observed data \eqn{z = (x, y)}.
 
 If the data generating process follows a model where the two distribution
@@ -64,40 +65,40 @@ An object of class \code{stepfun}.
 }
 \examples{
 
-### well-fitting logistic model
+## well-fitting logistic model
 nd <- data.frame(groups = gl(2, 50, labels = paste0("G", 1:2)))
 nd$y <- rlogis(nrow(nd), location = c(0, 2)[nd$groups])
 with(with(nd, split(y, groups)),
      ppplot(G1, G2, conf.level = .95,
             conf.args = list(link = "logit", type = "Wald", col = 2)))
-## with appropriate Wilcoxon test and log-odds ratio
+# with appropriate Wilcoxon test and log-odds ratio
 coef(ft <- free1way(y ~ groups, data = nd))
-## the model-based probability-probability curve
+# the model-based probability-probability curve
 prb <- 1:99 / 100
 points(prb,  plogis(qlogis(prb) - coef(ft)), pch = 3)
 
-### the corresponding model-based receiver operating characteristic (ROC)
-### curve, see Sewak and Hothorn (2023)
+## the corresponding model-based receiver operating characteristic (ROC)
+## curve, see Sewak and Hothorn (2023)
 plot(prb,  plogis(qlogis(1 - prb) - coef(ft), lower.tail = FALSE),
      xlab = "1 - Specificity", ylab = "Sensitivity", type = "l", 
      main = "ROC Curve")
 abline(a = 0, b = 1, col = "lightgrey")
-## with confidence band
+# with confidence band
 lines(prb, plogis(qlogis(1 - prb) - confint(ft, test = "Rao")[1], 
       lower.tail = FALSE), lty = 3)
 lines(prb, plogis(qlogis(1 - prb) - confint(ft, test = "Rao")[2], 
       lower.tail = FALSE), lty = 3)
-## and corresponding area under the ROC curve (AUC)
-## with score confidence interval
+# and corresponding area under the ROC curve (AUC)
+# with score confidence interval
 coef(ft, what = "AUC")
 confint(ft, test = "Rao", what = "AUC")
 
-### ill-fitting normal model
+## ill-fitting normal model
 nd$y <- rnorm(nrow(nd), mean = c(0, .5)[nd$groups], sd = c(1, 1.5)[nd$groups])
 with(with(nd, split(y, groups)),
      ppplot(G1, G2, conf.level = .95,
             conf.args = list(link = "probit", type = "Wald", col = 2)))
-### inappropriate probit model
+# inappropriate probit model
 coef(free1way(y ~ groups, data = nd, link = "probit"))
 
 }

@@ -24,7 +24,7 @@ power.free1way.test(n = NULL, prob = if (is.null(n)) NULL else
 \arguments{
   \item{n}{number of observations in the control group of the first block.
 }
-  \item{prob}{a matrix defining the density of discrete controls for each
+  \item{prob}{an optional matrix defining the density of discrete controls for each
     block (in columns).
 }
   \item{alloc_ratio}{allocation ratio, a factor defining the number of
@@ -85,15 +85,17 @@ variables \code{groups} and (optionally) \code{blocks}.
 }
 \examples{
 
-### sample from proportional odds model with 1:2 allocation
-### based on odds ratio of 3, with sample sizes (15, 30)
+## sample from proportional odds model with 1:2 allocation
+## based on odds ratio of 3, with sample sizes (15, 30)
 x <- rfree1way(n = 15, delta = log(3), alloc_ratio = 2)
-## Wilcoxon-Mann-Whitney rank sum test via classical stats interface
+
+# Wilcoxon-Mann-Whitney rank sum test via classical stats interface
 wilcox.test(y ~ groups, data = x, exact = FALSE, correct = FALSE)$p.value
-## Identical p-value obtained from a proportional-odds model 
+
+# Identical p-value obtained from a proportional-odds model 
 summary(free1way(y ~ groups, data = x), test = "Permutation")$p.value
 
-### approximate power for this test
+# approximate power for this test
 power.free1way.test(n = 15, delta = log(3), alloc_ratio = 2)
 
 }
