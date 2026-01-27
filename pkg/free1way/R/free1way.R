@@ -1483,6 +1483,8 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
 {
     cl <- match.call()
 
+    # formula business
+    
     if(missing(formula) || (length(formula) != 3L))
         stop("'formula' missing or incorrect")
 
@@ -1497,7 +1499,7 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
 
     formula <- terms(formula)
     if (length(attr(formula, "term.labels")) > 1L + stratum)
-        stop("'formula' missing or incorrect")
+       stop("'formula' missing or incorrect")
     group <- attr(formula, "term.labels")[1L]
 
     m <- match.call(expand.dots = FALSE)
@@ -1508,6 +1510,8 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
     m[[1L]] <- quote(stats::model.frame)
     m$... <- NULL
     mf <- eval(m, parent.frame())
+    
+
     response <- attr(attr(mf, "terms"), "response")
     DNAME <- paste(vn <- c(names(mf)[response], group), collapse = " by ") # works in all cases
     w <- as.vector(model.weights(mf))
@@ -1813,11 +1817,14 @@ power.free1way.test <- function(n = NULL, prob = if (is.null(n)) NULL else rep.i
                                 nsim = 100, seed = NULL, tol = .Machine$double.eps^0.25) 
 {
 
+    # power args check
+    
     if (sum(vapply(list(n, delta, power, sig.level), is.null, 
         NA)) != 1) 
         stop("exactly one of 'n', 'delta', 'power', and 'sig.level' must be NULL")
     stats:::assert_NULL_or_prob(sig.level)
     stats:::assert_NULL_or_prob(power)
+    
 
     # random seed
     
