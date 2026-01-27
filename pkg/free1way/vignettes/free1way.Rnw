@@ -4191,6 +4191,11 @@ interpreted as an event and \code{FALSE} as right-censored observation
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@cl <- match.call()@\\
+\mbox{}\verb@if (is.null(varnames))@\\
+\mbox{}\verb@    varnames <- c(deparse1(substitute(y)), @\\
+\mbox{}\verb@                  deparse1(substitute(groups)), @\\
+\mbox{}\verb@                  deparse1(substitute(blocks)))@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@DNAME <- paste(varnames[1], "by", varnames[2])@\\
 \mbox{}\verb@groups <- factor(groups)@\\
 \mbox{}\verb@if (nlevels(groups) < 2L)@\\
@@ -4233,9 +4238,7 @@ in the absence of right-censoring.
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, nbins = 0, @\\
-\mbox{}\verb@    varnames = c(deparse1(substitute(y)), @\\
-\mbox{}\verb@                 deparse1(substitute(groups)), @\\
-\mbox{}\verb@                 deparse1(substitute(blocks))), ...) {@\\
+\mbox{}\verb@                             varnames = NULL, ...) {@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -4286,9 +4289,7 @@ call to \code{xtabs}:
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, @\\
-\mbox{}\verb@    varnames = c(deparse1(substitute(y)), @\\
-\mbox{}\verb@                 deparse1(substitute(groups)), @\\
-\mbox{}\verb@                 deparse1(substitute(blocks))), ...) {@\\
+\mbox{}\verb@                            varnames = NULL, ...) {@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\

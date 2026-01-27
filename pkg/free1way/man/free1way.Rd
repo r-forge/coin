@@ -24,21 +24,17 @@ hazard ratio alternatives with corresponding confidence intervals.
 free1way(y, ...)
 \S3method{free1way}{formula}(formula, data, weights, subset, na.action = na.pass, ...)
 \S3method{free1way}{numeric}(y, groups, blocks = NULL, event = NULL, weights = NULL, nbins = 0, 
-    varnames = c(deparse1(substitute(y)), 
-                 deparse1(substitute(groups)), 
-                 deparse1(substitute(blocks))), ...)
+         varnames = NULL, ...)
 \S3method{free1way}{factor}(y, groups, blocks = NULL, event = NULL, weights = NULL, 
-    varnames = c(deparse1(substitute(y)), 
-                 deparse1(substitute(groups)), 
-                 deparse1(substitute(blocks))), ...)
+         varnames = NULL, ...)
 \S3method{free1way}{table}(y, link = c("logit", "probit", "cloglog", "loglog"), 
-    mu = 0, B = 0, exact = FALSE, ...)
+         mu = 0, B = 0, exact = FALSE, ...)
 \S3method{summary}{free1way}(object, test, alternative = c("two.sided", "less", "greater"), 
-    tol = .Machine$double.eps, ...)
+        tol = .Machine$double.eps, ...)
 \S3method{coef}{free1way}(object, what = c("shift", "PI", "AUC", "OVL"), ...)
-\S3method{confint}{free1way}(object, parm,
-    level = .95, test = c("Permutation", "Wald", "LRT", "Rao"), 
-    what = c("shift", "PI", "AUC", "OVL"), ...)
+\S3method{confint}{free1way}(object, parm, level = .95, 
+        test = c("Permutation", "Wald", "LRT", "Rao"), 
+        what = c("shift", "PI", "AUC", "OVL"), ...)
 \S3method{vcov}{free1way}(object, ...)
 \S3method{logLik}{free1way}(object, ...)
 }
@@ -144,7 +140,8 @@ function of the Gumbel maximum extreme value distribution)
 \deqn{F_k(y) = F_1(y)^{\exp(- \delta_k)},} and a shift alternative on a
 latent normal scale (similar in spirit to Cohen's \eqn{d}) on the probit link (\code{link = "probit"}, with \eqn{Q}
 being the quantile function of the standard normal distribution)
-\deqn{\Phi^{-1}(F_1(Y_k)) \sim N(\delta_k, 1).}
+\deqn{\Phi^{-1}(F_1(Y_k)) \sim N(\delta_k, 1)}
+for random variables \eqn{Y_k \sim F_k}.
 If strata (independent blocks) are present, the distribution functions may be stratum-specific
 but the shift parameters are assumed to be constant across strata, such that
 the above model holds for each stratum.

@@ -2128,6 +2128,11 @@ interpreted as an event and \code{FALSE} as right-censored observation
 @d variable names and checks
 @{
 cl <- match.call()
+if (is.null(varnames))
+    varnames <- c(deparse1(substitute(y)), 
+                  deparse1(substitute(groups)), 
+                  deparse1(substitute(blocks)))
+
 DNAME <- paste(varnames[1], "by", varnames[2])
 groups <- factor(groups)
 if (nlevels(groups) < 2L)
@@ -2157,9 +2162,7 @@ in the absence of right-censoring.
 @d free1way numeric
 @{
 free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, nbins = 0, 
-    varnames = c(deparse1(substitute(y)), 
-                 deparse1(substitute(groups)), 
-                 deparse1(substitute(blocks))), ...) {
+                             varnames = NULL, ...) {
 
     @<variable names and checks@>
 
@@ -2197,9 +2200,7 @@ call to \code{xtabs}:
 @d free1way factor
 @{
 free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, 
-    varnames = c(deparse1(substitute(y)), 
-                 deparse1(substitute(groups)), 
-                 deparse1(substitute(blocks))), ...) {
+                            varnames = NULL, ...) {
 
     @<variable names and checks@>
 
