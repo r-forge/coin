@@ -4072,7 +4072,7 @@ object
 \mbox{}\verb@    if (!stratified && link$model == "proportional odds" && d[2L] == 2L) {@\\
 \mbox{}\verb@        @\hbox{$\langle\,${\itshape exact proportional odds}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@        ret$exact <- .exact(c(res, res), grp = unclass(gl(2, d[1L])) - 1L,@\\
-\mbox{}\verb@                            w = c(y[,,1L]))@\\
+\mbox{}\verb@                            w = c(y))@\\
 \mbox{}\verb@        B <- 0@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        warning(gettextf("Cannot compute exact permutation distribution in %s",@\\
@@ -4081,11 +4081,6 @@ object
 \mbox{}\verb@    }@\\
 \mbox{}\verb@} @\\
 \mbox{}\verb@ret$perm <- .resample(res, y, B = B)@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@if (!is.null(names(dn))) {@\\
-\mbox{}\verb@    fm <- as.formula(paste(names(dn)[1:2], collapse = "~"))@\\
-\mbox{}\verb@    ret$terms <- terms(fm, data = as.data.frame(y))@\\
-\mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -4149,6 +4144,7 @@ stratum)} for model specification
 \mbox{}\verb@        y <- y[,1]@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    g <- factor(mf[[group]])@\\
+\mbox{}\verb@    mf[[group]] <- g@\\
 \mbox{}\verb@    lev <- levels(g)@\\
 \mbox{}\verb@    DNAME <- paste(DNAME, paste0("(", paste0(lev, collapse = ", "), ")"))@\\
 \mbox{}\verb@    if (nlevels(g) < 2L)@\\
@@ -4157,6 +4153,7 @@ stratum)} for model specification
 \mbox{}\verb@             domain = NA)@\\
 \mbox{}\verb@    if (stratum) {@\\
 \mbox{}\verb@        st <- factor(mf[[3L]])@\\
+\mbox{}\verb@        mf[[3L]] <- st@\\
 \mbox{}\verb@        ### nlevels(st) == 1L is explicitly allowed@\\
 \mbox{}\verb@        vn <- c(vn, names(mf)[3L])@\\
 \mbox{}\verb@        RVAL <- free1way(y = y, groups = g, blocks = st, event = event, weights = w,@\\
@@ -4166,6 +4163,7 @@ stratum)} for model specification
 \mbox{}\verb@        ## Call the corresponding method@\\
 \mbox{}\verb@        RVAL <- free1way(y = y, groups = g, event = event, weights = w, varnames = vn, ...)@\\
 \mbox{}\verb@    }@\\
+\mbox{}\verb@    RVAL$data <- mf@\\
 \mbox{}\verb@    RVAL$data.name <- DNAME@\\
 \mbox{}\verb@    RVAL$call <- cl@\\
 \mbox{}\verb@    RVAL@\\
@@ -4356,12 +4354,23 @@ method allows to obtain effects at alternative scales: probabilistic indices
 \mbox{}\verb@    object$vcov@\\
 \mbox{}\verb@logLik.free1way <- function(object, ...)@\\
 \mbox{}\verb@    -object$value@\\
-\mbox{}\verb@### the next two could go into multcomp@\\
-\mbox{}\verb@model.frame.free1way <- function(formula, ...)@\\
-\mbox{}\verb@    as.data.frame(formula$table)@\\
+\mbox{}\verb@model.frame.free1way <- function(formula, ...) {@\\
+\mbox{}\verb@    if (!is.null(formula[["data"]])) return(formula[["data"]])@\\
+\mbox{}\verb@    ret <- as.data.frame(formula$table)@\\
+\mbox{}\verb@    ret <- ret[rep(seq_len(nrow(ret)), ret$Freq),,drop = FALSE]@\\
+\mbox{}\verb@    ret@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@### the next two might go into multcomp@\\
+\mbox{}\verb@terms.free1way <- function(x, ...) {@\\
+\mbox{}\verb@    mf <- model.frame(x)@\\
+\mbox{}\verb@    terms(as.formula(paste(names(mf)[1:2], collapse = "~")), @\\
+\mbox{}\verb@          data = mf)@\\
+\mbox{}\verb@}@\\
 \mbox{}\verb@model.matrix.free1way <- function (object, ...) @\\
 \mbox{}\verb@{@\\
-\mbox{}\verb@    mm <- model.matrix(delete.response(terms(object)), data = model.frame(object))@\\
+\mbox{}\verb@    mf <- model.frame(object)@\\
+\mbox{}\verb@    tm <- terms(object)@\\
+\mbox{}\verb@    mm <- model.matrix(delete.response(tm), data = mf)@\\
 \mbox{}\verb@    at <- attributes(mm)@\\
 \mbox{}\verb@    mm <- mm[, -1]@\\
 \mbox{}\verb@    at$dim[2] <- at$dim[2] - 1@\\
