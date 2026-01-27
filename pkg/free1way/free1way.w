@@ -2035,7 +2035,7 @@ if (exact) {
     if (!stratified && link$model == "proportional odds" && d[2L] == 2L) {
         @<exact proportional odds@>
         ret$exact <- .exact(c(res, res), grp = unclass(gl(2, d[1L])) - 1L,
-                            w = c(y[,,1L]))
+                            w = c(y))
         B <- 0
     } else {
         warning(gettextf("Cannot compute exact permutation distribution in %s",
@@ -2044,11 +2044,6 @@ if (exact) {
     }
 } 
 ret$perm <- .resample(res, y, B = B)
-
-if (!is.null(names(dn))) {
-    fm <- as.formula(paste(names(dn)[1:2], collapse = "~"))
-    ret$terms <- terms(fm, data = as.data.frame(y))
-}
 @}
 
 The \code{formula} method allows formulae \code{outcome ~ treatment |
@@ -2099,6 +2094,7 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
         y <- y[,1]
     }
     g <- factor(mf[[group]])
+    mf[[group]] <- g
     lev <- levels(g)
     DNAME <- paste(DNAME, paste0("(", paste0(lev, collapse = ", "), ")"))
     if (nlevels(g) < 2L)
@@ -2107,6 +2103,7 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
              domain = NA)
     if (stratum) {
         st <- factor(mf[[3L]])
+        mf[[3L]] <- st
         ### nlevels(st) == 1L is explicitly allowed
         vn <- c(vn, names(mf)[3L])
         RVAL <- free1way(y = y, groups = g, blocks = st, event = event, weights = w,
@@ -2116,6 +2113,7 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
         ## Call the corresponding method
         RVAL <- free1way(y = y, groups = g, event = event, weights = w, varnames = vn, ...)
     }
+    RVAL$data <- mf
     RVAL$data.name <- DNAME
     RVAL$call <- cl
     RVAL
@@ -2254,12 +2252,23 @@ vcov.free1way <- function(object, ...)
     object$vcov
 logLik.free1way <- function(object, ...)
     -object$value
-### the next two could go into multcomp
-model.frame.free1way <- function(formula, ...)
-    as.data.frame(formula$table)
+model.frame.free1way <- function(formula, ...) {
+    if (!is.null(formula[["data"]])) return(formula[["data"]])
+    ret <- as.data.frame(formula$table)
+    ret <- ret[rep(seq_len(nrow(ret)), ret$Freq),,drop = FALSE]
+    ret
+}
+### the next two might go into multcomp
+terms.free1way <- function(x, ...) {
+    mf <- model.frame(x)
+    terms(as.formula(paste(names(mf)[1:2], collapse = "~")), 
+          data = mf)
+}
 model.matrix.free1way <- function (object, ...) 
 {
-    mm <- model.matrix(delete.response(terms(object)), data = model.frame(object))
+    mf <- model.frame(object)
+    tm <- terms(object)
+    mm <- model.matrix(delete.response(tm), data = mf)
     at <- attributes(mm)
     mm <- mm[, -1]
     at$dim[2] <- at$dim[2] - 1
