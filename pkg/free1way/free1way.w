@@ -117,7 +117,7 @@ urlcolor={linkcolor}%
 \def \thetavec        {\text{\boldmath$\theta$}}
 \newcommand{\rT}{G}
 \newcommand{\rS}{S}
-\newcommand{\rt}{t}
+\newcommand{\rt}{g}
 
 
 \author{Torsten Hothorn \\ Universit\"at Z\"urich \and
@@ -163,37 +163,37 @@ We consider $K$ treatment groups $\rT \in \{1, \dots, K\}, K \ge 2$ for an
 at least ordered outcome $Y \in \samY$ observed in
 stratum $\rS \in \{1, \dots, B\}$ out of $B \ge 1$ blocks with conditional
 cumulative distribution function (cdf)
-$F_Y(y \mid \rS = b, \rT = k) = \Prob(Y \le y \mid \rS = b, \rT = k)$. Detecting
+$F_Y(y \mid \rT = k, \rS = b) = \Prob(Y \le y \mid \rT = k, \rS = b)$. Detecting
 and describing differential distributions arising from different treatments
 is our main objective. We refer to the first treatment $\rT = 1$ as
 ``control''.
 
 \paragraph{Model}
 
-With model function $g: [0,1] \times \R \rightarrow [0,1]$, we describe
+With model function $m: [0,1] \times \R \rightarrow [0,1]$, we describe
 the conditional distribution under treatment $k$ as a function of the 
 conditional distribution under control and a scalar parameter
 $\delta_k$:
 \begin{eqnarray*}
-F(y \mid \rS = b, \rT = k) = g(F(y \mid \rS = b, \rT = 1), \delta_k).
+F(y \mid \rT = k, \rS = b) = m(F(y \mid \rT = 1, \rS = b), \delta_k).
 \end{eqnarray*}
 The model is assumed to hold for all blocks $b = 1,
 \dots, B$, treatments $k = 2, \dots, K$, and outcome values $y \in \samY$ based on parameters
 $\delta_2, \dots, \delta_K \in \R$. For notational convenience, we define $\delta_1 := 0$. 
 
 This model formulation gives rise to several specific models, for
-example, $g_\text{L}(p, \delta) = p^{\exp(-\delta)}$ (Lehmann alternatives),
-$g_\text{PH}(p, \delta) = 1 - (1 -
+example, $m_\text{L}(p, \delta) = p^{\exp(-\delta)}$ (Lehmann alternatives),
+$m_\text{PH}(p, \delta) = 1 - (1 -
 p)^{\exp(-\delta)}$ (proportional hazards),
-$g_\text{PO}(p, \delta) = \text{expit}(\text{logit}(p) - \delta)$ (proportional
-odds), or $g_\text{Cd}(p, \delta) =
+$m_\text{PO}(p, \delta) = \text{expit}(\text{logit}(p) - \delta)$ (proportional
+odds), or $m_\text{Cd}(p, \delta) =
 \Phi(\Phi^{-1}(p) - \delta)$ (generalised Cohen's $d$).
 
 Instead of directly working with $g$, we parameterise the model in terms of
 some absolute continuous cdf $F$ with log-concave density $f = F^\prime$
 and corresponding derivative $f^\prime$. The location model 
 \begin{eqnarray} \label{model}
-F_Y(y \mid \rS = b, \rT = k) = F\left(F^{-1}\left(F_Y(y \mid \rS = b, \rT = 1)\right) - \delta_k\right), \quad k = 2, \dots, K
+F_Y(y \mid  \rT = k, \rS = b) = F\left(F^{-1}\left(F_Y(y \mid \rT = 1, \rS = b)\right) - \delta_k\right), \quad k = 2, \dots, K
 \end{eqnarray}
 describes different distributions by means of shift parameter on a latent
 scale defined by $F$. The negative shift term ensures that positive values of $\delta_k$ correspond
@@ -204,14 +204,14 @@ of the response values, that is, transforming the observations of all
 treatment groups by the same function does not affect the values of
 $\delta_k$.
 
-The choice $F(z) = \exp(-\exp(-z))$ gives rise to $g_\text{L}$, 
-$F(z) = 1 - \exp(-\exp(z))$ corresponds to $g_\text{PH}$, $F = \text{expit}$
-leads to  $g_\text{PO}$, and $F = \Phi$ results in $g_\text{Cd}$. The choice
+The choice $F(z) = \exp(-\exp(-z))$ gives rise to $m_\text{L}$, 
+$F(z) = 1 - \exp(-\exp(z))$ corresponds to $m_\text{PH}$, $F = \text{expit}$
+leads to  $m_\text{PO}$, and $F = \Phi$ results in $m_\text{Cd}$. The choice
 of $F$ is made a priori and determines the interpretation of $\delta_k$. 
 
 This document describes the implementation of estimators of these shift parameters,
 as well as of confidence intervals and formal hypothesis tests for contrasts thereof under
-the permutation and population model. Proportional odds models ($g_\text{PO}$)
+the permutation and population model. Proportional odds models ($m_\text{PO}$)
 are explained in-depths by \cite{Harrell2015RMS}, although the models are
 presented in terms of survivor, not distribution, functions. 
 
@@ -232,11 +232,11 @@ For an ordered categorical outcome $Y$ from sample space $\samY = \{y_1 < y_2 < 
 y_C\}$, we parameterise the model in terms of intercept ($\vartheta_\cdot$) and
 shift ($\delta_\cdot$) parameters
 \begin{eqnarray*}
-F_Y(y_c \mid \rS = b, \rT = k) = F(\vartheta_{c,b} - \delta_k), \quad c = 1, \dots,
+F_Y(y_c \mid \rT = k, \rS = b) = F(\vartheta_{c,b} - \delta_k), \quad c = 1, \dots,
 C,
 \end{eqnarray*}
 that is we replace the transformed control outcome $F^{-1}\left(F_Y(y_c \mid
-\rS = b, \rT = 1)\right) =
+\rT = 1, \rS = b)\right) =
 \vartheta_{c,b}$ with a corresponding intercept parameter.
 These $C - 1$ intercept parameters are block-specific and monotone increasing
 $\vartheta_{0,b} = -\infty < \vartheta_{1,b} < \cdots < \vartheta_{C,b} = \infty$
@@ -265,10 +265,10 @@ value $-\infty$. \cite{Harrell2024} evaluates unconstrained optimisation in
 this context and recommends Newton-based algorithms leveraging the
 analytically available Hessian (see below).
 
-For the $i$th observation $(y_i = y_c, s_i = b, \rt_i = k)$ from block $b$
+For the $i$th observation $(y_i = y_c, \rt_i = k, s_i = b)$ from block $b$
 under treatment $k$, the log-likelihood contribution is
 \begin{eqnarray*}
-\log(\Prob(y_{c - 1} < Y \le y_c \mid \rS = b, \rT = k)) = \log(F(\vartheta_{c,b} - \delta_k) - F(\vartheta_{c - 1,b} - \delta_k)).
+\log(\Prob(y_{c - 1} < Y \le y_c \mid \rT = k, \rS = b)) = \log(F(\vartheta_{c,b} - \delta_k) - F(\vartheta_{c - 1,b} - \delta_k)).
 \end{eqnarray*}
 
 For an absolutely continuous outcome $Y \in \R$, we define $y_c := y_{(c)}$,
@@ -278,7 +278,7 @@ above is then the empirical or nonparametric log-likelihood.
 If observations were independently right-censored, the contribution of the
 event $Y > \tilde{y}$ to the log-likelihood is
 \begin{eqnarray*}
-\log(\Prob(Y > \tilde{y} \mid \rS = b, \rT = k)) = \log(1 - F(\vartheta_{c - 1,b} - \delta_k))
+\log(\Prob(Y > \tilde{y} \mid \rT = k, \rS = b)) = \log(1 - F(\vartheta_{c - 1,b} - \delta_k))
 \end{eqnarray*}
 where $y_{c - 1} = \max \{y \in \samY \mid y \le \tilde{y}\}$, that is,
 observations right-censored between $y_{c - 1}$ and $y_c$ correspond to the
@@ -292,8 +292,8 @@ powerful rank tests, for example against proportional odds ($F =
 \citep[$F(z) = 1 - \exp(-\exp(z))$,][Example 15.16]{vdVaart1998}.
 
 We represent the data in form of a $C \times K \times B$ contingency table,
-whose element $(c, k, b)$ is the number of observations with configuration $(y = y_c, s = b,
-\rt = k)$. In the presence of right-censoring, a fourth dimension is added 
+whose element $(c, k, b)$ is the number of observations with configuration $(y = y_c, \rt =
+k, s = b)$. In the presence of right-censoring, a fourth dimension is added 
 ($C \times K \times B \times 2)$ whose first $C \times K \times B$ table presents
 right-censoring and the second table contains numbers of events.
 
@@ -331,7 +331,7 @@ $= \thetavec$ (assuming only a single block) with data from a two-way $C
 
 From $\thetavec$, we first extract the shift parameters $\delta_\cdot$ and
 then the intercept parameters $\vartheta_\cdot$ and evaluate the probabilities
-\code{prb} $ = \Prob(y_{c - 1} < Y \le y_c \mid \rS = 1, \rT = k)$ for all
+\code{prb} $ = \Prob(y_{c - 1} < Y \le y_c \mid \rT = k, \rS = 1)$ for all
 groups:
 
 @d parm to prob
@@ -352,7 +352,7 @@ if (rightcensored) {
 @}
 
 If the table \code{x} represents right-censored observations, we compute
-\code{prb} $ = 1 - \Prob(Y \le y_c \mid \rS = 1, \rT = k)$.
+\code{prb} $ = 1 - \Prob(Y \le y_c \mid  \rT = k, \rS = 1)$.
 
 With default null values $\mu_k = 0, k = 2, \dots, K$, we define the
 negative log-likelihood function as the weighted (by number of observations) sum of
@@ -1936,11 +1936,6 @@ if (!inherits(link, "linkfun")) {
 }
 @}
 
-<TH>\code{B = 0} comes from \code{chisq.test} and means the default
-asymptotic permutation distribution. \code{B = 1000} means 1000 random
-permutations. Can we use \code{B = Inf} for the exact distribution once
-available?</TH>
-
 We use the positive residuals for defining a permutation test with treatment
 effect coding using the first group as control, that is, the test statistic
 is defined through the sum of the positive residuals in all but the control
@@ -2046,8 +2041,40 @@ if (exact) {
 ret$perm <- .resample(res, y, B = B)
 @}
 
-The \code{formula} method allows formulae \code{outcome ~ treatment |
-stratum)} for model specification
+The \code{formula} method allows formulae 
+<<formula, eval = FALSE>>=
+y ~ groups | blocks
+@@
+for model specification. We start handling the formula
+
+@d formula business
+@{
+if(missing(formula) || (length(formula) != 3L))
+    stop("'formula' missing or incorrect")
+
+if (stratum <- (length(formula[[3L]]) > 1)) {
+  if ((length(formula[[3L]]) != 3L) || 
+      (formula[[3L]][[1L]] != as.name("|")) || 
+      (length(formula[[3L]][[2L]]) !=  1L) || 
+      (length(formula[[3L]][[3L]]) != 1L)) 
+    stop("incorrect specification for 'formula'")
+  formula[[3L]][[1L]] <- as.name("+")
+}
+
+formula <- terms(formula)
+if (length(attr(formula, "term.labels")) > 1L + stratum)
+   stop("'formula' missing or incorrect")
+group <- attr(formula, "term.labels")[1L]
+
+m <- match.call(expand.dots = FALSE)
+m$formula <- formula
+if (is.matrix(eval(m$data, parent.frame())))
+    m$data <- as.data.frame(data)
+## need stats:: for non-standard evaluation
+m[[1L]] <- quote(stats::model.frame)
+m$... <- NULL
+mf <- eval(m, parent.frame())
+@}
 
 @d free1way formula
 @{
@@ -2055,31 +2082,8 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
 {
     cl <- match.call()
 
-    if(missing(formula) || (length(formula) != 3L))
-        stop("'formula' missing or incorrect")
+    @<formula business@>
 
-    if (stratum <- (length(formula[[3L]]) > 1)) {
-      if ((length(formula[[3L]]) != 3L) || 
-          (formula[[3L]][[1L]] != as.name("|")) || 
-          (length(formula[[3L]][[2L]]) !=  1L) || 
-          (length(formula[[3L]][[3L]]) != 1L)) 
-        stop("incorrect specification for 'formula'")
-      formula[[3L]][[1L]] <- as.name("+")
-    }
-
-    formula <- terms(formula)
-    if (length(attr(formula, "term.labels")) > 1L + stratum)
-        stop("'formula' missing or incorrect")
-    group <- attr(formula, "term.labels")[1L]
-
-    m <- match.call(expand.dots = FALSE)
-    m$formula <- formula
-    if (is.matrix(eval(m$data, parent.frame())))
-        m$data <- as.data.frame(data)
-    ## need stats:: for non-standard evaluation
-    m[[1L]] <- quote(stats::model.frame)
-    m$... <- NULL
-    mf <- eval(m, parent.frame())
     response <- attr(attr(mf, "terms"), "response")
     DNAME <- paste(vn <- c(names(mf)[response], group), collapse = " by ") # works in all cases
     w <- as.vector(model.weights(mf))
@@ -2819,6 +2823,29 @@ logLik(free1way(time ~ me | id, data = d, link = "loglog"))
 
 Maybe proportional-hazards model better?
 
+\section{MnNemar Test}
+
+<<McNemar>>=
+example(mcnemar.test, echo = FALSE)
+# set-up data frame with survey outcomes for voters
+s <- gl(2, 1, labels = dimnames(Performance)[[1L]])
+survey <- gl(2, 1, labels = c("1st", "2nd"))
+nvoters <- c(Performance)
+x <- expand.grid(survey = survey, voter = factor(seq_len(sum(nvoters))))
+x$performance <- c(rep(s[c(1, 1)], nvoters[1]), rep(s[c(2, 1)], nvoters[2]),
+                   rep(s[c(1, 2)], nvoters[3]), rep(s[c(2, 2)], nvoters[4]))
+# note that only those voters changing their minds are relevant
+mcn <- free1way(xtabs(~ performance + survey + voter, data = x))
+# same result as mcnemar.test w/o continuity correction
+print(mcn)
+# X^2 statistic
+summary(mcn, test = "Permutation")$statistic^2
+mcnemar.test(Performance, correct = FALSE)
+# Wald inference
+summary(mcn)
+confint(mcn, test = "Wald")
+@@
+
 \section{Contrast Tests}
 
 \code{free1way} output can be used to define multiple contrast tests and
@@ -2837,11 +2864,11 @@ can be criticised using confidence bands for QQ-plots in \code{qqplot},
 because the parameter $\mu$ shows up as a vertical shift of the diagonal
 if the model is appropriate.
 
-Likewise, model~(\ref{model}) can be graphically assessed using the PP-plot.
+Likewise, model~(\ref{model}) can be graphically assessed using the P-P-plot.
 We concentrate on the two-sample case. The shift parameter $\delta_2$ gives
-rise to the model-based PP graph $(p, F(F^{-1}(p) - \delta_2))$ and a
+rise to the model-based P-P graph $(p, F(F^{-1}(p) - \delta_2))$ and a
 confidence \emph{band} can be obtained from a confidence \emph{interval} for
-$\delta_2$. The PP-plot is, up to rescalings, identical to the ROC curve.
+$\delta_2$. The P-P-plot is, up to rescalings, identical to the ROC curve.
 
 @d ROC bands
 @{
@@ -2922,7 +2949,7 @@ x <- rlogis(50, location = 3)
 ppplot(y, x, conf.level = .95)
 @@
 \caption{Data sampled from a proportional-odds model with
-probability-probability (PP)  curve and $95\%$ confidence band obtained from
+probability-probability (P-P)  curve and $95\%$ confidence band obtained from
 a proportional-odds model. \label{fig:PO}}
 \end{figure}
 
@@ -2935,27 +2962,29 @@ ppplot(y, x, conf.args = list(link = "cloglog", type = "Wald",
        conf.level = .95)
 @@
 \caption{Data sampled from a proportional-odds model with
-probability-probability (PP)  curve and $95\%$ confidence band obtained from
+probability-probability (P-P)  curve and $95\%$ confidence band obtained from
 a proportional-hazards model. \label{fig:PH}}
 \end{figure}
 
 
 \chapter{Random Number Generation} \label{ch:rng}
 
-With~\ref{model} we know that
+With~\ref{model} we know that for an absolutely continuous random variable
+$Y$
 \begin{eqnarray*}
-U = F_Y(Y \mid \rS = b, \rT = k) = F\left(F^{-1}\left(F_Y(Y \mid \rS = b, \rT = 1)\right) - \delta_k\right), \quad k = 2, \dots, K
+U = F_Y(Y \mid  \rT = k, \rS = b) = F\left(F^{-1}\left(F_Y(Y \mid \rT = 1, \rS = b)\right) - \delta_k\right), \quad k = 2, \dots, K
 \end{eqnarray*}
 follows a standard uniform distribution on the unit interval. This means
 that we can sample from the distribution of $Y$ using
 \begin{eqnarray*}
-F_Y^{-1}\left(F(F^{-1}(U) + \delta_k) \mid \rS = b, \rT = 1)\right).
+F_Y^{-1}\left(F(F^{-1}(U) + \delta_k) \mid \rT = 1, \rS = b)\right).
 \end{eqnarray*}
 It is therefore enough to draw samples from $F(F^{-1}(U) + \delta_k)$, that
 is, assuming a uniform distribution for $F_Y$ in each control group. Because
 of the invariance with respect to monotone transformations, transforming all
 observations by the same quantile function changes the outcome distributions
-but not the shift effects.
+but not the shift effects. Discrete outcomes can be generated
+by post-hoc categorisation.
 
 @d design args
 @{
@@ -3237,6 +3266,15 @@ power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio,
                     nsim = nsim, seed = seed, tol = tol)$power - power
 @}
 
+@d power args check
+@{
+if (sum(vapply(list(n, delta, power, sig.level), is.null, 
+    NA)) != 1) 
+    stop("exactly one of 'n', 'delta', 'power', and 'sig.level' must be NULL")
+stats:::assert_NULL_or_prob(sig.level)
+stats:::assert_NULL_or_prob(power)
+@}
+
 @d power htest output
 @{
 ss <- paste(colSums(N), paste0("(", colnames(N), ")"), collapse = " + ")
@@ -3268,11 +3306,7 @@ power.free1way.test <- function(n = NULL, prob = if (is.null(n)) NULL else rep.i
                                 nsim = 100, seed = NULL, tol = .Machine$double.eps^0.25) 
 {
 
-    if (sum(vapply(list(n, delta, power, sig.level), is.null, 
-        NA)) != 1) 
-        stop("exactly one of 'n', 'delta', 'power', and 'sig.level' must be NULL")
-    stats:::assert_NULL_or_prob(sig.level)
-    stats:::assert_NULL_or_prob(power)
+    @<power args check@>
 
     @<random seed@>
 

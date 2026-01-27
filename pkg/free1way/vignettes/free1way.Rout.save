@@ -1336,6 +1336,59 @@ Wide Angle - Narrow Angle == 0    -2.02
 > logLik(free1way(time ~ me | id, data = d, link = "loglog"))
 [1] -55.624
 
+> example(mcnemar.test, echo = FALSE)
+
+> s <- gl(2, 1, labels = dimnames(Performance)[[1]])
+
+> survey <- gl(2, 1, labels = c("1st", "2nd"))
+
+> nvoters <- c(Performance)
+
+> x <- expand.grid(survey = survey, voter = factor(seq_len(sum(nvoters))))
+
+> x$performance <- c(rep(s[c(1, 1)], nvoters[1]), rep(s[c(2, 
++     1)], nvoters[2]), rep(s[c(1, 2)], nvoters[3]), rep(s[c(2, 
++     2)], nvoters[4]))
+
+> mcn <- free1way(xtabs(~performance + survey + voter, 
++     data = x))
+
+> print(mcn)
+
+	Stratified 2-sample Wilcoxon test against proportional odds
+	alternatives
+
+data:  performance by survey (c("1st", "2nd")) 
+	 stratified by voter
+Perm Z = 4.17, p-value = 3.1e-05
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(mcn, test = "Permutation")$statistic^2
+Perm Z 
+17.356 
+
+> mcnemar.test(Performance, correct = FALSE)
+
+	McNemar's Chi-squared test
+
+data:  Performance
+McNemar's chi-squared = 17.4, df = 1, p-value = 3.1e-05
+
+
+> summary(mcn)
+
+Call:
+free1way.table(y = xtabs(~performance + survey + voter, data = x))
+
+Coefficients:
+          log-odds ratio Std. Error z value P(>|z|)
+survey2nd          1.113      0.191   5.816       0
+
+> confint(mcn, test = "Wald")
+            2.5 % 97.5 %
+survey2nd 0.73767 1.4875
+
 > tk <- free1way(Ozone ~ Month, data = airquality)
 
 > library("multcomp")
@@ -1748,4 +1801,4 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 34.786   0.155  34.948 
+ 34.552   0.211  34.787 
