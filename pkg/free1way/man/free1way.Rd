@@ -183,7 +183,8 @@ The two-sample Wilcoxon rank sum test (implemented in
 log-odds ratios. If each observation forms its own block for
 \eqn{K}-samples, an analogue to \code{\link{friedman.test}} is obtained.
 Unlike these classical implementations, \code{free1way} allows discrete
-binary or ordered outcomes to be analysed in the same spirit.
+binary or ordered outcomes to be analysed in the same spirit, for example
+for binary paired comparisons (as in \code{\link{mcnemar.test}}).
 
 }
 \value{
@@ -221,7 +222,29 @@ coef(ft)
 summary(ft)
 confint(ft, test = "Wald")
 
-## Mantel-Haenszel test, Departments are blocks
+## McNemar test
+## paired binary observations
+example(mcnemar.test, echo = FALSE)
+# set-up data frame with survey outcomes for voters
+s <- gl(2, 1, labels = dimnames(Performance)[[1L]])
+survey <- gl(2, 1, labels = c("1st", "2nd"))
+nvoters <- c(Performance)
+x <- expand.grid(survey = survey, voter = factor(seq_len(sum(nvoters))))
+x$performance <- c(rep(s[c(1, 1)], nvoters[1]), rep(s[c(2, 1)], nvoters[2]),
+                   rep(s[c(1, 2)], nvoters[3]), rep(s[c(2, 2)], nvoters[4]))
+# note that only those voters changing their minds are relevant
+mcn <- free1way(xtabs(~ performance + survey + voter, data = x))
+# same result as mcnemar.test w/o continuity correction
+print(mcn)
+# X^2 statistic
+summary(mcn, test = "Permutation")$statistic^2
+mcnemar.test(Performance, correct = FALSE)
+# Wald inference
+summary(mcn)
+confint(mcn, test = "Wald")
+
+## Mantel-Haenszel test w/o continuity correction, 
+## Departments are blocks
 mantelhaen.test(UCBAdmissions, correct = FALSE)
 mh <- free1way(UCBAdmissions)
 print(mh)

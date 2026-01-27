@@ -87,6 +87,12 @@ variables \code{groups} and (optionally) \code{blocks}.
 }
 \examples{
 
+## make example reproducible
+if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) 
+    runif(1)
+R.seed <- get(".Random.seed", envir = .GlobalEnv)
+set.seed(29)
+
 ## sample from proportional odds model with 1:2 allocation
 ## based on odds ratio of 3, with sample sizes (15, 30)
 x <- rfree1way(n = 15, delta = log(3), alloc_ratio = 2)
@@ -100,5 +106,6 @@ summary(free1way(y ~ groups, data = x), test = "Permutation")$p.value
 # approximate power for this test
 power.free1way.test(n = 15, delta = log(3), alloc_ratio = 2)
 
+assign(".Random.seed", R.seed, envir = .GlobalEnv)
 }
 \keyword{htest}
