@@ -19,7 +19,8 @@
 .dd2d <- function(link, x, ...)
     link$dd2dlinkinv(x = x, ...)
 
-linkfun <- function(alias, 
+linkfun <- function(name,
+                    alias, 
                     model, 
                     parm, 
                     link, 
@@ -28,7 +29,8 @@ linkfun <- function(alias,
                     ddlinkinv,
                     ...) {
 
-    ret <- list(alias = alias,
+    ret <- list(name = name, 
+                alias = alias,
                 model = model,
                 parm = parm,
                 link = link,
@@ -46,7 +48,8 @@ linkfun <- function(alias,
 # logit
 
 logit <- function()
-    linkfun(alias = c("Wilcoxon", "Kruskal-Wallis"),
+    linkfun(name = "Logit", 
+            alias = c("Wilcoxon", "Kruskal-Wallis"),
             model = "proportional odds", 
             parm = "log-odds ratio",
             link = qlogis,
@@ -83,7 +86,8 @@ logit <- function()
 # probit
 
 probit <- function()
-    linkfun(alias = "van der Waerden normal scores",
+    linkfun(name = "Probit",
+            alias = "van der Waerden normal scores",
             model = "latent normal shift", 
             parm = "generalised Cohen's d",
             link = qnorm,
@@ -102,7 +106,8 @@ probit <- function()
 # cloglog
 
 cloglog <- function()
-    linkfun(alias = "Savage",
+    linkfun(name = "Complementary Log-log",
+            alias = "Savage",
             model = "proportional hazards", 
             parm = "log-hazard ratio",
             link = function(p, log.p = FALSE) {
@@ -147,7 +152,8 @@ cloglog <- function()
 # loglog
 
 loglog <- function()
-    linkfun(alias = "Lehmann", 
+    linkfun(name = "Log-log",
+            alias = "Lehmann", 
             model = "Lehmann", 
             parm = "log-reverse time hazard ratio",
             link = function(p, log.p = FALSE) {

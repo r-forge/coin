@@ -909,7 +909,8 @@ outcomes, it doesn't seem beneficial to extend this richer class.
 .dd2d <- function(link, x, ...)
     link$dd2dlinkinv(x = x, ...)
 
-linkfun <- function(alias, 
+linkfun <- function(name,
+                    alias, 
                     model, 
                     parm, 
                     link, 
@@ -918,7 +919,8 @@ linkfun <- function(alias,
                     ddlinkinv,
                     ...) {
 
-    ret <- list(alias = alias,
+    ret <- list(name = name, 
+                alias = alias,
                 model = model,
                 parm = parm,
                 link = link,
@@ -940,7 +942,8 @@ to Wilcoxon or Kruskal-Wallis type score residuals:
 @d logit
 @{
 logit <- function()
-    linkfun(alias = c("Wilcoxon", "Kruskal-Wallis"),
+    linkfun(name = "Logit", 
+            alias = c("Wilcoxon", "Kruskal-Wallis"),
             model = "proportional odds", 
             parm = "log-odds ratio",
             link = qlogis,
@@ -986,7 +989,8 @@ against Lehmann alternatives:
 @d loglog
 @{
 loglog <- function()
-    linkfun(alias = "Lehmann", 
+    linkfun(name = "Log-log",
+            alias = "Lehmann", 
             model = "Lehmann", 
             parm = "log-reverse time hazard ratio",
             link = function(p, log.p = FALSE) {
@@ -1036,7 +1040,8 @@ alternatives:
 @d cloglog
 @{
 cloglog <- function()
-    linkfun(alias = "Savage",
+    linkfun(name = "Complementary Log-log",
+            alias = "Savage",
             model = "proportional hazards", 
             parm = "log-hazard ratio",
             link = function(p, log.p = FALSE) {
@@ -1086,7 +1091,8 @@ that is, differences on a latent normal scale with variance one:
 @d probit
 @{
 probit <- function()
-    linkfun(alias = "van der Waerden normal scores",
+    linkfun(name = "Probit",
+            alias = "van der Waerden normal scores",
             model = "latent normal shift", 
             parm = "generalised Cohen's d",
             link = qnorm,
@@ -1474,6 +1480,11 @@ dn2 <- dimnames(xt)[2L]
 names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
 
 par <- ret$par
+intercepts <- function(parm, x) {
+    @<stratum prep@>
+    intercepts
+}
+ret$intercepts <- intercepts(par, x = xlist)
 
 if (score) {
     ret$negscore <- .snsc(par, x = xlist, mu = mu)[parm]

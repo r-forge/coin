@@ -132,4 +132,4 @@ Linear Hypotheses:
 > 
 > proc.time()
    user  system elapsed 
-  0.868   0.056   0.920 
+  0.844   0.060   0.910 

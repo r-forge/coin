@@ -80,24 +80,24 @@
 > .dd2d <- function(link, x, ...) link$dd2dlinkinv(x = x, 
 +     ...)
 
-> linkfun <- function(alias, model, parm, link, linkinv, 
-+     dlinkinv, ddlinkinv, ...) {
-+     ret <- list(alias = alias, model = model, parm = par .... [TRUNCATED] 
+> linkfun <- function(name, alias, model, parm, link, 
++     linkinv, dlinkinv, ddlinkinv, ...) {
++     ret <- list(name = name, alias = alias, model  .... [TRUNCATED] 
 
-> logit <- function() linkfun(alias = c("Wilcoxon", 
+> logit <- function() linkfun(name = "Logit", alias = c("Wilcoxon", 
 +     "Kruskal-Wallis"), model = "proportional odds", parm = "log-odds ratio", 
-+     link = qlog .... [TRUNCATED] 
++ .... [TRUNCATED] 
 
-> probit <- function() linkfun(alias = "van der Waerden normal scores", 
-+     model = "latent normal shift", parm = "generalised Cohen's d", 
-+     l .... [TRUNCATED] 
+> probit <- function() linkfun(name = "Probit", alias = "van der Waerden normal scores", 
++     model = "latent normal shift", parm = "generalised Coh ..." ... [TRUNCATED] 
 
-> cloglog <- function() linkfun(alias = "Savage", model = "proportional hazards", 
-+     parm = "log-hazard ratio", link = function(p, log.p = FALSE)  .... [TRUNCATED] 
+> cloglog <- function() linkfun(name = "Complementary Log-log", 
++     alias = "Savage", model = "proportional hazards", parm = "log-hazard ratio", 
++ .... [TRUNCATED] 
 
-> loglog <- function() linkfun(alias = "Lehmann", model = "Lehmann", 
-+     parm = "log-reverse time hazard ratio", link = function(p, 
-+         log. .... [TRUNCATED] 
+> loglog <- function() linkfun(name = "Log-log", alias = "Lehmann", 
++     model = "Lehmann", parm = "log-reverse time hazard ratio", 
++     link = fu .... [TRUNCATED] 
 
 > .NewtonRaphson <- function(start, objective, gradient, 
 +     hessian, control = list(iter.max = 150, trace = trace, objtol = 5e-04, 
@@ -1801,4 +1801,4 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 34.552   0.211  34.787 
+ 37.882   0.143  38.036 

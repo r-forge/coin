@@ -795,6 +795,20 @@
     names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
 
     par <- ret$par
+    intercepts <- function(parm, x) {
+        # stratum prep
+        
+        C <- vapply(x, NROW, 0L) ### might differ by stratum
+        K <- unique(do.call("c", lapply(x, ncol))) ### the same
+        B <- length(x)
+        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
+        bidx <- seq_len(K - 1L)
+        delta <- parm[bidx]
+        intercepts <- split(parm[-bidx], sidx)
+        
+        intercepts
+    }
+    ret$intercepts <- intercepts(par, x = xlist)
 
     if (score) {
         ret$negscore <- .snsc(par, x = xlist, mu = mu)[parm]
