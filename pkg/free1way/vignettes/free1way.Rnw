@@ -806,10 +806,13 @@ options(digits = 5)
     
     
 
-
-    if (NS <- is.null(start))
-        start <- rep.int(0, K - 1)
-    lwr <- rep(-Inf, times = K - 1)
+    ## allow specification of start = delta and fix = 1:K
+    ## for evaluating the likelihood at given delta parameters
+    ## without having to specify all intercept parameters
+    if (is.null(start))
+        start <- rep.int(0, K - 1L)
+    NS <- length(start) == (K - 1L)
+    lwr <- rep(-Inf, times = K - 1L)
     for (b in seq_len(length(xlist))) {
         bC <- nrow(xlist[[b]]) - 1L
         lwr <- c(lwr, -Inf, rep.int(0, times = bC - 1L))
@@ -3159,10 +3162,13 @@ after merging all treatment groups:
 \mbox{}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape table2list body}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@if (NS <- is.null(start))@\\
-\mbox{}\verb@    start <- rep.int(0, K - 1)@\\
-\mbox{}\verb@lwr <- rep(-Inf, times = K - 1)@\\
+\mbox{}\verb@## allow specification of start = delta and fix = 1:K@\\
+\mbox{}\verb@## for evaluating the likelihood at given delta parameters@\\
+\mbox{}\verb@## without having to specify all intercept parameters@\\
+\mbox{}\verb@if (is.null(start))@\\
+\mbox{}\verb@    start <- rep.int(0, K - 1L)@\\
+\mbox{}\verb@NS <- length(start) == (K - 1L)@\\
+\mbox{}\verb@lwr <- rep(-Inf, times = K - 1L)@\\
 \mbox{}\verb@for (b in seq_len(length(xlist))) {@\\
 \mbox{}\verb@    bC <- nrow(xlist[[b]]) - 1L@\\
 \mbox{}\verb@    lwr <- c(lwr, -Inf, rep.int(0, times = bC - 1L))@\\
@@ -3187,7 +3193,8 @@ after merging all treatment groups:
 \end{flushleft}
 The profile negative log-likelihood can be evaluated for some of the
 parameters in $\thetavec$ (denoted as \code{fix}), the remaining parameters
-are updated. Note that \code{start} must contain the full and feasible
+are updated. Note that \code{start} can either just contain a subset of the
+shift parameter or must contain the full and feasible
 (meeting monotonicity constraints for the intercept parameters) parameter vector
 $\thetavec$.
 

@@ -1297,10 +1297,13 @@ after merging all treatment groups:
 @{
 @<table2list body@>
 
-
-if (NS <- is.null(start))
-    start <- rep.int(0, K - 1)
-lwr <- rep(-Inf, times = K - 1)
+## allow specification of start = delta and fix = 1:K
+## for evaluating the likelihood at given delta parameters
+## without having to specify all intercept parameters
+if (is.null(start))
+    start <- rep.int(0, K - 1L)
+NS <- length(start) == (K - 1L)
+lwr <- rep(-Inf, times = K - 1L)
 for (b in seq_len(length(xlist))) {
     bC <- nrow(xlist[[b]]) - 1L
     lwr <- c(lwr, -Inf, rep.int(0, times = bC - 1L))
@@ -1316,7 +1319,8 @@ for (b in seq_len(length(xlist))) {
 
 The profile negative log-likelihood can be evaluated for some of the
 parameters in $\thetavec$ (denoted as \code{fix}), the remaining parameters
-are updated. Note that \code{start} must contain the full and feasible
+are updated. Note that \code{start} can either just contain a subset of the
+shift parameter or must contain the full and feasible
 (meeting monotonicity constraints for the intercept parameters) parameter vector
 $\thetavec$.
 
