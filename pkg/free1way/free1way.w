@@ -616,7 +616,57 @@ obj$vcov
 In the next step, we extend our results to the stratified case. We iterate
 over all blocks and evaluate the negative log-likelihood for the same values
 of the shift parameters but block-specific values of the intercept
-parameters. Before we begin, we convert the table $C \times K \times B
+parameters. Because \code{x} is a \code{table}, it may happen (especially in
+the presence of blocks) that some outcome values (rows) were not observed
+in any group (row sum is zero). Thus, the distribution function does not
+jump at this value and therefore no parameter for this value is needed. We
+remove these cases. In the right-censored case, we have to pay attention to
+censoring happening at these outcome values. We count how many obervations
+were censored between observations and assign the corresponding weights 
+to the subsequent outcome value. Furthermore, we need to be able to undo the
+removal of observations later, mainly for computing residuals. We store an
+attribute \code{idx} for later use in \code{.snsr} on page
+\pageref{lab:snsr}.
+
+@d determine steps in blocks
+@{
+xlist <- xrclist <- vector(mode = "list", length = B)
+
+for (b in seq_len(B)) {
+    xb <- matrix(x[,,b, drop = TRUE], ncol = K)
+    xw <- rowSums(abs(xb)) > 0
+    if (sum(xw) > 1L) {
+        ### do not remove last parameter if there are corresponding
+        ### right-censored observations
+        wm <- which(xw)[sum(xw)]
+        if (!is.null(xrc) && any(xrc[wm:dx[1],,b,drop = TRUE] > 0))
+            xw[length(xw)] <- TRUE
+        xlist[[b]] <- xb[xw,,drop = FALSE]
+        Cidx <- rep.int(1L, times = C)
+        Cidx[xw] <- Cidx[xw] + seq_len(sum(xw))
+        attr(xlist[[b]], "idx") <- Cidx
+        if (!is.null(xrc)) {
+            ### count right-censored observations between distinct event
+            ### times
+            cs <- apply(xrc[,,b,drop = TRUE] * (!xw), 2, function(x) 
+                diff(c(0, cumsum(x)[xw])))
+            xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K) + cs
+            idx <- seq_len(C)[xw]
+            idx <- rep(seq_len(sum(xw)), times = c(idx[1], diff(idx)))
+            Cidx <- rep.int(1L, times = C)
+            Cidx[seq_along(idx)] <- Cidx[seq_along(idx)] + idx
+            attr(xrclist[[b]], "idx") <- Cidx
+        }
+    }
+}
+### remove empty blocks
+strata <- !vapply(xlist, is.null, NA)
+xlist <- xlist[strata]
+xrclist <- xrclist[strata]
+@}
+
+
+Before we begin, we convert the table $C \times K \times B
 (\times 2)$ table \code{x} into a list of non-empty $C^\prime \times K$
 tables (yet still allowing zero row sums):
 
@@ -648,28 +698,7 @@ if (length(dx) == 4L) {
              domain = NA)
     }
 }
-
-xlist <- xrclist <- vector(mode = "list", length = B)
-
-for (b in seq_len(B)) {
-    xb <- matrix(x[,,b, drop = TRUE], ncol = K)
-    xw <- rowSums(abs(xb)) > 0
-    ### do not remove last parameter if there are corresponding
-    ### right-censored observations
-    if (!is.null(xrc) && any(xrc[dx[1],,b,drop = TRUE] > 0))
-        xw[length(xw)] <- TRUE
-    if (sum(xw) > 1L) {
-        xlist[[b]] <- xb[xw,,drop = FALSE]
-        attr(xlist[[b]], "idx") <- xw
-        if (!is.null(xrc)) {
-            xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K)
-            attr(xrclist[[b]], "idx") <- xw
-        }
-    }
-}
-strata <- !vapply(xlist, is.null, NA)
-xlist <- xlist[strata]
-xrclist <- xrclist[strata]
+@<determine steps in blocks@>
 @}
 
 @d table2list
@@ -735,7 +764,7 @@ intercept parameters are only concatenated:
 @}
 
 The score residuum is zero for an observation with weight zero, that is, a
-row of zeros in the table:
+row of zeros in the table: \label{lab:snsr}
 
 @d stratified negative score residual
 @{
@@ -744,10 +773,10 @@ row of zeros in the table:
     ret <- c()
     for (b in seq_len(B)) {
         idx <- attr(x[[b]], "idx")
-        sr <- numeric(length(idx))
-        sr[idx] <- .nsr(c(delta, intercepts[[b]]), x[[b]], mu = mu,
-                        rightcensored = rightcensored)
-        ret <- c(ret, sr)
+        ### idx == 1L means zero residual, see definition of idx
+        sr <- c(0, .nsr(c(delta, intercepts[[b]]), x[[b]], mu = mu,
+                        rightcensored = rightcensored))
+        ret <- c(ret, sr[idx])
     }
     return(ret)
 }
@@ -2032,8 +2061,8 @@ if (length(dim(y)) == 4L) {
     y <- y[,,ret$strata,, drop = FALSE]
     dy <- dim(y)
     dy[1] <- dy[1] * 2
-    y <- apply(y, 3, function(x) rbind(x[,,2], x[,,1]))
-    y <- array(y, dim = dy[1:3])
+    y <- apply(y, 3, function(x) rbind(x[,,"TRUE"], x[,,"FALSE"]), simplify = FALSE)
+    y <- array(unlist(y), dim = dy[1:3])
 }
 
 ### exact two-sample Wilcoxon w/o stratification
@@ -2172,7 +2201,13 @@ Because users can decide about the unique values in the vector \code{y} (by usin
 \code{round} or \code{trunc}, for example), before calling this function, we
 refrain from handling this issue internally. However, we offer an
 \code{nbins} argument for binning response observations at sample quantiles 
-in the absence of right-censoring.
+in the absence of right-censoring. Note that we ignore the blocks when
+calling \code{cut}. This is inefficient for many blocks with non-overlapping
+support of the outcome distribtion, as large sparse tables are resulting. We
+remove the corresponding elements from the first dimension of such a table
+later on (in \code{.free1wayML}). The reason for this inconvenice is that
+all the data going into \code{.free1wayML} can be stored as a \code{table} (and
+not as a list of things).
 
 @d free1way numeric
 @{
@@ -2187,8 +2222,8 @@ free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = N
                           "free1way"),
                  domain = NA)
         uy <- sort(unique(y[event]))
-        if (all(y[!event] < uy[length(uy)]))
-            uy <- uy[-length(uy)]
+#        if (all(y[!event] < uy[length(uy)]))
+#            uy <- uy[-length(uy)]
     } else {
         uy <- sort(unique(y))
     }
@@ -2698,7 +2733,6 @@ N <- 10
 nd <- expand.grid(g = gl(3, N), s = gl(3, N))
 nd$tm <- rexp(nrow(nd))
 nd$ev <- TRUE
-survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 0)$chisq
 cm <- coxph(Surv(tm, ev) ~ g + strata(s), data = nd)
 
 (ft <- free1way(tm ~ g | s, data = nd, link = "cloglog"))
@@ -2706,15 +2740,18 @@ coef(cm)
 coef(ft)
 vcov(cm)
 vcov(ft)
-summary(ft)
+### Rao score tests
 summary(cm)$sctest
 summary(ft, test = "Rao")
+### likelihood ratio tests
 summary(cm)$logtest
 summary(ft, test = "LRT")
+### Wald tests
 summary(cm)$waldtest
 summary(ft, test = "Wald")
+### asymptotic permutation tests
+survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 0)[c("chisq", "pvalue")]
 summary(ft, test = "Permutation")
-
 library("coin")
 independence_test(Surv(tm, ev) ~ g | s, data = nd, ytrafo = function(...)
                   trafo(..., numeric_trafo = logrank_trafo, block = nd$s), 
@@ -2724,7 +2761,7 @@ independence_test(Surv(tm, ev) ~ g | s, data = nd, ytrafo = function(...)
 Wilcoxon against proportional odds
 
 <<Peto>>=
-survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 1)$chisq
+survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 1)[c("chisq", "pvalue")]
 (ft <- free1way(tm ~ g | s, data = nd, link = "logit"))
 summary(ft)
 summary(ft, test = "Rao")
@@ -2742,42 +2779,82 @@ and we operate on the full likelihood.
 <<sw>>=
 library("survival")
 data("GBSG2", package = "TH.data")
-survdiff(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2, rho = 0)$chisq
 cm <- coxph(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2)
 
-### no formula interface yet
 ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | tgrade, 
                            link = "cloglog"))
 coef(cm)
 coef(ft)
 vcov(cm)
 vcov(ft)
-summary(ft)
+### Rao score tests
 summary(cm)$sctest
 summary(ft, test = "Rao")
+### likelihood ratio tests
 summary(cm)$logtest
 summary(ft, test = "LRT")
+### Wald tests
 summary(cm)$waldtest
 summary(ft, test = "Wald")
+### asymptotic permutation tests
+survdiff(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2, rho = 0)[c("chisq", "pvalue")]
 summary(ft, test = "Permutation")
-
-### test with many small strata 
-(ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | pnodes, 
-                            link = "cloglog")))
+independence_test(Surv(time, cens) ~ horTh | tgrade, data = GBSG2, ytrafo = function(...)
+                  trafo(..., numeric_trafo = logrank_trafo, block = GBSG2$tgrade), 
+                  teststat = "quad")
 @@
 
 Wilcoxon against proportional odds
 
 <<Peto>>=
-survdiff(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2, rho = 1)$chisq
+survdiff(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2, rho = 1)[c("chisq", "pvalue")]
 (ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | tgrade, 
                             link = "logit")))
-summary(ft)
 summary(ft, test = "Rao")
 summary(ft, test = "LRT")
 summary(ft, test = "Wald")
 summary(ft, test = "Permutation")
 @@
+
+And now with more and smaller blocks
+
+<<sw>>=
+library("survival")
+GBSG2$str <- cut(GBSG2$tsize, breaks = c(0, 1:9 * 10, Inf))
+cm <- coxph(Surv(time, cens) ~ horTh + strata(str), data = GBSG2)
+
+ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | str, 
+                           link = "cloglog"))
+coef(cm)
+coef(ft)
+vcov(cm)
+vcov(ft)
+### Rao score tests
+summary(cm)$sctest
+summary(ft, test = "Rao")
+### likelihood ratio tests
+summary(cm)$logtest
+summary(ft, test = "LRT")
+### Wald tests
+summary(cm)$waldtest
+summary(ft, test = "Wald")
+### asymptotic permutation tests
+survdiff(Surv(time, cens) ~ horTh + strata(str), data = GBSG2, rho = 0)[c("chisq", "pvalue")]
+summary(ft, test = "Permutation")
+@@
+
+Wilcoxon against proportional odds
+
+<<Peto>>=
+survdiff(Surv(time, cens) ~ horTh + strata(str), data = GBSG2, rho = 1)[c("chisq", "pvalue")]
+(ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | str, 
+                            link = "logit")))
+summary(ft, test = "Rao")
+summary(ft, test = "LRT")
+summary(ft, test = "Wald")
+summary(ft, test = "Permutation")
+@@
+
 
 
 \section{van der Waerden Test}
