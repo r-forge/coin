@@ -51,4 +51,4 @@ Loading required package: survival
 > 
 > proc.time()
    user  system elapsed 
-  6.082   0.156   6.234 
+  6.355   0.187   6.544 

@@ -356,22 +356,35 @@ options(digits = 5)
     for (b in seq_len(B)) {
         xb <- matrix(x[,,b, drop = TRUE], ncol = K)
         xw <- rowSums(abs(xb)) > 0
-        ### do not remove last parameter if there are corresponding
-        ### right-censored observations
-        if (!is.null(xrc) && any(xrc[dx[1],,b,drop = TRUE] > 0))
-            xw[length(xw)] <- TRUE
         if (sum(xw) > 1L) {
+            ### do not remove last parameter if there are corresponding
+            ### right-censored observations
+            wm <- which(xw)[sum(xw)]
+            if (!is.null(xrc) && any(xrc[wm:dx[1],,b,drop = TRUE] > 0))
+                xw[length(xw)] <- TRUE
             xlist[[b]] <- xb[xw,,drop = FALSE]
-            attr(xlist[[b]], "idx") <- xw
+            Cidx <- rep.int(1L, times = C)
+            Cidx[xw] <- Cidx[xw] + seq_len(sum(xw))
+            attr(xlist[[b]], "idx") <- Cidx
             if (!is.null(xrc)) {
-                xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K)
-                attr(xrclist[[b]], "idx") <- xw
+                ### count right-censored observations between distinct event
+                ### times
+                cs <- apply(xrc[,,b,drop = TRUE] * (!xw), 2, function(x) 
+                    diff(c(0, cumsum(x)[xw])))
+                xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K) + cs
+                idx <- seq_len(C)[xw]
+                idx <- rep(seq_len(sum(xw)), times = c(idx[1], diff(idx)))
+                Cidx <- rep.int(1L, times = C)
+                Cidx[seq_along(idx)] <- Cidx[seq_along(idx)] + idx
+                attr(xrclist[[b]], "idx") <- Cidx
             }
         }
     }
+    ### remove empty blocks
     strata <- !vapply(xlist, is.null, NA)
     xlist <- xlist[strata]
     xrclist <- xrclist[strata]
+    
     
 
     ret <- list(xlist = xlist)
@@ -682,10 +695,10 @@ options(digits = 5)
     ret <- c()
     for (b in seq_len(B)) {
         idx <- attr(x[[b]], "idx")
-        sr <- numeric(length(idx))
-        sr[idx] <- .nsr(c(delta, intercepts[[b]]), x[[b]], mu = mu,
-                        rightcensored = rightcensored)
-        ret <- c(ret, sr)
+        ### idx == 1L means zero residual, see definition of idx
+        sr <- c(0, .nsr(c(delta, intercepts[[b]]), x[[b]], mu = mu,
+                        rightcensored = rightcensored))
+        ret <- c(ret, sr[idx])
     }
     return(ret)
 }
@@ -762,22 +775,35 @@ options(digits = 5)
     for (b in seq_len(B)) {
         xb <- matrix(x[,,b, drop = TRUE], ncol = K)
         xw <- rowSums(abs(xb)) > 0
-        ### do not remove last parameter if there are corresponding
-        ### right-censored observations
-        if (!is.null(xrc) && any(xrc[dx[1],,b,drop = TRUE] > 0))
-            xw[length(xw)] <- TRUE
         if (sum(xw) > 1L) {
+            ### do not remove last parameter if there are corresponding
+            ### right-censored observations
+            wm <- which(xw)[sum(xw)]
+            if (!is.null(xrc) && any(xrc[wm:dx[1],,b,drop = TRUE] > 0))
+                xw[length(xw)] <- TRUE
             xlist[[b]] <- xb[xw,,drop = FALSE]
-            attr(xlist[[b]], "idx") <- xw
+            Cidx <- rep.int(1L, times = C)
+            Cidx[xw] <- Cidx[xw] + seq_len(sum(xw))
+            attr(xlist[[b]], "idx") <- Cidx
             if (!is.null(xrc)) {
-                xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K)
-                attr(xrclist[[b]], "idx") <- xw
+                ### count right-censored observations between distinct event
+                ### times
+                cs <- apply(xrc[,,b,drop = TRUE] * (!xw), 2, function(x) 
+                    diff(c(0, cumsum(x)[xw])))
+                xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K) + cs
+                idx <- seq_len(C)[xw]
+                idx <- rep(seq_len(sum(xw)), times = c(idx[1], diff(idx)))
+                Cidx <- rep.int(1L, times = C)
+                Cidx[seq_along(idx)] <- Cidx[seq_along(idx)] + idx
+                attr(xrclist[[b]], "idx") <- Cidx
             }
         }
     }
+    ### remove empty blocks
     strata <- !vapply(xlist, is.null, NA)
     xlist <- xlist[strata]
     xrclist <- xrclist[strata]
+    
     
 
 
@@ -1097,10 +1123,10 @@ options(digits = 5)
         ret <- c()
         for (b in seq_len(B)) {
             idx <- attr(x[[b]], "idx")
-            sr <- numeric(length(idx))
-            sr[idx] <- .nsr(c(delta, intercepts[[b]]), x[[b]], mu = mu,
-                            rightcensored = rightcensored)
-            ret <- c(ret, sr)
+            ### idx == 1L means zero residual, see definition of idx
+            sr <- c(0, .nsr(c(delta, intercepts[[b]]), x[[b]], mu = mu,
+                            rightcensored = rightcensored))
+            ret <- c(ret, sr[idx])
         }
         return(ret)
     }
@@ -2191,12 +2217,74 @@ obj$vcov
 In the next step, we extend our results to the stratified case. We iterate
 over all blocks and evaluate the negative log-likelihood for the same values
 of the shift parameters but block-specific values of the intercept
-parameters. Before we begin, we convert the table $C \times K \times B
+parameters. Because \code{x} is a \code{table}, it may happen (especially in
+the presence of blocks) that some outcome values (rows) were not observed
+in any group (row sum is zero). Thus, the distribution function does not
+jump at this value and therefore no parameter for this value is needed. We
+remove these cases. In the right-censored case, we have to pay attention to
+censoring happening at these outcome values. We count how many obervations
+were censored between observations and assign the corresponding weights 
+to the subsequent outcome value. Furthermore, we need to be able to undo the
+removal of observations later, mainly for computing residuals. We store an
+attribute \code{idx} for later use in \code{.snsr} on page
+\pageref{lab:snsr}.
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap11}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape determine steps in blocks}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@xlist <- xrclist <- vector(mode = "list", length = B)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@for (b in seq_len(B)) {@\\
+\mbox{}\verb@    xb <- matrix(x[,,b, drop = TRUE], ncol = K)@\\
+\mbox{}\verb@    xw <- rowSums(abs(xb)) > 0@\\
+\mbox{}\verb@    if (sum(xw) > 1L) {@\\
+\mbox{}\verb@        ### do not remove last parameter if there are corresponding@\\
+\mbox{}\verb@        ### right-censored observations@\\
+\mbox{}\verb@        wm <- which(xw)[sum(xw)]@\\
+\mbox{}\verb@        if (!is.null(xrc) && any(xrc[wm:dx[1],,b,drop = TRUE] > 0))@\\
+\mbox{}\verb@            xw[length(xw)] <- TRUE@\\
+\mbox{}\verb@        xlist[[b]] <- xb[xw,,drop = FALSE]@\\
+\mbox{}\verb@        Cidx <- rep.int(1L, times = C)@\\
+\mbox{}\verb@        Cidx[xw] <- Cidx[xw] + seq_len(sum(xw))@\\
+\mbox{}\verb@        attr(xlist[[b]], "idx") <- Cidx@\\
+\mbox{}\verb@        if (!is.null(xrc)) {@\\
+\mbox{}\verb@            ### count right-censored observations between distinct event@\\
+\mbox{}\verb@            ### times@\\
+\mbox{}\verb@            cs <- apply(xrc[,,b,drop = TRUE] * (!xw), 2, function(x) @\\
+\mbox{}\verb@                diff(c(0, cumsum(x)[xw])))@\\
+\mbox{}\verb@            xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K) + cs@\\
+\mbox{}\verb@            idx <- seq_len(C)[xw]@\\
+\mbox{}\verb@            idx <- rep(seq_len(sum(xw)), times = c(idx[1], diff(idx)))@\\
+\mbox{}\verb@            Cidx <- rep.int(1L, times = C)@\\
+\mbox{}\verb@            Cidx[seq_along(idx)] <- Cidx[seq_along(idx)] + idx@\\
+\mbox{}\verb@            attr(xrclist[[b]], "idx") <- Cidx@\\
+\mbox{}\verb@        }@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@### remove empty blocks@\\
+\mbox{}\verb@strata <- !vapply(xlist, is.null, NA)@\\
+\mbox{}\verb@xlist <- xlist[strata]@\\
+\mbox{}\verb@xrclist <- xrclist[strata]@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+Before we begin, we convert the table $C \times K \times B
 (\times 2)$ table \code{x} into a list of non-empty $C^\prime \times K$
 tables (yet still allowing zero row sums):
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap11}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap12}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape table2list body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2227,28 +2315,7 @@ tables (yet still allowing zero row sums):
 \mbox{}\verb@             domain = NA)@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@xlist <- xrclist <- vector(mode = "list", length = B)@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@for (b in seq_len(B)) {@\\
-\mbox{}\verb@    xb <- matrix(x[,,b, drop = TRUE], ncol = K)@\\
-\mbox{}\verb@    xw <- rowSums(abs(xb)) > 0@\\
-\mbox{}\verb@    ### do not remove last parameter if there are corresponding@\\
-\mbox{}\verb@    ### right-censored observations@\\
-\mbox{}\verb@    if (!is.null(xrc) && any(xrc[dx[1],,b,drop = TRUE] > 0))@\\
-\mbox{}\verb@        xw[length(xw)] <- TRUE@\\
-\mbox{}\verb@    if (sum(xw) > 1L) {@\\
-\mbox{}\verb@        xlist[[b]] <- xb[xw,,drop = FALSE]@\\
-\mbox{}\verb@        attr(xlist[[b]], "idx") <- xw@\\
-\mbox{}\verb@        if (!is.null(xrc)) {@\\
-\mbox{}\verb@            xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K)@\\
-\mbox{}\verb@            attr(xrclist[[b]], "idx") <- xw@\\
-\mbox{}\verb@        }@\\
-\mbox{}\verb@    }@\\
-\mbox{}\verb@}@\\
-\mbox{}\verb@strata <- !vapply(xlist, is.null, NA)@\\
-\mbox{}\verb@xlist <- xlist[strata]@\\
-\mbox{}\verb@xrclist <- xrclist[strata]@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape determine steps in blocks}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -2261,7 +2328,7 @@ tables (yet still allowing zero row sums):
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap12}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap13}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape table2list}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2291,7 +2358,7 @@ We first extract the shift parameters $\delta_{\cdot}$ and then, separately
 for each stratum, the corresponding contrasts of the intercept parameters:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap13}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap14}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2318,7 +2385,7 @@ before we loop over the non-empty strata and return the sum of the
 corresponding log-likelihoods:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap14}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap15}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape stratified negative logLik}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2347,7 +2414,7 @@ contributions by the shift parameters whereas the gradients for the
 intercept parameters are only concatenated:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap15}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap16}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape stratified negative score}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2375,10 +2442,10 @@ intercept parameters are only concatenated:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 The score residuum is zero for an observation with weight zero, that is, a
-row of zeros in the table:
+row of zeros in the table: \label{lab:snsr}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap16}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap17}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape stratified negative score residual}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2388,10 +2455,10 @@ row of zeros in the table:
 \mbox{}\verb@    ret <- c()@\\
 \mbox{}\verb@    for (b in seq_len(B)) {@\\
 \mbox{}\verb@        idx <- attr(x[[b]], "idx")@\\
-\mbox{}\verb@        sr <- numeric(length(idx))@\\
-\mbox{}\verb@        sr[idx] <- .nsr(c(delta, intercepts[[b]]), x[[b]], mu = mu,@\\
-\mbox{}\verb@                        rightcensored = rightcensored)@\\
-\mbox{}\verb@        ret <- c(ret, sr)@\\
+\mbox{}\verb@        ### idx == 1L means zero residual, see definition of idx@\\
+\mbox{}\verb@        sr <- c(0, .nsr(c(delta, intercepts[[b]]), x[[b]], mu = mu,@\\
+\mbox{}\verb@                        rightcensored = rightcensored))@\\
+\mbox{}\verb@        ret <- c(ret, sr[idx])@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    return(ret)@\\
 \mbox{}\verb@}@\\
@@ -2435,7 +2502,7 @@ shift- and intercept parameters first. We differentiate between computing
 the null Hessian for $\thetavec$ as a dense \code{matrix}:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap17}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap18}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape full Hessian}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2490,7 +2557,7 @@ and the computation of the Hessian for the shift parameters using
 \code{Matrix} technology:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap18}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap19}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape stratified Hessian}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2560,7 +2627,7 @@ Although there is some overlap with \code{family} objects for binomial
 outcomes, it doesn't seem beneficial to extend this richer class.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap19}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap20}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"linkfun.R"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2581,7 +2648,7 @@ outcomes, it doesn't seem beneficial to extend this richer class.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap20}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap21}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape linkfun}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2644,7 +2711,7 @@ We start with the logit link, that is $F(z) = (1 + \exp(-z))^{-1}$, giving rise
 to Wilcoxon or Kruskal-Wallis type score residuals:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap21}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap22}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape logit}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2704,7 +2771,7 @@ The log-log link, with $F(z) = \exp(-\exp(-z))$, is used to construct tests
 against Lehmann alternatives:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap22}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap23}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape loglog}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2768,7 +2835,7 @@ log-rank or Savage score residuals against proportional hazards
 alternatives:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap23}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap24}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape cloglog}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2832,7 +2899,7 @@ shift effect can be interpreted as a generalised version of Cohen's $d$,
 that is, differences on a latent normal scale with variance one:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap24}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap25}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape probit}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2874,7 +2941,7 @@ matrix. The following code was adopted from his \pkg{rms} package, function
 \code{rms:::lrm.fit}.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap25}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap26}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Newton update}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2900,7 +2967,7 @@ matrix. The following code was adopted from his \pkg{rms} package, function
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap26}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap27}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Newton step halving}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2941,7 +3008,7 @@ matrix. The following code was adopted from his \pkg{rms} package, function
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap27}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap28}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Newton convergence}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2967,7 +3034,7 @@ matrix. The following code was adopted from his \pkg{rms} package, function
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap28}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap29}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape NewtonRaphson}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3048,7 +3115,7 @@ all.equal(unname(cf$par), unname(cf2))
 \label{ch:ML}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap29}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap30}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"free1way.R"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3085,7 +3152,7 @@ intercept parameters from the empirical cumulative distribution function
 after merging all treatment groups:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap30}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap31}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape setup and starting values}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3129,7 +3196,7 @@ We call \code{nlminb} and will increase the \code{eval.max} and
 we encounter optimisation issues and restart at the current solution:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap31}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap32}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape do optim}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3186,7 +3253,7 @@ the profile negative log-likelihood, which in turn calls the two functions
 defined first
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap32}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap33}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape profile}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3275,7 +3342,7 @@ and it is certainly unclear if one can proceed with permutation testing
 after correcting the bias.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap33}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap34}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Firth correction}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3320,7 +3387,7 @@ log-likelihood. We allow some (or all) parameters to be fixed at some
 constants, and provide a profile version of the likelihood:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap34}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap35}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape optim}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3353,7 +3420,7 @@ After parameter estimation, we evaluate negative scores, the Hessian, and
 negative residuals as requested:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap35}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap36}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape post processing}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3435,7 +3502,7 @@ time whenever a larger number of intercept parameters in present in the
 problem.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap36}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap37}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ML estimation}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3540,7 +3607,7 @@ statistics and obtain the limiting null distribution based on classical ML
 theory under the population model:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap37}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap38}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape statistics}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3571,7 +3638,7 @@ We only need access to the parameter estimates $\hat{\delta}_2, \dots,
 \hat{\delta}_K$ and the corresponding Hessian:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap38}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap39}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Wald statistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3602,7 +3669,7 @@ evaluate the profile log-likelihood at some value corresponding the null
 hypothesis to be tested:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap39}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap40}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape LRT}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3632,7 +3699,7 @@ function of the shift parameters evaluated for some null values need to be
 computed:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap40}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap41}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Rao}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3669,7 +3736,7 @@ asymptotic distribution or based on a Monte-Carlo estimate of the reference
 distribution:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap41}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap42}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Permutation statistics}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3705,7 +3772,7 @@ distribution:
 In addition, we compute permutation p-values
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap42}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap43}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Permutation p-values}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3765,7 +3832,7 @@ The mean and variance of the linear permutation statistic under the null was
 given by \cite{strasserweber1999}:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap43}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap44}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Strasser Weber}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3820,7 +3887,7 @@ For small samples, we used the \code{r2dtable} function to sample from
 tables with fixed marginal distributions:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap44}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap45}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape resampling}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3874,7 +3941,7 @@ also provide exact p-values computed via the Streitberg-R\"ohmel shift
 algorithm, mainly because the scores can be mapped to integers:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap45}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap46}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape exact proportional odds}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3966,7 +4033,7 @@ We provide a new test procedure in a generic \code{free1way}, featuring
 a method for tables (the main workhorse) and additional user interfaces. 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap46}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap47}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape link2fun}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3994,7 +4061,7 @@ group as control, so factors need to be releveled to obtain identical
 results (this is relevant for the one-sided case).
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap47}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap48}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4056,7 +4123,7 @@ where preparations for permutations tests are performed before returning the
 object
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap48}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap49}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way permutation tests}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4088,8 +4155,8 @@ object
 \mbox{}\verb@    y <- y[,,ret$strata,, drop = FALSE]@\\
 \mbox{}\verb@    dy <- dim(y)@\\
 \mbox{}\verb@    dy[1] <- dy[1] * 2@\\
-\mbox{}\verb@    y <- apply(y, 3, function(x) rbind(x[,,2], x[,,1]))@\\
-\mbox{}\verb@    y <- array(y, dim = dy[1:3])@\\
+\mbox{}\verb@    y <- apply(y, 3, function(x) rbind(x[,,"TRUE"], x[,,"FALSE"]), simplify = FALSE)@\\
+\mbox{}\verb@    y <- array(unlist(y), dim = dy[1:3])@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@### exact two-sample Wilcoxon w/o stratification@\\
@@ -4124,7 +4191,7 @@ y ~ groups | blocks
 for model specification. We start handling the formula
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap49}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap50}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape formula business}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4166,7 +4233,7 @@ for model specification. We start handling the formula
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap50}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap51}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way formula}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4232,7 +4299,7 @@ outcomes. The \code{event} argument is a logical where \code{TRUE} is
 interpreted as an event and \code{FALSE} as right-censored observation
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap51}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap52}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4276,10 +4343,16 @@ Because users can decide about the unique values in the vector \code{y} (by usin
 \code{round} or \code{trunc}, for example), before calling this function, we
 refrain from handling this issue internally. However, we offer an
 \code{nbins} argument for binning response observations at sample quantiles 
-in the absence of right-censoring.
+in the absence of right-censoring. Note that we ignore the blocks when
+calling \code{cut}. This is inefficient for many blocks with non-overlapping
+support of the outcome distribtion, as large sparse tables are resulting. We
+remove the corresponding elements from the first dimension of such a table
+later on (in \code{.free1wayML}). The reason for this inconvenice is that
+all the data going into \code{.free1wayML} can be stored as a \code{table} (and
+not as a list of things).
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap52}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap53}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way numeric}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4295,8 +4368,8 @@ in the absence of right-censoring.
 \mbox{}\verb@                          "free1way"),@\\
 \mbox{}\verb@                 domain = NA)@\\
 \mbox{}\verb@        uy <- sort(unique(y[event]))@\\
-\mbox{}\verb@        if (all(y[!event] < uy[length(uy)]))@\\
-\mbox{}\verb@            uy <- uy[-length(uy)]@\\
+\mbox{}\verb@#        if (all(y[!event] < uy[length(uy)]))@\\
+\mbox{}\verb@#            uy <- uy[-length(uy)]@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        uy <- sort(unique(y))@\\
 \mbox{}\verb@    }@\\
@@ -4330,7 +4403,7 @@ The \code{factor} method also allows right-censoring but otherwise is just a
 call to \code{xtabs}:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap53}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap54}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way factor}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4384,7 +4457,7 @@ method allows to obtain effects at alternative scales: probabilistic indices
 (\code{AUC} = \code{PI}) or the overlap coefficient:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap54}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap55}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way methods}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4447,7 +4520,7 @@ permutation test is performed, mainly because the $p$-values coincide with
 some special cases (\code{wilcox,kruskal,friedman.test}):
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap55}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap56}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way print}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4506,7 +4579,7 @@ The \code{summary} method performs population Wald inference unless the
 \code{test} argument is specified:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap56}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap57}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way summary}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4564,7 +4637,7 @@ indices or overlap coefficients can also be computed.
 We begin computing the critical values for permutation tests, making sure
 the confidence intervals will be in line with one- and two-sided p-values:
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap57}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap58}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape permutation confint}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4615,7 +4688,7 @@ manner. However, this may still fail and we thus exit gently, returning
 \code{NA} and issuing a warning.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap58}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap59}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape confint lower}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4668,7 +4741,7 @@ manner. However, this may still fail and we thus exit gently, returning
 The upper bound works in the very same way.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap59}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap60}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape confint upper}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4718,7 +4791,7 @@ The upper bound works in the very same way.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap60}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap61}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way confint}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4919,7 +4992,6 @@ N <- 10
 nd <- expand.grid(g = gl(3, N), s = gl(3, N))
 nd$tm <- rexp(nrow(nd))
 nd$ev <- TRUE
-survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 0)$chisq
 cm <- coxph(Surv(tm, ev) ~ g + strata(s), data = nd)
 
 (ft <- free1way(tm ~ g | s, data = nd, link = "cloglog"))
@@ -4927,15 +4999,18 @@ coef(cm)
 coef(ft)
 vcov(cm)
 vcov(ft)
-summary(ft)
+### Rao score tests
 summary(cm)$sctest
 summary(ft, test = "Rao")
+### likelihood ratio tests
 summary(cm)$logtest
 summary(ft, test = "LRT")
+### Wald tests
 summary(cm)$waldtest
 summary(ft, test = "Wald")
+### asymptotic permutation tests
+survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 0)[c("chisq", "pvalue")]
 summary(ft, test = "Permutation")
-
 library("coin")
 independence_test(Surv(tm, ev) ~ g | s, data = nd, ytrafo = function(...)
                   trafo(..., numeric_trafo = logrank_trafo, block = nd$s), 
@@ -4945,7 +5020,7 @@ independence_test(Surv(tm, ev) ~ g | s, data = nd, ytrafo = function(...)
 Wilcoxon against proportional odds
 
 <<Peto>>=
-survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 1)$chisq
+survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 1)[c("chisq", "pvalue")]
 (ft <- free1way(tm ~ g | s, data = nd, link = "logit"))
 summary(ft)
 summary(ft, test = "Rao")
@@ -4963,42 +5038,82 @@ and we operate on the full likelihood.
 <<sw>>=
 library("survival")
 data("GBSG2", package = "TH.data")
-survdiff(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2, rho = 0)$chisq
 cm <- coxph(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2)
 
-### no formula interface yet
 ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | tgrade, 
                            link = "cloglog"))
 coef(cm)
 coef(ft)
 vcov(cm)
 vcov(ft)
-summary(ft)
+### Rao score tests
 summary(cm)$sctest
 summary(ft, test = "Rao")
+### likelihood ratio tests
 summary(cm)$logtest
 summary(ft, test = "LRT")
+### Wald tests
 summary(cm)$waldtest
 summary(ft, test = "Wald")
+### asymptotic permutation tests
+survdiff(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2, rho = 0)[c("chisq", "pvalue")]
 summary(ft, test = "Permutation")
-
-### test with many small strata 
-(ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | pnodes, 
-                            link = "cloglog")))
+independence_test(Surv(time, cens) ~ horTh | tgrade, data = GBSG2, ytrafo = function(...)
+                  trafo(..., numeric_trafo = logrank_trafo, block = GBSG2$tgrade), 
+                  teststat = "quad")
 @
 
 Wilcoxon against proportional odds
 
 <<Peto>>=
-survdiff(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2, rho = 1)$chisq
+survdiff(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2, rho = 1)[c("chisq", "pvalue")]
 (ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | tgrade, 
                             link = "logit")))
-summary(ft)
 summary(ft, test = "Rao")
 summary(ft, test = "LRT")
 summary(ft, test = "Wald")
 summary(ft, test = "Permutation")
 @
+
+And now with more and smaller blocks
+
+<<sw>>=
+library("survival")
+GBSG2$str <- cut(GBSG2$tsize, breaks = c(0, 1:9 * 10, Inf))
+cm <- coxph(Surv(time, cens) ~ horTh + strata(str), data = GBSG2)
+
+ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | str, 
+                           link = "cloglog"))
+coef(cm)
+coef(ft)
+vcov(cm)
+vcov(ft)
+### Rao score tests
+summary(cm)$sctest
+summary(ft, test = "Rao")
+### likelihood ratio tests
+summary(cm)$logtest
+summary(ft, test = "LRT")
+### Wald tests
+summary(cm)$waldtest
+summary(ft, test = "Wald")
+### asymptotic permutation tests
+survdiff(Surv(time, cens) ~ horTh + strata(str), data = GBSG2, rho = 0)[c("chisq", "pvalue")]
+summary(ft, test = "Permutation")
+@
+
+Wilcoxon against proportional odds
+
+<<Peto>>=
+survdiff(Surv(time, cens) ~ horTh + strata(str), data = GBSG2, rho = 1)[c("chisq", "pvalue")]
+(ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | str, 
+                            link = "logit")))
+summary(ft, test = "Rao")
+summary(ft, test = "LRT")
+summary(ft, test = "Wald")
+summary(ft, test = "Permutation")
+@
+
 
 
 \section{van der Waerden Test}
@@ -5103,7 +5218,7 @@ confidence \emph{band} can be obtained from a confidence \emph{interval} for
 $\delta_2$. The P-P-plot is, up to rescalings, identical to the ROC curve.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap61}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap62}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ROC bands}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5147,7 +5262,7 @@ corresponding model-based \citep{SewakHothorn2023} probability-probability plot,
 the latter for a certain choice of link function:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap62}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap63}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ppplot}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5245,7 +5360,7 @@ but not the shift effects. Discrete outcomes can be generated
 by post-hoc categorisation.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap63}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap64}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape design args}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5276,7 +5391,7 @@ by post-hoc categorisation.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap64}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap65}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape rfree1way}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5393,7 +5508,7 @@ essence, we draw samples from the multinomial distribution after computing
 the relevant discrete density.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap65}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap66}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5472,7 +5587,7 @@ directly. Nevertheless, this is a random experiment, so we first make
 computations reproducible:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap66}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap67}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape random seed}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5499,7 +5614,7 @@ computations reproducible:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap67}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap68}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power setup}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5546,7 +5661,7 @@ $1000$) and adjust the obtained Fisher information accordingly to reduce
 sampling error.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap68}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap69}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5590,7 +5705,7 @@ control:treatment = 1:2) and the sample size ratios between strata.
 The treatment effects are contained in $K - 1$ vector \code{delta}:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap69}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap70}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power call}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5613,7 +5728,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap70}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap71}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power args check}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5635,7 +5750,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap71}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap72}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power htest output}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5668,7 +5783,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap72}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap73}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5944,6 +6059,7 @@ free1way(y ~ w, link = "probit", correctFirth = TRUE)
 }
 \item $\langle\,$design args\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
+\item $\langle\,$determine steps in blocks\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$diagonal elements for Hessian of intercepts\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$do optim\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }

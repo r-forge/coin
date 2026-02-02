@@ -201,10 +201,10 @@ horThyes 0.015754
 +                            link = "cloglog"))
 > coef(ft)
 horThyes 
- 0.38762 
+ 0.34056 
 > vcov(ft)
          horThyes
-horThyes 0.016048
+horThyes 0.015751
 > 
 > ft
 
@@ -212,11 +212,11 @@ horThyes 0.016048
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Perm Z = 3.09, p-value = 0.002
+Perm Z = 2.76, p-value = 0.0058
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > 
 > 
 > proc.time()
    user  system elapsed 
-  1.262   0.079   1.363 
+  1.349   0.096   1.441 

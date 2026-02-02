@@ -476,4 +476,4 @@ attr(,"Attained level")
 > 
 > proc.time()
    user  system elapsed 
-  3.865   0.080   3.941 
+  3.841   0.072   3.908 

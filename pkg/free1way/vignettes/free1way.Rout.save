@@ -890,10 +890,6 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > nd$ev <- TRUE
 
-> survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, 
-+     rho = 0)$chisq
-[1] 5.0323
-
 > cm <- coxph(Surv(tm, ev) ~ g + strata(s), data = nd)
 
 > (ft <- free1way(tm ~ g | s, data = nd, link = "cloglog"))
@@ -924,16 +920,6 @@ g3 0.0034163 0.0067785
           g2        g3
 g2 0.0067888 0.0034204
 g3 0.0034204 0.0067851
-
-> summary(ft)
-
-Call:
-free1way.formula(formula = tm ~ g | s, data = nd, link = "cloglog")
-
-Coefficients:
-   log-hazard ratio Std. Error z value P(>|z|)
-g2           0.1604     0.0824  1.9464    0.05
-g3           0.1606     0.0824  1.9494    0.05
 
 > summary(cm)$sctest
    test      df  pvalue 
@@ -980,6 +966,15 @@ Wald chi-squared = 5.05, df = 2, p-value = 0.08
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
+> survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, 
++     rho = 0)[c("chisq", "pvalue")]
+$chisq
+[1] 5.0323
+
+$pvalue
+[1] 0.08077
+
+
 > summary(ft, test = "Permutation")
 
 	Stratified 3-sample Savage test against proportional hazards
@@ -1005,8 +1000,13 @@ chi-squared = 4.75, df = 2, p-value = 0.093
 
 
 > survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, 
-+     rho = 1)$chisq
++     rho = 1)[c("chisq", "pvalue")]
+$chisq
 [1] 5.3318
+
+$pvalue
+[1] 0.069535
+
 
 > (ft <- free1way(tm ~ g | s, data = nd, link = "logit"))
 
@@ -1077,10 +1077,6 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > data("GBSG2", package = "TH.data")
 
-> survdiff(Surv(time, cens) ~ horTh + strata(tgrade), 
-+     data = GBSG2, rho = 0)$chisq
-[1] 7.3958
-
 > cm <- coxph(Surv(time, cens) ~ horTh + strata(tgrade), 
 +     data = GBSG2)
 
@@ -1093,7 +1089,7 @@ horThyes
 
 > coef(ft)
 horThyes 
- 0.38762 
+ 0.34056 
 
 > vcov(cm)
          horThyes
@@ -1101,17 +1097,7 @@ horThyes 0.015754
 
 > vcov(ft)
          horThyes
-horThyes 0.016048
-
-> summary(ft)
-
-Call:
-free1way.formula(formula = Surv(time, cens) ~ horTh | tgrade, 
-    link = "cloglog")
-
-Coefficients:
-         log-hazard ratio Std. Error z value P(>|z|)
-horThyes            0.388      0.127   3.060       0
+horThyes 0.015751
 
 > summary(cm)$sctest
      test        df    pvalue 
@@ -1123,7 +1109,7 @@ horThyes            0.388      0.127   3.060       0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Rao chi-squared = 9.47, df = 1, p-value = 0.0021
+Rao chi-squared = 7.43, df = 1, p-value = 0.0064
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -1137,7 +1123,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-logLR chi-squared = 9.75, df = 1, p-value = 0.0018
+logLR chi-squared = 7.64, df = 1, p-value = 0.0057
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -1151,8 +1137,17 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Wald chi-squared = 9.36, df = 1, p-value = 0.0022
+Wald chi-squared = 7.36, df = 1, p-value = 0.0067
 alternative hypothesis: true log-hazard ratio is not equal to 0
+
+
+> survdiff(Surv(time, cens) ~ horTh + strata(tgrade), 
++     data = GBSG2, rho = 0)[c("chisq", "pvalue")]
+$chisq
+[1] 7.3958
+
+$pvalue
+[1] 0.0065376
 
 
 > summary(ft, test = "Permutation")
@@ -1161,24 +1156,29 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Perm Z = 3.09, p-value = 0.002
+Perm Z = 2.76, p-value = 0.0058
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
-> (ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | 
-+     pnodes, link = "cloglog")))
+> independence_test(Surv(time, cens) ~ horTh | tgrade, 
++     data = GBSG2, ytrafo = function(...) trafo(..., numeric_trafo = logrank_trafo, 
++        .... [TRUNCATED] 
 
-	2-sample Savage test against proportional hazards alternatives
+	Asymptotic General Independence Test
 
 data:  Surv(time, cens) by horTh (no, yes) 
-	 stratified by pnodes
-Perm Z = 2.7, p-value = 0.0069
-alternative hypothesis: true log-hazard ratio is not equal to 0
+	 stratified by tgrade
+chi-squared = 7.63, df = 1, p-value = 0.0057
 
 
 > survdiff(Surv(time, cens) ~ horTh + strata(tgrade), 
-+     data = GBSG2, rho = 1)$chisq
++     data = GBSG2, rho = 1)[c("chisq", "pvalue")]
+$chisq
 [1] 7.5938
+
+$pvalue
+[1] 0.0058569
+
 
 > (ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | 
 +     tgrade, link = "logit")))
@@ -1187,19 +1187,9 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Perm Z = 3.06, p-value = 0.0022
+Perm Z = 2.78, p-value = 0.0054
 alternative hypothesis: true log-odds ratio is not equal to 0
 
-
-> summary(ft)
-
-Call:
-free1way.formula(formula = Surv(time, cens) ~ horTh | tgrade, 
-    link = "logit")
-
-Coefficients:
-         log-odds ratio Std. Error z value P(>|z|)
-horThyes          0.528      0.173   3.057       0
 
 > summary(ft, test = "Rao")
 
@@ -1207,7 +1197,7 @@ horThyes          0.528      0.173   3.057       0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Rao chi-squared = 9.4, df = 1, p-value = 0.0022
+Rao chi-squared = 7.8, df = 1, p-value = 0.0052
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -1217,7 +1207,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-logLR chi-squared = 9.48, df = 1, p-value = 0.0021
+logLR chi-squared = 7.89, df = 1, p-value = 0.005
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -1227,7 +1217,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Wald chi-squared = 9.34, df = 1, p-value = 0.0022
+Wald chi-squared = 7.75, df = 1, p-value = 0.0054
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -1237,7 +1227,155 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Perm Z = 3.06, p-value = 0.0022
+Perm Z = 2.78, p-value = 0.0054
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> library("survival")
+
+> GBSG2$str <- cut(GBSG2$tsize, breaks = c(0, 1:9 * 
++     10, Inf))
+
+> cm <- coxph(Surv(time, cens) ~ horTh + strata(str), 
++     data = GBSG2)
+
+> ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | 
++     str, link = "cloglog"))
+
+> coef(cm)
+horThyes 
+-0.33921 
+
+> coef(ft)
+horThyes 
+ 0.33879 
+
+> vcov(cm)
+         horThyes
+horThyes 0.016147
+
+> vcov(ft)
+         horThyes
+horThyes 0.016204
+
+> summary(cm)$sctest
+     test        df    pvalue 
+7.1917181 1.0000000 0.0073241 
+
+> summary(ft, test = "Rao")
+
+	2-sample Savage test against proportional hazards alternatives
+
+data:  Surv(time, cens) by horTh (no, yes) 
+	 stratified by str
+Rao chi-squared = 7.15, df = 1, p-value = 0.0075
+alternative hypothesis: true log-hazard ratio is not equal to 0
+
+
+> summary(cm)$logtest
+     test        df    pvalue 
+7.3938622 1.0000000 0.0065447 
+
+> summary(ft, test = "LRT")
+
+	2-sample Savage test against proportional hazards alternatives
+
+data:  Surv(time, cens) by horTh (no, yes) 
+	 stratified by str
+logLR chi-squared = 7.35, df = 1, p-value = 0.0067
+alternative hypothesis: true log-hazard ratio is not equal to 0
+
+
+> summary(cm)$waldtest
+     test        df    pvalue 
+7.1300000 1.0000000 0.0075971 
+
+> summary(ft, test = "Wald")
+
+	2-sample Savage test against proportional hazards alternatives
+
+data:  Surv(time, cens) by horTh (no, yes) 
+	 stratified by str
+Wald chi-squared = 7.08, df = 1, p-value = 0.0078
+alternative hypothesis: true log-hazard ratio is not equal to 0
+
+
+> survdiff(Surv(time, cens) ~ horTh + strata(str), data = GBSG2, 
++     rho = 0)[c("chisq", "pvalue")]
+$chisq
+[1] 7.1868
+
+$pvalue
+[1] 0.0073441
+
+
+> summary(ft, test = "Permutation")
+
+	2-sample Savage test against proportional hazards alternatives
+
+data:  Surv(time, cens) by horTh (no, yes) 
+	 stratified by str
+Perm Z = 2.67, p-value = 0.0076
+alternative hypothesis: true log-hazard ratio is not equal to 0
+
+
+> survdiff(Surv(time, cens) ~ horTh + strata(str), data = GBSG2, 
++     rho = 1)[c("chisq", "pvalue")]
+$chisq
+[1] 8.2045
+
+$pvalue
+[1] 0.0041787
+
+
+> (ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | 
++     str, link = "logit")))
+
+	2-sample Wilcoxon test against proportional odds alternatives
+
+data:  Surv(time, cens) by horTh (no, yes) 
+	 stratified by str
+Perm Z = 2.88, p-value = 0.0039
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft, test = "Rao")
+
+	2-sample Wilcoxon test against proportional odds alternatives
+
+data:  Surv(time, cens) by horTh (no, yes) 
+	 stratified by str
+Rao chi-squared = 8.47, df = 1, p-value = 0.0036
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft, test = "LRT")
+
+	2-sample Wilcoxon test against proportional odds alternatives
+
+data:  Surv(time, cens) by horTh (no, yes) 
+	 stratified by str
+logLR chi-squared = 8.57, df = 1, p-value = 0.0034
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft, test = "Wald")
+
+	2-sample Wilcoxon test against proportional odds alternatives
+
+data:  Surv(time, cens) by horTh (no, yes) 
+	 stratified by str
+Wald chi-squared = 8.42, df = 1, p-value = 0.0037
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft, test = "Permutation")
+
+	2-sample Wilcoxon test against proportional odds alternatives
+
+data:  Surv(time, cens) by horTh (no, yes) 
+	 stratified by str
+Perm Z = 2.88, p-value = 0.0039
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -1801,4 +1939,4 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 37.882   0.143  38.036 
+ 37.890   0.139  38.043 

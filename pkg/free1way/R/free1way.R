@@ -155,28 +155,42 @@
                  domain = NA)
         }
     }
+    # determine steps in blocks
 
     xlist <- xrclist <- vector(mode = "list", length = B)
 
     for (b in seq_len(B)) {
         xb <- matrix(x[,,b, drop = TRUE], ncol = K)
         xw <- rowSums(abs(xb)) > 0
-        ### do not remove last parameter if there are corresponding
-        ### right-censored observations
-        if (!is.null(xrc) && any(xrc[dx[1],,b,drop = TRUE] > 0))
-            xw[length(xw)] <- TRUE
         if (sum(xw) > 1L) {
+            ### do not remove last parameter if there are corresponding
+            ### right-censored observations
+            wm <- which(xw)[sum(xw)]
+            if (!is.null(xrc) && any(xrc[wm:dx[1],,b,drop = TRUE] > 0))
+                xw[length(xw)] <- TRUE
             xlist[[b]] <- xb[xw,,drop = FALSE]
-            attr(xlist[[b]], "idx") <- xw
+            Cidx <- rep.int(1L, times = C)
+            Cidx[xw] <- Cidx[xw] + seq_len(sum(xw))
+            attr(xlist[[b]], "idx") <- Cidx
             if (!is.null(xrc)) {
-                xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K)
-                attr(xrclist[[b]], "idx") <- xw
+                ### count right-censored observations between distinct event
+                ### times
+                cs <- apply(xrc[,,b,drop = TRUE] * (!xw), 2, function(x) 
+                    diff(c(0, cumsum(x)[xw])))
+                xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K) + cs
+                idx <- seq_len(C)[xw]
+                idx <- rep(seq_len(sum(xw)), times = c(idx[1], diff(idx)))
+                Cidx <- rep.int(1L, times = C)
+                Cidx[seq_along(idx)] <- Cidx[seq_along(idx)] + idx
+                attr(xrclist[[b]], "idx") <- Cidx
             }
         }
     }
+    ### remove empty blocks
     strata <- !vapply(xlist, is.null, NA)
     xlist <- xlist[strata]
     xrclist <- xrclist[strata]
+    
     
 
 
@@ -519,10 +533,10 @@
         ret <- c()
         for (b in seq_len(B)) {
             idx <- attr(x[[b]], "idx")
-            sr <- numeric(length(idx))
-            sr[idx] <- .nsr(c(delta, intercepts[[b]]), x[[b]], mu = mu,
-                            rightcensored = rightcensored)
-            ret <- c(ret, sr)
+            ### idx == 1L means zero residual, see definition of idx
+            sr <- c(0, .nsr(c(delta, intercepts[[b]]), x[[b]], mu = mu,
+                            rightcensored = rightcensored))
+            ret <- c(ret, sr[idx])
         }
         return(ret)
     }
@@ -996,8 +1010,8 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
         y <- y[,,ret$strata,, drop = FALSE]
         dy <- dim(y)
         dy[1] <- dy[1] * 2
-        y <- apply(y, 3, function(x) rbind(x[,,2], x[,,1]))
-        y <- array(y, dim = dy[1:3])
+        y <- apply(y, 3, function(x) rbind(x[,,"TRUE"], x[,,"FALSE"]), simplify = FALSE)
+        y <- array(unlist(y), dim = dy[1:3])
     }
 
     ### exact two-sample Wilcoxon w/o stratification
@@ -1603,8 +1617,8 @@ free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = N
                           "free1way"),
                  domain = NA)
         uy <- sort(unique(y[event]))
-        if (all(y[!event] < uy[length(uy)]))
-            uy <- uy[-length(uy)]
+#        if (all(y[!event] < uy[length(uy)]))
+#            uy <- uy[-length(uy)]
     } else {
         uy <- sort(unique(y))
     }
