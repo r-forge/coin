@@ -1558,14 +1558,29 @@ Linear Hypotheses:
 9 - 8 == 0 -1.6313  -2.9843 -0.2783
 
 
+> tk <- free1way(Ozone ~ Month, data = airquality)
+
+> plot(tk, las = 1)
+
+> plot(tk, cdf = TRUE, model = FALSE, las = 1)
+
+> aq <- subset(airquality, !is.na(Ozone))
+
+> aq$r <- match(aq$Ozone, sort(unique(aq$Ozone)))
+
+> library("latticeExtra")
+Loading required package: lattice
+
+> plot(ecdfplot(~r, data = aq, groups = Month, col = 1:5))
+
 > y <- rlogis(50)
 
 > x <- rlogis(50, location = 3)
 
-> ppplot(y, x, conf.level = 0.95)
+> ppplot(y, x, conf.level = 0.95, las = 1)
 
 > ppplot(y, x, conf.args = list(link = "cloglog", type = "Wald", 
-+     col = NA, border = NULL), conf.level = 0.95)
++     col = NA, border = NULL), conf.level = 0.95, las = 1)
 
 > (logOR <- c(log(1.5), log(2)))
 [1] 0.40547 0.69315
@@ -1797,7 +1812,7 @@ NOTE: 'n' is sample size in control group
 > mean(pw < 0.05)
 [1] 0.26
 
-> boxplot(cf)
+> boxplot(cf, las = 1, ylab = expression(hat(delta)))
 
 > points(c(1:2), delta, pch = 19, col = "red")
 
@@ -1833,7 +1848,7 @@ NOTE: 'n' is sample size in control group
 > mean(pw < 0.05)
 [1] 0.73
 
-> boxplot(cf)
+> boxplot(cf, las = 1, ylab = expression(hat(delta)))
 
 > points(c(1:2), delta, pch = 19, col = "red")
 
@@ -1939,4 +1954,4 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 37.890   0.139  38.043 
+ 36.840   0.099  36.952 

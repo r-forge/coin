@@ -1698,6 +1698,101 @@ free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NU
     RVAL
 }
 
+# plot free1way
+
+plot.free1way <- function(x, ..., block = 1L, cdf = FALSE, model = TRUE,
+                          col = seq_len(length(coef(object)) + 1L),
+                          lty = 1:2, legend = TRUE) {
+
+    # extract plot data
+    
+    object <- x
+    x <- object$table
+    if (RC <- (length(dim(x)) == 4L)) {
+        x <- x[,,block,,drop = FALSE]
+        x <- x[marginSums(x, margin = 1) > 0,,,,drop = FALSE]
+    } else {
+        x <- x[,,block,drop = FALSE]
+        x <- x[marginSums(x, margin = 1) > 0,,,drop = FALSE]
+    }
+    K <- dim(x)[2L]
+    ret0 <- matrix(NA, nrow = dim(x)[1L], ncol = K)
+    ln <- object$link
+    
+    # refit block intercepts
+    
+    ### refit for this block only
+    m1 <- free1way:::.free1wayML(x, link = ln, start = coef(object), 
+                                 fix = seq_along(coef(object)),
+                                 residuals = FALSE, hessian = FALSE)
+    intercepts <- m1$intercepts[[1L]]
+    j1 <- which(attr(get("xlist", environment(m1$profile))[[1L]], "idx") > 1)
+    j1 <- j1[-length(j1)]
+    cf <- c(0, coef(object))
+    
+    # marginal fit
+    
+    for (k in seq_len(K)) {
+        y <- x
+        if (RC) {
+            y[,-k,1,] <- 0
+        } else {
+            y[,-k,1] <- 0
+        }
+        start <- numeric(K - 1)
+        m0 <- free1way:::.free1wayML(y, link = ln, start = start, 
+                                     fix = seq_len(K - 1), residuals = FALSE, 
+                                     hessian = FALSE)
+        j <- which(attr(get("xlist", environment(m0$profile))[[1L]], "idx") > 1)
+        ret0[j[-length(j)],k] <- m0$intercepts[[1L]]
+    }
+    
+
+    # setup canvas
+    
+    if (cdf) {
+        ylim <- c(0, 1)
+        FUN <- function(x) ln$linkinv(x)
+    } else {
+        ylim <- range(c(ret0, intercepts), na.rm = TRUE)
+        FUN <- function(x) x
+    }
+
+    idx <- seq_len(nrow(x))
+    main <- list(...)$main
+    if (is.null(main) && dim(object$table)[3L] > 1L)
+        main <- paste(names(dimnames(x))[3L], dimnames(x)[[3L]][1L], sep = "=")
+    plot(idx, rep(0, length(idx)), type = "n", ylim = ylim, 
+         xlab = paste("Rank(", names(dimnames(x))[1L], ")", sep = ""),
+         ylab = ifelse(cdf, "Probability", paste(ln$name, "Link")), 
+         main = main, ...)
+    
+    # marginal plot
+    
+    out <- sapply(seq_len(K), function(k) 
+        lines(which(!is.na(ret0[,k])), FUN(ret0[!is.na(ret0[,k]),k]), 
+              type = "s", col = col[k], lty = lty[1]))
+    
+    # model plot
+    
+    if (model)
+        out <- sapply(seq_len(K), function(k) 
+            lines(j1, FUN(intercepts - cf[k]), type = "s", col = col[k], lty = lty[2]))
+    
+    # add legend
+    
+    if (legend) {
+            legend("topleft", lty = lty[1], col = col, 
+                   legend = paste(names(dimnames(x))[2L], dimnames(x)[[2L]]),
+                   title = "Nonparametric", bty = "n")
+            if (model) 
+                legend("bottomright", lty = lty[2], col = col, 
+                       legend = paste(names(dimnames(x))[2L], dimnames(x)[[2L]]),
+                       title = "Semiparametric", bty = "n")
+        }
+    
+}
+
 # ppplot
 
 ppplot <- function(x, y, plot.it = TRUE,

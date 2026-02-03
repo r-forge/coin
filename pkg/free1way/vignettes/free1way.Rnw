@@ -208,7 +208,8 @@ Instead of directly working with $g$, we parameterise the model in terms of
 some absolute continuous cdf $F$ with log-concave density $f = F^\prime$
 and corresponding derivative $f^\prime$. The location model 
 \begin{eqnarray} \label{model}
-F_Y(y \mid  \rT = k, \rS = b) = F\left(F^{-1}\left(F_Y(y \mid \rT = 1, \rS = b)\right) - \delta_k\right), \quad k = 2, \dots, K
+F_Y(y \mid  \rT = k, \rS = b) = F\left(F^{-1}\left(F_Y(y \mid \rT = 1, \rS = b)\right) - 
+                                       \delta_k\right), \quad k = 2, \dots, K
 \end{eqnarray}
 describes different distributions by means of shift parameter on a latent
 scale defined by $F$. The negative shift term ensures that positive values of $\delta_k$ correspond
@@ -3133,6 +3134,7 @@ all.equal(unname(cf$par), unname(cf2))
 \mbox{}\verb@@\hbox{$\langle\,${\itshape free1way formula}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape free1way numeric}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape free1way factor}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape plot free1way}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape ppplot}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape rfree1way}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape power}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
@@ -5213,6 +5215,319 @@ confint(glht(tk, linfct = mcp(Month = "Tukey")))
 
 \chapter{Model Diagnostics}
 
+\section{Transformation Plots}
+
+The model formulation~(\ref{model}) suggests a simple graphical check of the
+main model assumption, that is, the existence of a constant shift on a latent
+scale defined by $F$. For one block and two samples, the model reads
+\begin{eqnarray*} 
+F_Y(y \mid  \rT = 1) & = & F\left(F^{-1}(F_Y(y \mid \rT = 1))\right) = F(h(y)) \\
+F_Y(y \mid  \rT = 2) & = & F\left(F^{-1}(F_Y(y \mid \rT = 1)) - 
+                                  \delta_2\right) = F(h(y) - \delta_2).
+\end{eqnarray*}
+We can now contrast the conditional distributions obtained from this model
+with the marginally estimated distribution functions of $Y$, that is,
+nonparametric estimates for the two distribution functions obtained within
+each treatment group separately. These latter estimates are typically simply the ECDF or
+Kaplan-Meier estimators in the presence of right-censoring. It is easier to
+see deviations from model~(\ref{model}) when the plot is presented on the
+scale of the link function $F^{-1}$. If the control distribution is close to
+$\hat{h}(y)$ and the distribution of those treated close to $\hat{h}(y) -
+\hat{\delta}_2$, model~(\ref{model}) provides a good approximation. If the
+two curves cross or if their horizontal distance varies considerably across
+the sample space, we should be concerned.
+
+The model is assumed to hold in each block with overall treatment effects
+$\delta_k$, but the intercept function $h$ may differ between blocks.
+Therefore, we produce such a plot for each block separately. We also do not
+pay attention to the original observations of the outcome but plot the model
+on the scale of the ranked outcomes (the model is invariant with respect to
+monotone and therefore rank transformations).
+
+All the necessary information can be extracted from an \code{object} of class
+\code{free1way}. We extract the sub-table containing the data for
+\code{block}, paying attention to possible right-censoring (in the four
+dimension)
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap62}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape extract plot data}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@object <- x@\\
+\mbox{}\verb@x <- object$table@\\
+\mbox{}\verb@if (RC <- (length(dim(x)) == 4L)) {@\\
+\mbox{}\verb@    x <- x[,,block,,drop = FALSE]@\\
+\mbox{}\verb@    x <- x[marginSums(x, margin = 1) > 0,,,,drop = FALSE]@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    x <- x[,,block,drop = FALSE]@\\
+\mbox{}\verb@    x <- x[marginSums(x, margin = 1) > 0,,,drop = FALSE]@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@K <- dim(x)[2L]@\\
+\mbox{}\verb@ret0 <- matrix(NA, nrow = dim(x)[1L], ncol = K)@\\
+\mbox{}\verb@ln <- object$link@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+We then refit the intercept parameters (that is, $\hat{h}(y)$) for this
+block re-using the treatment effects already contained in \code{object}. We
+will plot them later on as a means to directly compare the model to the data
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap63}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape refit block intercepts}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@### refit for this block only@\\
+\mbox{}\verb@m1 <- free1way:::.free1wayML(x, link = ln, start = coef(object), @\\
+\mbox{}\verb@                             fix = seq_along(coef(object)),@\\
+\mbox{}\verb@                             residuals = FALSE, hessian = FALSE)@\\
+\mbox{}\verb@intercepts <- m1$intercepts[[1L]]@\\
+\mbox{}\verb@j1 <- which(attr(get("xlist", environment(m1$profile))[[1L]], "idx") > 1)@\\
+\mbox{}\verb@j1 <- j1[-length(j1)]@\\
+\mbox{}\verb@cf <- c(0, coef(object))@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+Last, we compute the marginal distributions, that is, the distribution
+function of the outcome separately for each group. We could have used
+\code{ecdf} or \code{survfit} here, but since we have everything available
+in \code{.free1wayML}, we simply remove the observations corresponding to
+other groups and refit the intercept parameters.
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap64}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape marginal fit}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@for (k in seq_len(K)) {@\\
+\mbox{}\verb@    y <- x@\\
+\mbox{}\verb@    if (RC) {@\\
+\mbox{}\verb@        y[,-k,1,] <- 0@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        y[,-k,1] <- 0@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    start <- numeric(K - 1)@\\
+\mbox{}\verb@    m0 <- free1way:::.free1wayML(y, link = ln, start = start, @\\
+\mbox{}\verb@                                 fix = seq_len(K - 1), residuals = FALSE, @\\
+\mbox{}\verb@                                 hessian = FALSE)@\\
+\mbox{}\verb@    j <- which(attr(get("xlist", environment(m0$profile))[[1L]], "idx") > 1)@\\
+\mbox{}\verb@    ret0[j[-length(j)],k] <- m0$intercepts[[1L]]@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+We can now setup a \code{plot} method for \code{free1way} objects, we begin
+with an empty plot with appropriate axes annotations (we allow plotting on
+the scale of the CDF as well):
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap65}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape setup canvas}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@if (cdf) {@\\
+\mbox{}\verb@    ylim <- c(0, 1)@\\
+\mbox{}\verb@    FUN <- function(x) ln$linkinv(x)@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    ylim <- range(c(ret0, intercepts), na.rm = TRUE)@\\
+\mbox{}\verb@    FUN <- function(x) x@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@idx <- seq_len(nrow(x))@\\
+\mbox{}\verb@main <- list(...)$main@\\
+\mbox{}\verb@if (is.null(main) && dim(object$table)[3L] > 1L)@\\
+\mbox{}\verb@    main <- paste(names(dimnames(x))[3L], dimnames(x)[[3L]][1L], sep = "=")@\\
+\mbox{}\verb@plot(idx, rep(0, length(idx)), type = "n", ylim = ylim, @\\
+\mbox{}\verb@     xlab = paste("Rank(", names(dimnames(x))[1L], ")", sep = ""),@\\
+\mbox{}\verb@     ylab = ifelse(cdf, "Probability", paste(ln$name, "Link")), @\\
+\mbox{}\verb@     main = main, ...)@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+The marginally estimated functions are plotted first
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap66}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape marginal plot}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@out <- sapply(seq_len(K), function(k) @\\
+\mbox{}\verb@    lines(which(!is.na(ret0[,k])), FUN(ret0[!is.na(ret0[,k]),k]), @\\
+\mbox{}\verb@          type = "s", col = col[k], lty = lty[1]))@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+followed by a plot of the model-based functions (which can be switched off)
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap67}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape model plot}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@if (model)@\\
+\mbox{}\verb@    out <- sapply(seq_len(K), function(k) @\\
+\mbox{}\verb@        lines(j1, FUN(intercepts - cf[k]), type = "s", col = col[k], lty = lty[2]))@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+and finally we add a legend
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap68}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape add legend}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@if (legend) {@\\
+\mbox{}\verb@        legend("topleft", lty = lty[1], col = col, @\\
+\mbox{}\verb@               legend = paste(names(dimnames(x))[2L], dimnames(x)[[2L]]),@\\
+\mbox{}\verb@               title = "Nonparametric", bty = "n")@\\
+\mbox{}\verb@        if (model) @\\
+\mbox{}\verb@            legend("bottomright", lty = lty[2], col = col, @\\
+\mbox{}\verb@                   legend = paste(names(dimnames(x))[2L], dimnames(x)[[2L]]),@\\
+\mbox{}\verb@                   title = "Semiparametric", bty = "n")@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+We put everything together in a \code{plot} method
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap69}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape plot free1way}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@plot.free1way <- function(x, ..., block = 1L, cdf = FALSE, model = TRUE,@\\
+\mbox{}\verb@                          col = seq_len(length(coef(object)) + 1L),@\\
+\mbox{}\verb@                          lty = 1:2, legend = TRUE) {@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape extract plot data}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape refit block intercepts}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape marginal fit}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape setup canvas}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape marginal plot}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape model plot}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape add legend}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+By default, the plot shows the marginal (``nonparametric'') and model-based
+(``semiparametric'') estimates in the sample plot. For the ozone
+concentrations in different months in Figure~\ref{fig:ozone}, we see that the distributions differ,
+but the effects can be well understood as shifts on a log-odds scale. Note
+that the solid nonparametric curves agree quite well with the dashed
+model-based ones.
+
+\begin{figure}
+<<plot-ex, fig = TRUE>>=
+tk <- free1way(Ozone ~ Month, data = airquality)
+plot(tk, las = 1)
+@
+\caption{Model diagnostics for proportional odds model comparing ozone
+concentrations for different months. \label{fig:ozone}}
+\end{figure}
+
+We can check if the plot is correct by comparing the result
+(Figure~\ref{fig:ozonecdf}) to the one
+obtained with \code{ecdfplot} after rank transformation on the scale of the
+distribution functions (Figure~\ref{fig:ozoneecdf})
+
+\begin{figure}
+<<plot-ex-cdf, fig = TRUE>>=
+plot(tk, cdf = TRUE, model = FALSE, las = 1)
+@
+\caption{Nonparametric distributions of ozone concentrations for different months. \label{fig:ozonecdf}}
+\end{figure}
+
+\begin{figure}
+<<plot-ex-ecdf, fig = TRUE>>=
+aq <- subset(airquality, !is.na(Ozone))
+aq$r <- match(aq$Ozone, sort(unique(aq$Ozone)))
+library("latticeExtra")
+plot(ecdfplot(~ r, data = aq, groups = Month, col = 1:5))
+@
+\caption{Nonparametric distributions of ozone concentrations for different months.
+\label{fig:ozoneecdf}}
+\end{figure}
+
+
+
+\section{Probability-probability Plots}
+
 The classical shift model $F_Y(y \mid T = 2) = F_Y(y - \mu \mid T = 1)$
 can be criticised using confidence bands for QQ-plots in \code{qqplot},
 because the parameter $\mu$ shows up as a vertical shift of the diagonal
@@ -5225,7 +5540,7 @@ confidence \emph{band} can be obtained from a confidence \emph{interval} for
 $\delta_2$. The P-P-plot is, up to rescalings, identical to the ROC curve.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap62}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap70}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ROC bands}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5269,7 +5584,7 @@ corresponding model-based \citep{SewakHothorn2023} probability-probability plot,
 the latter for a certain choice of link function:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap63}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap71}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ppplot}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5326,7 +5641,7 @@ Figure~\ref{fig:PH}.
 <<ppplot, fig = TRUE>>=
 y <- rlogis(50)
 x <- rlogis(50, location = 3)
-ppplot(y, x, conf.level = .95)
+ppplot(y, x, conf.level = .95, las = 1)
 @
 \caption{Data sampled from a proportional-odds model with
 probability-probability (P-P)  curve and $95\%$ confidence band obtained from
@@ -5339,7 +5654,7 @@ a proportional-odds model. \label{fig:PO}}
 <<ppplot-savage, fig = TRUE>>=
 ppplot(y, x, conf.args = list(link = "cloglog", type = "Wald", 
                               col = NA, border = NULL),
-       conf.level = .95)
+       conf.level = .95, las = 1)
 @
 \caption{Data sampled from a proportional-odds model with
 probability-probability (P-P)  curve and $95\%$ confidence band obtained from
@@ -5367,7 +5682,7 @@ but not the shift effects. Discrete outcomes can be generated
 by post-hoc categorisation.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap64}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap72}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape design args}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5398,7 +5713,7 @@ by post-hoc categorisation.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap65}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap73}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape rfree1way}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5515,7 +5830,7 @@ essence, we draw samples from the multinomial distribution after computing
 the relevant discrete density.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap66}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap74}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5594,7 +5909,7 @@ directly. Nevertheless, this is a random experiment, so we first make
 computations reproducible:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap67}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap75}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape random seed}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5621,7 +5936,7 @@ computations reproducible:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap68}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap76}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power setup}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5668,7 +5983,7 @@ $1000$) and adjust the obtained Fisher information accordingly to reduce
 sampling error.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap69}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap77}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5712,7 +6027,7 @@ control:treatment = 1:2) and the sample size ratios between strata.
 The treatment effects are contained in $K - 1$ vector \code{delta}:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap70}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap78}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power call}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5735,7 +6050,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap71}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap79}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power args check}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5757,7 +6072,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap72}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap80}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power htest output}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5790,7 +6105,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap73}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap81}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5955,7 +6270,7 @@ for (i in seq_along(pw)) {
     pw[i] <- summary(ft, test = "Permutation")$p.value
 }
 mean(pw < .05)
-boxplot(cf)
+boxplot(cf, las = 1, ylab = expression(hat(delta)))
 points(c(1:2), delta, pch = 19, col = "red")
 power.free1way.test(n = N, prob = prb, delta = delta)
 @
@@ -5985,7 +6300,7 @@ for (i in seq_along(pw)) {
     pw[i] <- summary(ft, test = "Permutation")$p.value
 }
 mean(pw < .05)
-boxplot(cf)
+boxplot(cf, las = 1, ylab = expression(hat(delta)))
 points(c(1:2), delta, pch = 19, col = "red")
 @
 \caption{Power simulation for stratified proportional-odds model and corresponding
@@ -6059,6 +6374,7 @@ free1way(y ~ w, link = "probit", correctFirth = TRUE)
 
 
 {\small\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item $\langle\,$add legend\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$cloglog\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$confint lower\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$confint upper\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
@@ -6072,6 +6388,7 @@ free1way(y ~ w, link = "probit", correctFirth = TRUE)
 }
 \item $\langle\,$estimate Fisher information\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$exact proportional odds\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$extract plot data\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$Firth correction\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$formula business\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
@@ -6093,7 +6410,10 @@ free1way(y ~ w, link = "probit", correctFirth = TRUE)
 \item $\langle\,$logit\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$loglog\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$LRT\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$marginal fit\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$marginal plot\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$ML estimation\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$model plot\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$negative logLik\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$negative score\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$negative score residuals\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
@@ -6109,6 +6429,7 @@ free1way(y ~ w, link = "probit", correctFirth = TRUE)
 \item $\langle\,$permutation confint\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$Permutation p-values\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$Permutation statistics\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$plot free1way\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$post processing\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$power\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$power args check\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
@@ -6121,10 +6442,12 @@ free1way(y ~ w, link = "probit", correctFirth = TRUE)
 \item $\langle\,$r2dsim\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$random seed\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$Rao\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$refit block intercepts\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$resampling\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$rfree1way\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$ROC bands\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$setup and starting values\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$setup canvas\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$statistics\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
 \item $\langle\,$Strasser Weber\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
