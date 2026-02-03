@@ -1,7 +1,7 @@
 \documentclass[a4paper]{report}
 
 %\VignetteIndexEntry{Stratified K-sample Inference}
-%\VignetteDepends{free1way,multcomp,survival,Hmisc,coin,rms}
+%\VignetteDepends{free1way,multcomp,survival,Hmisc,coin,rms,latticeExtra}
 %\VignetteKeywords{semiparametric model,conditional inference}}
 %\VignettePackage{free1way}
 
