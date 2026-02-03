@@ -193,7 +193,8 @@ Instead of directly working with $g$, we parameterise the model in terms of
 some absolute continuous cdf $F$ with log-concave density $f = F^\prime$
 and corresponding derivative $f^\prime$. The location model 
 \begin{eqnarray} \label{model}
-F_Y(y \mid  \rT = k, \rS = b) = F\left(F^{-1}\left(F_Y(y \mid \rT = 1, \rS = b)\right) - \delta_k\right), \quad k = 2, \dots, K
+F_Y(y \mid  \rT = k, \rS = b) = F\left(F^{-1}\left(F_Y(y \mid \rT = 1, \rS = b)\right) - 
+                                       \delta_k\right), \quad k = 2, \dots, K
 \end{eqnarray}
 describes different distributions by means of shift parameter on a latent
 scale defined by $F$. The negative shift term ensures that positive values of $\delta_k$ correspond
@@ -1280,6 +1281,7 @@ all.equal(unname(cf$par), unname(cf2))
 @<free1way formula@>
 @<free1way numeric@>
 @<free1way factor@>
+@<plot free1way@>
 @<ppplot@>
 @<rfree1way@>
 @<power@>
@@ -2951,6 +2953,215 @@ confint(glht(tk, linfct = mcp(Month = "Tukey")))
 
 \chapter{Model Diagnostics}
 
+\section{Transformation Plots}
+
+The model formulation~(\ref{model}) suggests a simple graphical check of the
+main model assumption, that is, the existence of a constant shift on a latent
+scale defined by $F$. For one block and two samples, the model reads
+\begin{eqnarray*} 
+F_Y(y \mid  \rT = 1) & = & F\left(F^{-1}(F_Y(y \mid \rT = 1))\right) = F(h(y)) \\
+F_Y(y \mid  \rT = 2) & = & F\left(F^{-1}(F_Y(y \mid \rT = 1)) - 
+                                  \delta_2\right) = F(h(y) - \delta_2).
+\end{eqnarray*}
+We can now contrast the conditional distributions obtained from this model
+with the marginally estimated distribution functions of $Y$, that is,
+nonparametric estimates for the two distribution functions obtained within
+each treatment group separately. These latter estimates are typically simply the ECDF or
+Kaplan-Meier estimators in the presence of right-censoring. It is easier to
+see deviations from model~(\ref{model}) when the plot is presented on the
+scale of the link function $F^{-1}$. If the control distribution is close to
+$\hat{h}(y)$ and the distribution of those treated close to $\hat{h}(y) -
+\hat{\delta}_2$, model~(\ref{model}) provides a good approximation. If the
+two curves cross or if their horizontal distance varies considerably across
+the sample space, we should be concerned.
+
+The model is assumed to hold in each block with overall treatment effects
+$\delta_k$, but the intercept function $h$ may differ between blocks.
+Therefore, we produce such a plot for each block separately. We also do not
+pay attention to the original observations of the outcome but plot the model
+on the scale of the ranked outcomes (the model is invariant with respect to
+monotone and therefore rank transformations).
+
+All the necessary information can be extracted from an \code{object} of class
+\code{free1way}. We extract the sub-table containing the data for
+\code{block}, paying attention to possible right-censoring (in the four
+dimension)
+
+@d extract plot data
+@{
+object <- x
+x <- object$table
+if (RC <- (length(dim(x)) == 4L)) {
+    x <- x[,,block,,drop = FALSE]
+    x <- x[marginSums(x, margin = 1) > 0,,,,drop = FALSE]
+} else {
+    x <- x[,,block,drop = FALSE]
+    x <- x[marginSums(x, margin = 1) > 0,,,drop = FALSE]
+}
+K <- dim(x)[2L]
+ret0 <- matrix(NA, nrow = dim(x)[1L], ncol = K)
+ln <- object$link
+@}
+
+We then refit the intercept parameters (that is, $\hat{h}(y)$) for this
+block re-using the treatment effects already contained in \code{object}. We
+will plot them later on as a means to directly compare the model to the data
+
+@d refit block intercepts
+@{
+### refit for this block only
+m1 <- free1way:::.free1wayML(x, link = ln, start = coef(object), 
+                             fix = seq_along(coef(object)),
+                             residuals = FALSE, hessian = FALSE)
+intercepts <- m1$intercepts[[1L]]
+j1 <- which(attr(get("xlist", environment(m1$profile))[[1L]], "idx") > 1)
+j1 <- j1[-length(j1)]
+cf <- c(0, coef(object))
+@}
+
+Last, we compute the marginal distributions, that is, the distribution
+function of the outcome separately for each group. We could have used
+\code{ecdf} or \code{survfit} here, but since we have everything available
+in \code{.free1wayML}, we simply remove the observations corresponding to
+other groups and refit the intercept parameters.
+
+@d marginal fit
+@{
+for (k in seq_len(K)) {
+    y <- x
+    if (RC) {
+        y[,-k,1,] <- 0
+    } else {
+        y[,-k,1] <- 0
+    }
+    start <- numeric(K - 1)
+    m0 <- free1way:::.free1wayML(y, link = ln, start = start, 
+                                 fix = seq_len(K - 1), residuals = FALSE, 
+                                 hessian = FALSE)
+    j <- which(attr(get("xlist", environment(m0$profile))[[1L]], "idx") > 1)
+    ret0[j[-length(j)],k] <- m0$intercepts[[1L]]
+}
+@}
+
+We can now setup a \code{plot} method for \code{free1way} objects, we begin
+with an empty plot with appropriate axes annotations (we allow plotting on
+the scale of the CDF as well):
+
+@d setup canvas
+@{
+if (cdf) {
+    ylim <- c(0, 1)
+    FUN <- function(x) ln$linkinv(x)
+} else {
+    ylim <- range(c(ret0, intercepts), na.rm = TRUE)
+    FUN <- function(x) x
+}
+
+idx <- seq_len(nrow(x))
+main <- list(...)$main
+if (is.null(main) && dim(object$table)[3L] > 1L)
+    main <- paste(names(dimnames(x))[3L], dimnames(x)[[3L]][1L], sep = "=")
+plot(idx, rep(0, length(idx)), type = "n", ylim = ylim, 
+     xlab = paste("Rank(", names(dimnames(x))[1L], ")", sep = ""),
+     ylab = ifelse(cdf, "Probability", paste(ln$name, "Link")), 
+     main = main, ...)
+@}
+
+The marginally estimated functions are plotted first
+
+@d marginal plot
+@{
+out <- sapply(seq_len(K), function(k) 
+    lines(which(!is.na(ret0[,k])), FUN(ret0[!is.na(ret0[,k]),k]), 
+          type = "s", col = col[k], lty = lty[1]))
+@}
+
+followed by a plot of the model-based functions (which can be switched off)
+
+@d model plot
+@{
+if (model)
+    out <- sapply(seq_len(K), function(k) 
+        lines(j1, FUN(intercepts - cf[k]), type = "s", col = col[k], lty = lty[2]))
+@}
+
+and finally we add a legend
+
+@d add legend
+@{
+if (legend) {
+        legend("topleft", lty = lty[1], col = col, 
+               legend = paste(names(dimnames(x))[2L], dimnames(x)[[2L]]),
+               title = "Nonparametric", bty = "n")
+        if (model) 
+            legend("bottomright", lty = lty[2], col = col, 
+                   legend = paste(names(dimnames(x))[2L], dimnames(x)[[2L]]),
+                   title = "Semiparametric", bty = "n")
+    }
+@}
+
+We put everything together in a \code{plot} method
+
+@d plot free1way
+@{
+plot.free1way <- function(x, ..., block = 1L, cdf = FALSE, model = TRUE,
+                          col = seq_len(length(coef(object)) + 1L),
+                          lty = 1:2, legend = TRUE) {
+
+    @<extract plot data@>
+    @<refit block intercepts@>
+    @<marginal fit@>
+
+    @<setup canvas@>
+    @<marginal plot@>
+    @<model plot@>
+    @<add legend@>
+}
+@}
+
+By default, the plot shows the marginal (``nonparametric'') and model-based
+(``semiparametric'') estimates in the sample plot. For the ozone
+concentrations in different months in Figure~\ref{fig:ozone}, we see that the distributions differ,
+but the effects can be well understood as shifts on a log-odds scale. Note
+that the solid nonparametric curves agree quite well with the dashed
+model-based ones.
+
+\begin{figure}
+<<plot-ex, fig = TRUE>>=
+tk <- free1way(Ozone ~ Month, data = airquality)
+plot(tk, las = 1)
+@@
+\caption{Model diagnostics for proportional odds model comparing ozone
+concentrations for different months. \label{fig:ozone}}
+\end{figure}
+
+We can check if the plot is correct by comparing the result
+(Figure~\ref{fig:ozonecdf}) to the one
+obtained with \code{ecdfplot} after rank transformation on the scale of the
+distribution functions (Figure~\ref{fig:ozoneecdf})
+
+\begin{figure}
+<<plot-ex-cdf, fig = TRUE>>=
+plot(tk, cdf = TRUE, model = FALSE, las = 1)
+@@
+\caption{Nonparametric distributions of ozone concentrations for different months. \label{fig:ozonecdf}}
+\end{figure}
+
+\begin{figure}
+<<plot-ex-ecdf, fig = TRUE>>=
+aq <- subset(airquality, !is.na(Ozone))
+aq$r <- match(aq$Ozone, sort(unique(aq$Ozone)))
+library("latticeExtra")
+plot(ecdfplot(~ r, data = aq, groups = Month, col = 1:5))
+@@
+\caption{Nonparametric distributions of ozone concentrations for different months.
+\label{fig:ozoneecdf}}
+\end{figure}
+
+
+
+\section{Probability-probability Plots}
+
 The classical shift model $F_Y(y \mid T = 2) = F_Y(y - \mu \mid T = 1)$
 can be criticised using confidence bands for QQ-plots in \code{qqplot},
 because the parameter $\mu$ shows up as a vertical shift of the diagonal
@@ -3038,7 +3249,7 @@ Figure~\ref{fig:PH}.
 <<ppplot, fig = TRUE>>=
 y <- rlogis(50)
 x <- rlogis(50, location = 3)
-ppplot(y, x, conf.level = .95)
+ppplot(y, x, conf.level = .95, las = 1)
 @@
 \caption{Data sampled from a proportional-odds model with
 probability-probability (P-P)  curve and $95\%$ confidence band obtained from
@@ -3051,7 +3262,7 @@ a proportional-odds model. \label{fig:PO}}
 <<ppplot-savage, fig = TRUE>>=
 ppplot(y, x, conf.args = list(link = "cloglog", type = "Wald", 
                               col = NA, border = NULL),
-       conf.level = .95)
+       conf.level = .95, las = 1)
 @@
 \caption{Data sampled from a proportional-odds model with
 probability-probability (P-P)  curve and $95\%$ confidence band obtained from
@@ -3540,7 +3751,7 @@ for (i in seq_along(pw)) {
     pw[i] <- summary(ft, test = "Permutation")$p.value
 }
 mean(pw < .05)
-boxplot(cf)
+boxplot(cf, las = 1, ylab = expression(hat(delta)))
 points(c(1:2), delta, pch = 19, col = "red")
 power.free1way.test(n = N, prob = prb, delta = delta)
 @@
@@ -3570,7 +3781,7 @@ for (i in seq_along(pw)) {
     pw[i] <- summary(ft, test = "Permutation")$p.value
 }
 mean(pw < .05)
-boxplot(cf)
+boxplot(cf, las = 1, ylab = expression(hat(delta)))
 points(c(1:2), delta, pch = 19, col = "red")
 @@
 \caption{Power simulation for stratified proportional-odds model and corresponding
