@@ -1,32 +1,40 @@
 
 # linkfun
 
+### distribution function
 .p <- function(link, q, ...)
     link$linkinv(q = q, ...)
 
+### quantile function
 .q <- function(link, p, ...)
     link$link(p = p, ...)
 
+### density function
 .d <- function(link, x, ...)
     link$dlinkinv(x = x, ...)
 
+### derivative of density function
 .dd <- function(link, x, ...)
     link$ddlinkinv(x = x, ...)
 
+### 2nd derivative of density function
 .ddd <- function(link, x, ...)
     link$dddlinkinv(x = x, ...)
 
+### ratio of derivative of density to
+### density function
 .dd2d <- function(link, x, ...)
     link$dd2dlinkinv(x = x, ...)
 
-linkfun <- function(name,
-                    alias, 
-                    model, 
-                    parm, 
-                    link, 
-                    linkinv,
-                    dlinkinv, 
-                    ddlinkinv,
+### constructor
+linkfun <- function(name,       ### nickname
+                    alias,      ### char 
+                    model,      ### char, semiparametric model name
+                    parm,       ### char, parameter name
+                    link,       ### quantile function
+                    linkinv,    ### distribution function
+                    dlinkinv,   ### density function
+                    ddlinkinv,  ### derivative of density function
                     ...) {
 
     ret <- list(name = name, 

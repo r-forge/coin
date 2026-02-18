@@ -362,6 +362,7 @@ the log-probabilities
 @d negative logLik
 @{
 .nll <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
     @<parm to prob@>
     if (any(prb < .Machine$double.eps^10)) 
         return(Inf)
@@ -399,7 +400,9 @@ and then compute the negative score function:
 @d negative score
 @{
 .nsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
     @<parm to prob@>
+
     @<density prob ratio@>
 
     ret <- numeric(length(parm))
@@ -420,7 +423,9 @@ zero:
 @d negative score residuals
 @{
 .nsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
     @<parm to prob@>
+
     @<density prob ratio@>
 
     ret <- .rowSums(zl - zu, m = nrow(zl), n = ncol(zl)) / 
@@ -530,6 +535,7 @@ represent this matrix:
 @d Hessian
 @{
 .hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) {
+
     @<parm to prob@>
 
     @<Hessian prep@>
@@ -699,6 +705,7 @@ if (length(dx) == 4L) {
              domain = NA)
     }
 }
+
 @<determine steps in blocks@>
 @}
 
@@ -736,7 +743,9 @@ corresponding log-likelihoods:
 @d stratified negative logLik
 @{
 .snll <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
     @<stratum prep@>
+
     ret <- 0
     for (b in seq_len(B))
         ret <- ret + .nll(c(delta, intercepts[[b]]), x[[b]], mu = mu,
@@ -752,7 +761,9 @@ intercept parameters are only concatenated:
 @d stratified negative score
 @{
 .snsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
     @<stratum prep@>
+
     ret <- numeric(length(bidx))
     for (b in seq_len(B)) {
         nsc <- .nsc(c(delta, intercepts[[b]]), x[[b]], mu = mu,
@@ -770,7 +781,9 @@ row of zeros in the table: \label{lab:snsr}
 @d stratified negative score residual
 @{
 .snsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
     @<stratum prep@>
+
     ret <- c()
     for (b in seq_len(B)) {
         idx <- attr(x[[b]], "idx")
@@ -856,7 +869,9 @@ and the computation of the Hessian for the shift parameters using
 @d stratified Hessian
 @{
 .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) {
+
     @<stratum prep@>
+
     if (!isFALSE(ret <- full)) {
         @<full Hessian@>
     }
@@ -921,32 +936,40 @@ outcomes, it doesn't seem beneficial to extend this richer class.
 
 @d linkfun
 @{
+### distribution function
 .p <- function(link, q, ...)
     link$linkinv(q = q, ...)
 
+### quantile function
 .q <- function(link, p, ...)
     link$link(p = p, ...)
 
+### density function
 .d <- function(link, x, ...)
     link$dlinkinv(x = x, ...)
 
+### derivative of density function
 .dd <- function(link, x, ...)
     link$ddlinkinv(x = x, ...)
 
+### 2nd derivative of density function
 .ddd <- function(link, x, ...)
     link$dddlinkinv(x = x, ...)
 
+### ratio of derivative of density to
+### density function
 .dd2d <- function(link, x, ...)
     link$dd2dlinkinv(x = x, ...)
 
-linkfun <- function(name,
-                    alias, 
-                    model, 
-                    parm, 
-                    link, 
-                    linkinv,
-                    dlinkinv, 
-                    ddlinkinv,
+### constructor
+linkfun <- function(name,	### nickname
+                    alias,	### char 
+                    model, 	### char, semiparametric model name
+                    parm, 	### char, parameter name
+                    link,      	### quantile function
+                    linkinv,   	### distribution function
+                    dlinkinv,  	### density function
+                    ddlinkinv, 	### derivative of density function
                     ...) {
 
     ret <- list(name = name, 
@@ -1221,9 +1244,6 @@ if ((objthe <= oldobj + 1e-6 && (oldobj - objthe < control$objtol)) &&
         return(list(par = theta, objective = objthe, convergence = 1, message = msg)) 
     }
 
-    ### Note: This is done in the call to .free1wayML
-    ### gradtol <- gradtol * n / 1000.
-
     for (iter in seq_len(control$iter.max)) {
 
         @<Newton update@>
@@ -1297,6 +1317,7 @@ after merging all treatment groups:
 
 @d setup and starting values
 @{
+
 @<table2list body@>
 
 ## allow specification of start = delta and fix = 1:K
@@ -1431,7 +1452,9 @@ he <- function(par) {
                      })
     opargs$control <- control[[1L]]
     correctFirth <- FALSE ### turn off Firth correction in .profile
+
     @<do optim@>
+
     p <- numeric(length(start))
     p[fix] <- delta
     p[-fix] <- ret$par
@@ -1516,8 +1539,10 @@ names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
 
 par <- ret$par
 intercepts <- function(parm, x) {
+
     @<stratum prep@>
-    intercepts
+
+    return(intercepts)
 }
 ret$intercepts <- intercepts(par, x = xlist)
 
@@ -2422,6 +2447,7 @@ summary.free1way <- function(object, test, alternative = c("two.sided", "less", 
     class(ret) <- "summary.free1way"
     return(ret)
 }
+
 print.summary.free1way <- function(x, ...) {
     cat("\nCall:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"), 
         "\n\n", sep = "")
@@ -3639,6 +3665,7 @@ power.free1way.test <- function(n = NULL, prob = if (is.null(n)) NULL else rep.i
 
     ### n is available now
     if (is.null(prob)) prob <- rep(1 / n, n)
+
     @<power setup@>
     @<estimate Fisher information@>
 

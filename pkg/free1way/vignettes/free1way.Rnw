@@ -352,6 +352,7 @@ options(digits = 5)
         }
     }
 
+
     xlist <- xrclist <- vector(mode = "list", length = B)
 
     for (b in seq_len(B)) {
@@ -397,6 +398,7 @@ options(digits = 5)
 
 
 .nll <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
     
     bidx <- seq_len(ncol(x) - 1L)
     delta <- c(0, mu + parm[bidx])
@@ -419,6 +421,7 @@ options(digits = 5)
 
 
 .nsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
     
     bidx <- seq_len(ncol(x) - 1L)
     delta <- c(0, mu + parm[bidx])
@@ -434,6 +437,7 @@ options(digits = 5)
                Ftmb[- nrow(Ftmb), , drop = FALSE]
     } 
     
+
     
     ftmb <- f(tmb)
     zu <- x * ftmb[- 1, , drop = FALSE] / prb
@@ -453,6 +457,7 @@ options(digits = 5)
 
 
 .nsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
     
     bidx <- seq_len(ncol(x) - 1L)
     delta <- c(0, mu + parm[bidx])
@@ -468,6 +473,7 @@ options(digits = 5)
                Ftmb[- nrow(Ftmb), , drop = FALSE]
     } 
     
+
     
     ftmb <- f(tmb)
     zu <- x * ftmb[- 1, , drop = FALSE] / prb
@@ -483,6 +489,7 @@ options(digits = 5)
 
 
 .hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) {
+
     
     bidx <- seq_len(ncol(x) - 1L)
     delta <- c(0, mu + parm[bidx])
@@ -575,6 +582,7 @@ options(digits = 5)
 
 
 .snll <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
     
     C <- vapply(x, NROW, 0L) ### might differ by stratum
     K <- unique(do.call("c", lapply(x, ncol))) ### the same
@@ -584,6 +592,7 @@ options(digits = 5)
     delta <- parm[bidx]
     intercepts <- split(parm[-bidx], sidx)
     
+
     ret <- 0
     for (b in seq_len(B))
         ret <- ret + .nll(c(delta, intercepts[[b]]), x[[b]], mu = mu,
@@ -593,6 +602,7 @@ options(digits = 5)
 
 
 .snsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
     
     C <- vapply(x, NROW, 0L) ### might differ by stratum
     K <- unique(do.call("c", lapply(x, ncol))) ### the same
@@ -602,6 +612,7 @@ options(digits = 5)
     delta <- parm[bidx]
     intercepts <- split(parm[-bidx], sidx)
     
+
     ret <- numeric(length(bidx))
     for (b in seq_len(B)) {
         nsc <- .nsc(c(delta, intercepts[[b]]), x[[b]], mu = mu,
@@ -614,6 +625,7 @@ options(digits = 5)
 
 
 .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) {
+
     
     C <- vapply(x, NROW, 0L) ### might differ by stratum
     K <- unique(do.call("c", lapply(x, ncol))) ### the same
@@ -623,6 +635,7 @@ options(digits = 5)
     delta <- parm[bidx]
     intercepts <- split(parm[-bidx], sidx)
     
+
     if (!isFALSE(ret <- full)) {
         
         for (b in seq_len(B)) {
@@ -684,6 +697,7 @@ options(digits = 5)
 
 
 .snsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
     
     C <- vapply(x, NROW, 0L) ### might differ by stratum
     K <- unique(do.call("c", lapply(x, ncol))) ### the same
@@ -693,6 +707,7 @@ options(digits = 5)
     delta <- parm[bidx]
     intercepts <- split(parm[-bidx], sidx)
     
+
     ret <- c()
     for (b in seq_len(B)) {
         idx <- attr(x[[b]], "idx")
@@ -744,6 +759,7 @@ options(digits = 5)
 
     
 
+
     dx <- dim(x)
     if (length(dx) == 1L)
         stop("Incorrect dimensions")
@@ -770,6 +786,7 @@ options(digits = 5)
                  domain = NA)
         }
     }
+
 
     xlist <- xrclist <- vector(mode = "list", length = B)
 
@@ -828,6 +845,7 @@ options(digits = 5)
     
     
     .nll <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
         
         bidx <- seq_len(ncol(x) - 1L)
         delta <- c(0, mu + parm[bidx])
@@ -850,6 +868,7 @@ options(digits = 5)
     
     
     .nsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
         
         bidx <- seq_len(ncol(x) - 1L)
         delta <- c(0, mu + parm[bidx])
@@ -865,6 +884,7 @@ options(digits = 5)
                    Ftmb[- nrow(Ftmb), , drop = FALSE]
         } 
         
+
         
         ftmb <- f(tmb)
         zu <- x * ftmb[- 1, , drop = FALSE] / prb
@@ -884,6 +904,7 @@ options(digits = 5)
     
     
     .nsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
         
         bidx <- seq_len(ncol(x) - 1L)
         delta <- c(0, mu + parm[bidx])
@@ -899,6 +920,7 @@ options(digits = 5)
                    Ftmb[- nrow(Ftmb), , drop = FALSE]
         } 
         
+
         
         ftmb <- f(tmb)
         zu <- x * ftmb[- 1, , drop = FALSE] / prb
@@ -914,6 +936,7 @@ options(digits = 5)
     
     
     .hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) {
+
         
         bidx <- seq_len(ncol(x) - 1L)
         delta <- c(0, mu + parm[bidx])
@@ -1006,6 +1029,7 @@ options(digits = 5)
     
     
     .snll <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
         
         C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
@@ -1015,6 +1039,7 @@ options(digits = 5)
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
         
+
         ret <- 0
         for (b in seq_len(B))
             ret <- ret + .nll(c(delta, intercepts[[b]]), x[[b]], mu = mu,
@@ -1024,6 +1049,7 @@ options(digits = 5)
     
     
     .snsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
         
         C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
@@ -1033,6 +1059,7 @@ options(digits = 5)
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
         
+
         ret <- numeric(length(bidx))
         for (b in seq_len(B)) {
             nsc <- .nsc(c(delta, intercepts[[b]]), x[[b]], mu = mu,
@@ -1045,6 +1072,7 @@ options(digits = 5)
     
     
     .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) {
+
         
         C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
@@ -1054,6 +1082,7 @@ options(digits = 5)
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
         
+
         if (!isFALSE(ret <- full)) {
             
             for (b in seq_len(B)) {
@@ -1115,6 +1144,7 @@ options(digits = 5)
     
     
     .snsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
         
         C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
@@ -1124,6 +1154,7 @@ options(digits = 5)
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
         
+
         ret <- c()
         for (b in seq_len(B)) {
             idx <- attr(x[[b]], "idx")
@@ -1191,6 +1222,7 @@ options(digits = 5)
                          })
         opargs$control <- control[[1L]]
         correctFirth <- FALSE ### turn off Firth correction in .profile
+
         
         maxit <- control[[1L]]$iter.max
         while(maxit < 10001) {
@@ -1276,6 +1308,7 @@ options(digits = 5)
         ret$value <- ret$objective
         ret$objective <- NULL
         
+
         p <- numeric(length(start))
         p[fix] <- delta
         p[-fix] <- ret$par
@@ -1395,6 +1428,7 @@ options(digits = 5)
 
     par <- ret$par
     intercepts <- function(parm, x) {
+
         
         C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
@@ -1404,7 +1438,8 @@ options(digits = 5)
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
         
-        intercepts
+
+        return(intercepts)
     }
     ret$intercepts <- intercepts(par, x = xlist)
 
@@ -1525,32 +1560,40 @@ options(digits = 5)
 }
 
 
+### distribution function
 .p <- function(link, q, ...)
     link$linkinv(q = q, ...)
 
+### quantile function
 .q <- function(link, p, ...)
     link$link(p = p, ...)
 
+### density function
 .d <- function(link, x, ...)
     link$dlinkinv(x = x, ...)
 
+### derivative of density function
 .dd <- function(link, x, ...)
     link$ddlinkinv(x = x, ...)
 
+### 2nd derivative of density function
 .ddd <- function(link, x, ...)
     link$dddlinkinv(x = x, ...)
 
+### ratio of derivative of density to
+### density function
 .dd2d <- function(link, x, ...)
     link$dd2dlinkinv(x = x, ...)
 
-linkfun <- function(name,
-                    alias, 
-                    model, 
-                    parm, 
-                    link, 
-                    linkinv,
-                    dlinkinv, 
-                    ddlinkinv,
+### constructor
+linkfun <- function(name,	### nickname
+                    alias,	### char 
+                    model, 	### char, semiparametric model name
+                    parm, 	### char, parameter name
+                    link,      	### quantile function
+                    linkinv,   	### distribution function
+                    dlinkinv,  	### density function
+                    ddlinkinv, 	### derivative of density function
                     ...) {
 
     ret <- list(name = name, 
@@ -1734,9 +1777,6 @@ loglog <- function()
         return(list(par = theta, objective = objthe, convergence = 1, message = msg)) 
     }
 
-    ### Note: This is done in the call to .free1wayML
-    ### gradtol <- gradtol * n / 1000.
-
     for (iter in seq_len(control$iter.max)) {
 
         
@@ -1853,6 +1893,7 @@ the log-probabilities
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.nll <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    if (any(prb < .Machine$double.eps^10)) @\\
 \mbox{}\verb@        return(Inf)@\\
@@ -1916,7 +1957,9 @@ and then compute the negative score function:
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.nsc <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape density prob ratio}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    ret <- numeric(length(parm))@\\
@@ -1950,7 +1993,9 @@ zero:
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.nsr <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape density prob ratio}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    ret <- .rowSums(zl - zu, m = nrow(zl), n = ncol(zl)) / @\\
@@ -2125,6 +2170,7 @@ represent this matrix:
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) {@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Hessian prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
@@ -2319,6 +2365,7 @@ tables (yet still allowing zero row sums):
 \mbox{}\verb@             domain = NA)@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape determine steps in blocks}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -2395,7 +2442,9 @@ corresponding log-likelihoods:
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.snll <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    ret <- 0@\\
 \mbox{}\verb@    for (b in seq_len(B))@\\
 \mbox{}\verb@        ret <- ret + .nll(c(delta, intercepts[[b]]), x[[b]], mu = mu,@\\
@@ -2424,7 +2473,9 @@ intercept parameters are only concatenated:
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.snsc <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    ret <- numeric(length(bidx))@\\
 \mbox{}\verb@    for (b in seq_len(B)) {@\\
 \mbox{}\verb@        nsc <- .nsc(c(delta, intercepts[[b]]), x[[b]], mu = mu,@\\
@@ -2455,7 +2506,9 @@ row of zeros in the table: \label{lab:snsr}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.snsr <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    ret <- c()@\\
 \mbox{}\verb@    for (b in seq_len(B)) {@\\
 \mbox{}\verb@        idx <- attr(x[[b]], "idx")@\\
@@ -2567,7 +2620,9 @@ and the computation of the Hessian for the shift parameters using
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) {@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    if (!isFALSE(ret <- full)) {@\\
 \mbox{}\verb@        @\hbox{$\langle\,${\itshape full Hessian}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    }@\\
@@ -2657,32 +2712,40 @@ outcomes, it doesn't seem beneficial to extend this richer class.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
+\mbox{}\verb@### distribution function@\\
 \mbox{}\verb@.p <- function(link, q, ...)@\\
 \mbox{}\verb@    link$linkinv(q = q, ...)@\\
 \mbox{}\verb@@\\
+\mbox{}\verb@### quantile function@\\
 \mbox{}\verb@.q <- function(link, p, ...)@\\
 \mbox{}\verb@    link$link(p = p, ...)@\\
 \mbox{}\verb@@\\
+\mbox{}\verb@### density function@\\
 \mbox{}\verb@.d <- function(link, x, ...)@\\
 \mbox{}\verb@    link$dlinkinv(x = x, ...)@\\
 \mbox{}\verb@@\\
+\mbox{}\verb@### derivative of density function@\\
 \mbox{}\verb@.dd <- function(link, x, ...)@\\
 \mbox{}\verb@    link$ddlinkinv(x = x, ...)@\\
 \mbox{}\verb@@\\
+\mbox{}\verb@### 2nd derivative of density function@\\
 \mbox{}\verb@.ddd <- function(link, x, ...)@\\
 \mbox{}\verb@    link$dddlinkinv(x = x, ...)@\\
 \mbox{}\verb@@\\
+\mbox{}\verb@### ratio of derivative of density to@\\
+\mbox{}\verb@### density function@\\
 \mbox{}\verb@.dd2d <- function(link, x, ...)@\\
 \mbox{}\verb@    link$dd2dlinkinv(x = x, ...)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@linkfun <- function(name,@\\
-\mbox{}\verb@                    alias, @\\
-\mbox{}\verb@                    model, @\\
-\mbox{}\verb@                    parm, @\\
-\mbox{}\verb@                    link, @\\
-\mbox{}\verb@                    linkinv,@\\
-\mbox{}\verb@                    dlinkinv, @\\
-\mbox{}\verb@                    ddlinkinv,@\\
+\mbox{}\verb@### constructor@\\
+\mbox{}\verb@linkfun <- function(name,       ### nickname@\\
+\mbox{}\verb@                    alias,      ### char @\\
+\mbox{}\verb@                    model,      ### char, semiparametric model name@\\
+\mbox{}\verb@                    parm,       ### char, parameter name@\\
+\mbox{}\verb@                    link,       ### quantile function@\\
+\mbox{}\verb@                    linkinv,    ### distribution function@\\
+\mbox{}\verb@                    dlinkinv,   ### density function@\\
+\mbox{}\verb@                    ddlinkinv,  ### derivative of density function@\\
 \mbox{}\verb@                    ...) {@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    ret <- list(name = name, @\\
@@ -3061,9 +3124,6 @@ matrix. The following code was adopted from his \pkg{rms} package, function
 \mbox{}\verb@        return(list(par = theta, objective = objthe, convergence = 1, message = msg)) @\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    ### Note: This is done in the call to .free1wayML@\\
-\mbox{}\verb@    ### gradtol <- gradtol * n / 1000.@\\
-\mbox{}\verb@@\\
 \mbox{}\verb@    for (iter in seq_len(control$iter.max)) {@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@        @\hbox{$\langle\,${\itshape Newton update}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
@@ -3161,6 +3221,7 @@ after merging all treatment groups:
 \NWtarget{nuweb?}{} $\langle\,${\itshape setup and starting values}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
+\mbox{}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape table2list body}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -3322,7 +3383,9 @@ defined first
 \mbox{}\verb@                     })@\\
 \mbox{}\verb@    opargs$control <- control[[1L]]@\\
 \mbox{}\verb@    correctFirth <- FALSE ### turn off Firth correction in .profile@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape do optim}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    p <- numeric(length(start))@\\
 \mbox{}\verb@    p[fix] <- delta@\\
 \mbox{}\verb@    p[-fix] <- ret$par@\\
@@ -3446,8 +3509,10 @@ negative residuals as requested:
 \mbox{}\verb@@\\
 \mbox{}\verb@par <- ret$par@\\
 \mbox{}\verb@intercepts <- function(parm, x) {@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    intercepts@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    return(intercepts)@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@ret$intercepts <- intercepts(par, x = xlist)@\\
 \mbox{}\verb@@\\
@@ -4381,8 +4446,6 @@ not as a list of things).
 \mbox{}\verb@                          "free1way"),@\\
 \mbox{}\verb@                 domain = NA)@\\
 \mbox{}\verb@        uy <- sort(unique(y[event]))@\\
-\mbox{}\verb@#        if (all(y[!event] < uy[length(uy)]))@\\
-\mbox{}\verb@#            uy <- uy[-length(uy)]@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        uy <- sort(unique(y))@\\
 \mbox{}\verb@    }@\\
@@ -4625,6 +4688,7 @@ The \code{summary} method performs population Wald inference unless the
 \mbox{}\verb@    class(ret) <- "summary.free1way"@\\
 \mbox{}\verb@    return(ret)@\\
 \mbox{}\verb@}@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@print.summary.free1way <- function(x, ...) {@\\
 \mbox{}\verb@    cat("\nCall:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"), @\\
 \mbox{}\verb@        "\n\n", sep = "")@\\
@@ -6151,6 +6215,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \mbox{}\verb@@\\
 \mbox{}\verb@    ### n is available now@\\
 \mbox{}\verb@    if (is.null(prob)) prob <- rep(1 / n, n)@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape power setup}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\

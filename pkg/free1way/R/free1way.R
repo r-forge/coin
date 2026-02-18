@@ -19,9 +19,6 @@
         return(list(par = theta, objective = objthe, convergence = 1, message = msg)) 
     }
 
-    ### Note: This is done in the call to .free1wayML
-    ### gradtol <- gradtol * n / 1000.
-
     for (iter in seq_len(control$iter.max)) {
 
         # Newton update
@@ -127,6 +124,7 @@
 
     # setup and starting values
     
+
     # table2list body
 
     dx <- dim(x)
@@ -155,6 +153,7 @@
                  domain = NA)
         }
     }
+
     # determine steps in blocks
 
     xlist <- xrclist <- vector(mode = "list", length = B)
@@ -215,6 +214,7 @@
     # negative logLik
     
     .nll <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
         # parm to prob
         
         bidx <- seq_len(ncol(x) - 1L)
@@ -239,6 +239,7 @@
     # negative score
     
     .nsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
         # parm to prob
         
         bidx <- seq_len(ncol(x) - 1L)
@@ -255,6 +256,7 @@
                    Ftmb[- nrow(Ftmb), , drop = FALSE]
         } 
         
+
         # density prob ratio
         
         ftmb <- f(tmb)
@@ -276,6 +278,7 @@
     # negative score residuals
     
     .nsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
         # parm to prob
         
         bidx <- seq_len(ncol(x) - 1L)
@@ -292,6 +295,7 @@
                    Ftmb[- nrow(Ftmb), , drop = FALSE]
         } 
         
+
         # density prob ratio
         
         ftmb <- f(tmb)
@@ -309,6 +313,7 @@
     # Hessian
     
     .hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) {
+
         # parm to prob
         
         bidx <- seq_len(ncol(x) - 1L)
@@ -407,6 +412,7 @@
     # stratified negative logLik
     
     .snll <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
         # stratum prep
         
         C <- vapply(x, NROW, 0L) ### might differ by stratum
@@ -417,6 +423,7 @@
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
         
+
         ret <- 0
         for (b in seq_len(B))
             ret <- ret + .nll(c(delta, intercepts[[b]]), x[[b]], mu = mu,
@@ -427,6 +434,7 @@
     # stratified negative score
     
     .snsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
         # stratum prep
         
         C <- vapply(x, NROW, 0L) ### might differ by stratum
@@ -437,6 +445,7 @@
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
         
+
         ret <- numeric(length(bidx))
         for (b in seq_len(B)) {
             nsc <- .nsc(c(delta, intercepts[[b]]), x[[b]], mu = mu,
@@ -450,6 +459,7 @@
     # stratified Hessian
     
     .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) {
+
         # stratum prep
         
         C <- vapply(x, NROW, 0L) ### might differ by stratum
@@ -460,6 +470,7 @@
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
         
+
         if (!isFALSE(ret <- full)) {
             # full Hessian
             
@@ -523,6 +534,7 @@
     # stratified negative score residual
     
     .snsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
+
         # stratum prep
         
         C <- vapply(x, NROW, 0L) ### might differ by stratum
@@ -533,6 +545,7 @@
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
         
+
         ret <- c()
         for (b in seq_len(B)) {
             idx <- attr(x[[b]], "idx")
@@ -601,6 +614,7 @@
                          })
         opargs$control <- control[[1L]]
         correctFirth <- FALSE ### turn off Firth correction in .profile
+
         # do optim
         
         maxit <- control[[1L]]$iter.max
@@ -689,6 +703,7 @@
         ret$value <- ret$objective
         ret$objective <- NULL
         
+
         p <- numeric(length(start))
         p[fix] <- delta
         p[-fix] <- ret$par
@@ -813,6 +828,7 @@
 
     par <- ret$par
     intercepts <- function(parm, x) {
+
         # stratum prep
         
         C <- vapply(x, NROW, 0L) ### might differ by stratum
@@ -823,7 +839,8 @@
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
         
-        intercepts
+
+        return(intercepts)
     }
     ret$intercepts <- intercepts(par, x = xlist)
 
@@ -1289,6 +1306,7 @@ summary.free1way <- function(object, test, alternative = c("two.sided", "less", 
     class(ret) <- "summary.free1way"
     return(ret)
 }
+
 print.summary.free1way <- function(x, ...) {
     cat("\nCall:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"), 
         "\n\n", sep = "")
@@ -1624,8 +1642,6 @@ free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = N
                           "free1way"),
                  domain = NA)
         uy <- sort(unique(y[event]))
-#        if (all(y[!event] < uy[length(uy)]))
-#            uy <- uy[-length(uy)]
     } else {
         uy <- sort(unique(y))
     }
@@ -2069,6 +2085,7 @@ power.free1way.test <- function(n = NULL, prob = if (is.null(n)) NULL else rep.i
 
     ### n is available now
     if (is.null(prob)) prob <- rep(1 / n, n)
+
     # power setup
     
 
