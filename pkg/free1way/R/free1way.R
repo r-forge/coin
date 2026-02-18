@@ -1686,7 +1686,7 @@ free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NU
             stop(gettextf("%s currently only allows independent right-censoring",
                           "free1way"),
                 domain = NA)
-        d$event <- event
+        d$event <- factor(event, levels = c(FALSE, TRUE), labels = c("FALSE", "TRUE"))
     }
     tab <- xtabs(w ~ ., data = d)
     dn <- dimnames(tab)

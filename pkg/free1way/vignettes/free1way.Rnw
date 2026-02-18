@@ -16,7 +16,7 @@
 \documentclass[a4paper]{report}
 
 %\VignetteIndexEntry{Stratified K-sample Inference}
-%\VignetteDepends{free1way,multcomp,survival,Hmisc,coin,rms}
+%\VignetteDepends{free1way,multcomp,survival,Hmisc,coin,rms,latticeExtra}
 %\VignetteKeywords{semiparametric model,conditional inference}}
 %\VignettePackage{free1way}
 
@@ -4435,7 +4435,7 @@ call to \code{xtabs}:
 \mbox{}\verb@            stop(gettextf("%s currently only allows independent right-censoring",@\\
 \mbox{}\verb@                          "free1way"),@\\
 \mbox{}\verb@                domain = NA)@\\
-\mbox{}\verb@        d$event <- event@\\
+\mbox{}\verb@        d$event <- factor(event, levels = c(FALSE, TRUE), labels = c("FALSE", "TRUE"))@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    tab <- xtabs(w ~ ., data = d)@\\
 \mbox{}\verb@    dn <- dimnames(tab)@\\
