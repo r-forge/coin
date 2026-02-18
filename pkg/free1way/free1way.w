@@ -2232,8 +2232,6 @@ free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = N
                           "free1way"),
                  domain = NA)
         uy <- sort(unique(y[event]))
-#        if (all(y[!event] < uy[length(uy)]))
-#            uy <- uy[-length(uy)]
     } else {
         uy <- sort(unique(y))
     }
