@@ -1,7 +1,7 @@
 \documentclass[a4paper]{report}
 
 %\VignetteIndexEntry{Stratified K-sample Inference}
-%\VignetteDepends{free1way,multcomp,survival,Hmisc,coin,rms,latticeExtra}
+%\VignetteDepends{free1way,multcomp,survival,Hmisc,coin,rms,latticeExtra,daewr}
 %\VignetteKeywords{semiparametric model,conditional inference}}
 %\VignettePackage{free1way}
 
@@ -361,7 +361,8 @@ the log-probabilities
 
 @d negative logLik
 @{
-.nll <- function(parm, x, mu = 0, rightcensored = FALSE) {
+.nll <- function(parm, x, mu = 0, rightcensored = FALSE) 
+{
 
     @<parm to prob@>
     if (any(prb < .Machine$double.eps^10)) 
@@ -399,7 +400,8 @@ and then compute the negative score function:
 
 @d negative score
 @{
-.nsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
+.nsc <- function(parm, x, mu = 0, rightcensored = FALSE) 
+{
 
     @<parm to prob@>
 
@@ -422,7 +424,8 @@ zero:
 
 @d negative score residuals
 @{
-.nsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
+.nsr <- function(parm, x, mu = 0, rightcensored = FALSE) 
+{
 
     @<parm to prob@>
 
@@ -534,7 +537,8 @@ represent this matrix:
 
 @d Hessian
 @{
-.hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) {
+.hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) 
+{
 
     @<parm to prob@>
 
@@ -597,7 +601,8 @@ Parameter estimates and the in-sample log-likelihood are practically
 identical. We now turn to the inverse Hessian of the shift terms, first
 defining the derivative of the density of the standard logistic distribution
 <<glm-H>>=
-fp <- function(x) {
+fp <- function(x) 
+{
     p <- plogis(x)
     p * (1 - p)^2 - p^2 * (1 - p)
 }
@@ -711,7 +716,8 @@ if (length(dx) == 4L) {
 
 @d table2list
 @{
-.table2list <- function(x) {
+.table2list <- function(x) 
+{
 
     @<table2list body@>
 
@@ -742,7 +748,8 @@ corresponding log-likelihoods:
 
 @d stratified negative logLik
 @{
-.snll <- function(parm, x, mu = 0, rightcensored = FALSE) {
+.snll <- function(parm, x, mu = 0, rightcensored = FALSE) 
+{
 
     @<stratum prep@>
 
@@ -760,7 +767,8 @@ intercept parameters are only concatenated:
 
 @d stratified negative score
 @{
-.snsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
+.snsc <- function(parm, x, mu = 0, rightcensored = FALSE) 
+{
 
     @<stratum prep@>
 
@@ -780,7 +788,8 @@ row of zeros in the table: \label{lab:snsr}
 
 @d stratified negative score residual
 @{
-.snsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
+.snsr <- function(parm, x, mu = 0, rightcensored = FALSE) 
+{
 
     @<stratum prep@>
 
@@ -868,7 +877,8 @@ and the computation of the Hessian for the shift parameters using
 
 @d stratified Hessian
 @{
-.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) {
+.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) 
+{
 
     @<stratum prep@>
 
@@ -970,7 +980,8 @@ linkfun <- function(name,	### nickname
                     linkinv,   	### distribution function
                     dlinkinv,  	### density function
                     ddlinkinv, 	### derivative of density function
-                    ...) {
+                    ...) 
+{
 
     ret <- list(name = name, 
                 alias = alias,
@@ -1397,14 +1408,16 @@ defined first
 
 @d profile
 @{
-fn <- function(par) {
+fn <- function(par) 
+{
     ret <- .snll(par, x = xlist, mu = mu)
     if (!is.null(xrc))
         ret <- ret + .snll(par, x = xrclist, mu = mu, 
                            rightcensored = TRUE)
     return(ret)
 }
-gr <- function(par) {
+gr <- function(par) 
+{
     ret <- .snsc(par, x = xlist, mu = mu)
     if (!is.null(xrc))
         ret <- ret + .snsc(par, x = xrclist, mu = mu, 
@@ -1415,7 +1428,8 @@ gr <- function(par) {
 ### allocate memory for hessian
 Hess <- Matrix::Matrix(0, nrow = length(start), ncol = length(start))
 
-he <- function(par) {
+he <- function(par) 
+{
     if (!is.null(xrc)) {
         ret <- .shes(par, x = xlist, mu = mu, xrc = xrclist, full = Hess, 
                      retMatrix = names(control)[1L] == ".NewtonRaphson")
@@ -1425,7 +1439,8 @@ he <- function(par) {
     }
     return(ret)
 }
-.profile <- function(start, fix = seq_len(K - 1)) {
+.profile <- function(start, fix = seq_len(K - 1)) 
+{
     if (!all(fix %in% seq_len(K - 1)))
         stop(gettextf("Incorrect argument 'fix' in %s",
                       "free1way"),
@@ -1475,7 +1490,8 @@ after correcting the bias.
 
 @d Firth correction
 @{
-.Firth_ll <- function(cf, start) {
+.Firth_ll <- function(cf, start) 
+{
     fix <- seq_along(cf)
     start[fix] <- cf
     ### compute profile likelihood w/o warnings
@@ -1538,7 +1554,8 @@ dn2 <- dimnames(xt)[2L]
 names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
 
 par <- ret$par
-intercepts <- function(parm, x) {
+intercepts <- function(parm, x) 
+{
 
     @<stratum prep@>
 
@@ -1614,7 +1631,8 @@ problem.
                                              tolsolve = .Machine$double.eps)
                         )[dooptim],
                         trace = FALSE, 
-                        tol = sqrt(.Machine$double.eps), ...) {
+                        tol = sqrt(.Machine$double.eps), ...) 
+{
 
     ### convert to three-way table
     xt <- x
@@ -1838,7 +1856,8 @@ given by \cite{strasserweber1999}:
 
 @d Strasser Weber
 @{
-.SW <- function(res, xt) {
+.SW <- function(res, xt) 
+{
 
     if (length(dim(xt)) == 3L) {
         res <- matrix(res, nrow = dim(xt)[1L], ncol = dim(xt)[3])
@@ -1880,7 +1899,8 @@ tables with fixed marginal distributions:
 
 @d resampling
 @{
-.resample <- function(res, xt, B = 10000) {
+.resample <- function(res, xt, B = 10000) 
+{
 
     if (length(dim(xt)) == 2L)
         xt <- as.table(array(xt, dim = c(dim(xt), 1)))
@@ -1921,7 +1941,8 @@ algorithm, mainly because the scores can be mapped to integers:
 
 @d exact proportional odds
 @{
-.exact <- function(z, grp, w = rep.int(1, length(z))) {
+.exact <- function(z, grp, w = rep.int(1, length(z))) 
+{
 
     z <- rep(z, times = w)
     grp <- rep(grp, times = w)
@@ -2247,7 +2268,8 @@ not as a list of things).
 @d free1way numeric
 @{
 free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, nbins = 0, 
-                             varnames = NULL, ...) {
+                             varnames = NULL, ...) 
+{
 
     @<variable names and checks@>
 
@@ -2283,7 +2305,8 @@ call to \code{xtabs}:
 @d free1way factor
 @{
 free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, 
-                            varnames = NULL, ...) {
+                            varnames = NULL, ...) 
+{
 
     @<variable names and checks@>
 
@@ -2343,7 +2366,8 @@ model.frame.free1way <- function(formula, ...) {
     ret
 }
 ### the next two might go into multcomp
-terms.free1way <- function(x, ...) {
+terms.free1way <- function(x, ...) 
+{
     mf <- model.frame(x)
     terms(as.formula(paste(names(mf)[1:2], collapse = "~")), 
           data = mf)
@@ -2408,7 +2432,8 @@ some special cases (\code{wilcox,kruskal,friedman.test}):
     return(RVAL)
 }
 
-print.free1way <- function(x, ...) {
+print.free1way <- function(x, ...) 
+{
     print(ret <- .print.free1way(x, ...))
     return(invisible(x))
 }
@@ -2448,7 +2473,8 @@ summary.free1way <- function(object, test, alternative = c("two.sided", "less", 
     return(ret)
 }
 
-print.summary.free1way <- function(x, ...) {
+print.summary.free1way <- function(x, ...) 
+{
     cat("\nCall:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"), 
         "\n\n", sep = "")
     cat("Coefficients:\n")
@@ -2476,7 +2502,8 @@ if (!is.null(object$exact)) {
     if (is.null(object$perm$permStat)) {
         qu <- qnorm(conf.level) * c(-1, 1)
     } else {
-        .pq <- function(s, alpha) {
+        .pq <- function(s, alpha) 
+        {
             su <- sort(unique(s)) 
             ### F = P(T <= t), S = P(T >= t)
             Fs <- cumsum(st <- table(match(s, su)))
@@ -2598,7 +2625,8 @@ confint.free1way <- function(object, parm,
         wlevel <- 1 - (1 - level) / 2
         CINT[] <- confint.default(object, level = wlevel)
 
-        sfun <- function(value, parm, quantile) {
+        sfun <- function(value, parm, quantile) 
+        {
             x <- object
             alternative <- "two.sided"
             tol <- .Machine$double.eps
@@ -2945,6 +2973,20 @@ logLik(free1way(time ~ me | id, data = d, link = "loglog"))
 
 Maybe proportional-hazards model better?
 
+\section{Incomplete Block Designs}
+
+\code{friedman.test} expects all blocks to be complete and
+\code{kruskal.test} has no idea about blocks. When blocks are incomplete,
+\code{free1way} can be employed. Replacing the normality assumption inherit
+in \code{aov} \citep[Chapter~8.3.1. in][]{Meier2022} with a semiparametric
+proportional odds model, we get
+<<incomplete>>=
+data("taste", package = "daewr")
+### highly discrete
+table(taste$score)
+summary(free1way(score ~ recipe | panelist, data = taste))
+@@
+
 \section{MnNemar Test}
 
 <<McNemar>>=
@@ -3134,7 +3176,8 @@ We put everything together in a \code{plot} method
 @{
 plot.free1way <- function(x, ..., block = 1L, cdf = FALSE, model = TRUE,
                           col = seq_len(length(coef(object)) + 1L),
-                          lty = 1:2, legend = TRUE) {
+                          lty = 1:2, legend = TRUE) 
+{
 
     @<extract plot data@>
     @<refit block intercepts@>
@@ -3240,7 +3283,8 @@ ppplot <- function(x, y, plot.it = TRUE,
                    main = "P-P plot",
                    ..., conf.level = NULL, 
                    conf.args = list(link = "logit", type = "Wald", 
-                                    col = NA, border = NULL)) {
+                                    col = NA, border = NULL)) 
+{
 
     force(xlab)
     force(ylab)
@@ -3337,7 +3381,8 @@ N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) *
 
 @d rfree1way
 @{
-.rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "loglog")) {
+.rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "loglog")) 
+{
 
     logU <- log(ret <- runif(n))
 
@@ -3354,6 +3399,7 @@ rfree1way <- function(n, prob = NULL, alloc_ratio = 1,
                       strata_ratio = 1, delta = 0, offset = 0, 
                       link = c("logit", "probit", "cloglog", "loglog"))
 {
+
     B <- blocks
 
     @<design args@>

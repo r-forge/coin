@@ -1474,6 +1474,24 @@ Wide Angle - Narrow Angle == 0    -2.02
 > logLik(free1way(time ~ me | id, data = d, link = "loglog"))
 [1] -55.624
 
+> data("taste", package = "daewr")
+
+> table(taste$score)
+
+4 5 6 7 8 
+4 6 6 6 2 
+
+> summary(free1way(score ~ recipe | panelist, data = taste))
+
+Call:
+free1way.formula(formula = score ~ recipe | panelist, data = taste)
+
+Coefficients:
+        log-odds ratio Std. Error z value P(>|z|)
+recipeB          2.483      2.118   1.172    0.24
+recipeC          2.930      1.933   1.515    0.13
+recipeD         -1.696      1.793  -0.946    0.34
+
 > example(mcnemar.test, echo = FALSE)
 
 > s <- gl(2, 1, labels = dimnames(Performance)[[1]])
@@ -1954,4 +1972,4 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 36.840   0.099  36.952 
+ 37.545   0.143  37.714 

@@ -35,7 +35,8 @@ linkfun <- function(name,       ### nickname
                     linkinv,    ### distribution function
                     dlinkinv,   ### density function
                     ddlinkinv,  ### derivative of density function
-                    ...) {
+                    ...) 
+{
 
     ret <- list(name = name, 
                 alias = alias,

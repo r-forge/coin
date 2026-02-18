@@ -16,7 +16,7 @@
 \documentclass[a4paper]{report}
 
 %\VignetteIndexEntry{Stratified K-sample Inference}
-%\VignetteDepends{free1way,multcomp,survival,Hmisc,coin,rms,latticeExtra}
+%\VignetteDepends{free1way,multcomp,survival,Hmisc,coin,rms,latticeExtra,daewr}
 %\VignetteKeywords{semiparametric model,conditional inference}}
 %\VignettePackage{free1way}
 
@@ -322,7 +322,8 @@ right-censoring and the second table contains numbers of events.
 Nsim <- 100
 options(digits = 5)
 
-.table2list <- function(x) {
+.table2list <- function(x) 
+{
 
     
     dx <- dim(x)
@@ -397,7 +398,8 @@ options(digits = 5)
 }
 
 
-.nll <- function(parm, x, mu = 0, rightcensored = FALSE) {
+.nll <- function(parm, x, mu = 0, rightcensored = FALSE) 
+{
 
     
     bidx <- seq_len(ncol(x) - 1L)
@@ -420,7 +422,8 @@ options(digits = 5)
 }
 
 
-.nsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
+.nsc <- function(parm, x, mu = 0, rightcensored = FALSE) 
+{
 
     
     bidx <- seq_len(ncol(x) - 1L)
@@ -456,7 +459,8 @@ options(digits = 5)
 }
 
 
-.nsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
+.nsr <- function(parm, x, mu = 0, rightcensored = FALSE) 
+{
 
     
     bidx <- seq_len(ncol(x) - 1L)
@@ -488,7 +492,8 @@ options(digits = 5)
 }
 
 
-.hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) {
+.hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) 
+{
 
     
     bidx <- seq_len(ncol(x) - 1L)
@@ -581,7 +586,8 @@ options(digits = 5)
 }
 
 
-.snll <- function(parm, x, mu = 0, rightcensored = FALSE) {
+.snll <- function(parm, x, mu = 0, rightcensored = FALSE) 
+{
 
     
     C <- vapply(x, NROW, 0L) ### might differ by stratum
@@ -601,7 +607,8 @@ options(digits = 5)
 }
 
 
-.snsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
+.snsc <- function(parm, x, mu = 0, rightcensored = FALSE) 
+{
 
     
     C <- vapply(x, NROW, 0L) ### might differ by stratum
@@ -624,7 +631,8 @@ options(digits = 5)
 }
 
 
-.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) {
+.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) 
+{
 
     
     C <- vapply(x, NROW, 0L) ### might differ by stratum
@@ -696,7 +704,8 @@ options(digits = 5)
 }
 
 
-.snsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
+.snsr <- function(parm, x, mu = 0, rightcensored = FALSE) 
+{
 
     
     C <- vapply(x, NROW, 0L) ### might differ by stratum
@@ -736,7 +745,8 @@ options(digits = 5)
                                              tolsolve = .Machine$double.eps)
                         )[dooptim],
                         trace = FALSE, 
-                        tol = sqrt(.Machine$double.eps), ...) {
+                        tol = sqrt(.Machine$double.eps), ...) 
+{
 
     ### convert to three-way table
     xt <- x
@@ -844,7 +854,8 @@ options(digits = 5)
     }
     
     
-    .nll <- function(parm, x, mu = 0, rightcensored = FALSE) {
+    .nll <- function(parm, x, mu = 0, rightcensored = FALSE) 
+    {
 
         
         bidx <- seq_len(ncol(x) - 1L)
@@ -867,7 +878,8 @@ options(digits = 5)
     }
     
     
-    .nsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
+    .nsc <- function(parm, x, mu = 0, rightcensored = FALSE) 
+    {
 
         
         bidx <- seq_len(ncol(x) - 1L)
@@ -903,7 +915,8 @@ options(digits = 5)
     }
     
     
-    .nsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
+    .nsr <- function(parm, x, mu = 0, rightcensored = FALSE) 
+    {
 
         
         bidx <- seq_len(ncol(x) - 1L)
@@ -935,7 +948,8 @@ options(digits = 5)
     }
     
     
-    .hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) {
+    .hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) 
+    {
 
         
         bidx <- seq_len(ncol(x) - 1L)
@@ -1028,7 +1042,8 @@ options(digits = 5)
     }
     
     
-    .snll <- function(parm, x, mu = 0, rightcensored = FALSE) {
+    .snll <- function(parm, x, mu = 0, rightcensored = FALSE) 
+    {
 
         
         C <- vapply(x, NROW, 0L) ### might differ by stratum
@@ -1048,7 +1063,8 @@ options(digits = 5)
     }
     
     
-    .snsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
+    .snsc <- function(parm, x, mu = 0, rightcensored = FALSE) 
+    {
 
         
         C <- vapply(x, NROW, 0L) ### might differ by stratum
@@ -1071,7 +1087,8 @@ options(digits = 5)
     }
     
     
-    .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) {
+    .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) 
+    {
 
         
         C <- vapply(x, NROW, 0L) ### might differ by stratum
@@ -1143,7 +1160,8 @@ options(digits = 5)
     }
     
     
-    .snsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
+    .snsr <- function(parm, x, mu = 0, rightcensored = FALSE) 
+    {
 
         
         C <- vapply(x, NROW, 0L) ### might differ by stratum
@@ -1167,14 +1185,16 @@ options(digits = 5)
     }
     
     
-    fn <- function(par) {
+    fn <- function(par) 
+    {
         ret <- .snll(par, x = xlist, mu = mu)
         if (!is.null(xrc))
             ret <- ret + .snll(par, x = xrclist, mu = mu, 
                                rightcensored = TRUE)
         return(ret)
     }
-    gr <- function(par) {
+    gr <- function(par) 
+    {
         ret <- .snsc(par, x = xlist, mu = mu)
         if (!is.null(xrc))
             ret <- ret + .snsc(par, x = xrclist, mu = mu, 
@@ -1185,7 +1205,8 @@ options(digits = 5)
     ### allocate memory for hessian
     Hess <- Matrix::Matrix(0, nrow = length(start), ncol = length(start))
 
-    he <- function(par) {
+    he <- function(par) 
+    {
         if (!is.null(xrc)) {
             ret <- .shes(par, x = xlist, mu = mu, xrc = xrclist, full = Hess, 
                          retMatrix = names(control)[1L] == ".NewtonRaphson")
@@ -1195,7 +1216,8 @@ options(digits = 5)
         }
         return(ret)
     }
-    .profile <- function(start, fix = seq_len(K - 1)) {
+    .profile <- function(start, fix = seq_len(K - 1)) 
+    {
         if (!all(fix %in% seq_len(K - 1)))
             stop(gettextf("Incorrect argument 'fix' in %s",
                           "free1way"),
@@ -1239,7 +1261,8 @@ options(digits = 5)
 
         if (isTRUE(correctFirth)) {
             
-            .Firth_ll <- function(cf, start) {
+            .Firth_ll <- function(cf, start) 
+            {
                 fix <- seq_along(cf)
                 start[fix] <- cf
                 ### compute profile likelihood w/o warnings
@@ -1272,7 +1295,8 @@ options(digits = 5)
                                      domain = NA)
                     correctFirth <- TRUE
                     
-                    .Firth_ll <- function(cf, start) {
+                    .Firth_ll <- function(cf, start) 
+                    {
                         fix <- seq_along(cf)
                         start[fix] <- cf
                         ### compute profile likelihood w/o warnings
@@ -1339,7 +1363,8 @@ options(digits = 5)
 
         if (isTRUE(correctFirth)) {
             
-            .Firth_ll <- function(cf, start) {
+            .Firth_ll <- function(cf, start) 
+            {
                 fix <- seq_along(cf)
                 start[fix] <- cf
                 ### compute profile likelihood w/o warnings
@@ -1372,7 +1397,8 @@ options(digits = 5)
                                      domain = NA)
                     correctFirth <- TRUE
                     
-                    .Firth_ll <- function(cf, start) {
+                    .Firth_ll <- function(cf, start) 
+                    {
                         fix <- seq_along(cf)
                         start[fix] <- cf
                         ### compute profile likelihood w/o warnings
@@ -1427,7 +1453,8 @@ options(digits = 5)
     names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
 
     par <- ret$par
-    intercepts <- function(parm, x) {
+    intercepts <- function(parm, x) 
+    {
 
         
         C <- vapply(x, NROW, 0L) ### might differ by stratum
@@ -1488,7 +1515,8 @@ options(digits = 5)
 }
 
 
-.SW <- function(res, xt) {
+.SW <- function(res, xt) 
+{
 
     if (length(dim(xt)) == 3L) {
         res <- matrix(res, nrow = dim(xt)[1L], ncol = dim(xt)[3])
@@ -1525,7 +1553,8 @@ options(digits = 5)
 }
 
 
-.resample <- function(res, xt, B = 10000) {
+.resample <- function(res, xt, B = 10000) 
+{
 
     if (length(dim(xt)) == 2L)
         xt <- as.table(array(xt, dim = c(dim(xt), 1)))
@@ -1594,7 +1623,8 @@ linkfun <- function(name,	### nickname
                     linkinv,   	### distribution function
                     dlinkinv,  	### density function
                     ddlinkinv, 	### derivative of density function
-                    ...) {
+                    ...) 
+{
 
     ret <- list(name = name, 
                 alias = alias,
@@ -1892,7 +1922,8 @@ the log-probabilities
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.nll <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
+\mbox{}\verb@.nll <- function(parm, x, mu = 0, rightcensored = FALSE) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    if (any(prb < .Machine$double.eps^10)) @\\
@@ -1956,7 +1987,8 @@ and then compute the negative score function:
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.nsc <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
+\mbox{}\verb@.nsc <- function(parm, x, mu = 0, rightcensored = FALSE) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -1992,7 +2024,8 @@ zero:
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.nsr <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
+\mbox{}\verb@.nsr <- function(parm, x, mu = 0, rightcensored = FALSE) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -2169,7 +2202,8 @@ represent this matrix:
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) {@\\
+\mbox{}\verb@.hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -2241,7 +2275,8 @@ Parameter estimates and the in-sample log-likelihood are practically
 identical. We now turn to the inverse Hessian of the shift terms, first
 defining the derivative of the density of the standard logistic distribution
 <<glm-H>>=
-fp <- function(x) {
+fp <- function(x) 
+{
     p <- plogis(x)
     p * (1 - p)^2 - p^2 * (1 - p)
 }
@@ -2384,7 +2419,8 @@ tables (yet still allowing zero row sums):
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.table2list <- function(x) {@\\
+\mbox{}\verb@.table2list <- function(x) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape table2list body}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -2441,7 +2477,8 @@ corresponding log-likelihoods:
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.snll <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
+\mbox{}\verb@.snll <- function(parm, x, mu = 0, rightcensored = FALSE) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -2472,7 +2509,8 @@ intercept parameters are only concatenated:
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.snsc <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
+\mbox{}\verb@.snsc <- function(parm, x, mu = 0, rightcensored = FALSE) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -2505,7 +2543,8 @@ row of zeros in the table: \label{lab:snsr}
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.snsr <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
+\mbox{}\verb@.snsr <- function(parm, x, mu = 0, rightcensored = FALSE) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -2619,7 +2658,8 @@ and the computation of the Hessian for the shift parameters using
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) {@\\
+\mbox{}\verb@.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -2746,7 +2786,8 @@ outcomes, it doesn't seem beneficial to extend this richer class.
 \mbox{}\verb@                    linkinv,    ### distribution function@\\
 \mbox{}\verb@                    dlinkinv,   ### density function@\\
 \mbox{}\verb@                    ddlinkinv,  ### derivative of density function@\\
-\mbox{}\verb@                    ...) {@\\
+\mbox{}\verb@                    ...) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    ret <- list(name = name, @\\
 \mbox{}\verb@                alias = alias,@\\
@@ -3328,14 +3369,16 @@ defined first
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@fn <- function(par) {@\\
+\mbox{}\verb@fn <- function(par) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@    ret <- .snll(par, x = xlist, mu = mu)@\\
 \mbox{}\verb@    if (!is.null(xrc))@\\
 \mbox{}\verb@        ret <- ret + .snll(par, x = xrclist, mu = mu, @\\
 \mbox{}\verb@                           rightcensored = TRUE)@\\
 \mbox{}\verb@    return(ret)@\\
 \mbox{}\verb@}@\\
-\mbox{}\verb@gr <- function(par) {@\\
+\mbox{}\verb@gr <- function(par) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@    ret <- .snsc(par, x = xlist, mu = mu)@\\
 \mbox{}\verb@    if (!is.null(xrc))@\\
 \mbox{}\verb@        ret <- ret + .snsc(par, x = xrclist, mu = mu, @\\
@@ -3346,7 +3389,8 @@ defined first
 \mbox{}\verb@### allocate memory for hessian@\\
 \mbox{}\verb@Hess <- Matrix::Matrix(0, nrow = length(start), ncol = length(start))@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@he <- function(par) {@\\
+\mbox{}\verb@he <- function(par) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@    if (!is.null(xrc)) {@\\
 \mbox{}\verb@        ret <- .shes(par, x = xlist, mu = mu, xrc = xrclist, full = Hess, @\\
 \mbox{}\verb@                     retMatrix = names(control)[1L] == ".NewtonRaphson")@\\
@@ -3356,7 +3400,8 @@ defined first
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    return(ret)@\\
 \mbox{}\verb@}@\\
-\mbox{}\verb@.profile <- function(start, fix = seq_len(K - 1)) {@\\
+\mbox{}\verb@.profile <- function(start, fix = seq_len(K - 1)) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@    if (!all(fix %in% seq_len(K - 1)))@\\
 \mbox{}\verb@        stop(gettextf("Incorrect argument 'fix' in %s",@\\
 \mbox{}\verb@                      "free1way"),@\\
@@ -3419,7 +3464,8 @@ after correcting the bias.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.Firth_ll <- function(cf, start) {@\\
+\mbox{}\verb@.Firth_ll <- function(cf, start) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@    fix <- seq_along(cf)@\\
 \mbox{}\verb@    start[fix] <- cf@\\
 \mbox{}\verb@    ### compute profile likelihood w/o warnings@\\
@@ -3508,7 +3554,8 @@ negative residuals as requested:
 \mbox{}\verb@names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@par <- ret$par@\\
-\mbox{}\verb@intercepts <- function(parm, x) {@\\
+\mbox{}\verb@intercepts <- function(parm, x) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -3597,7 +3644,8 @@ problem.
 \mbox{}\verb@                                             tolsolve = .Machine$double.eps)@\\
 \mbox{}\verb@                        )[dooptim],@\\
 \mbox{}\verb@                        trace = FALSE, @\\
-\mbox{}\verb@                        tol = sqrt(.Machine$double.eps), ...) {@\\
+\mbox{}\verb@                        tol = sqrt(.Machine$double.eps), ...) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    ### convert to three-way table@\\
 \mbox{}\verb@    xt <- x@\\
@@ -3911,7 +3959,8 @@ given by \cite{strasserweber1999}:
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.SW <- function(res, xt) {@\\
+\mbox{}\verb@.SW <- function(res, xt) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (length(dim(xt)) == 3L) {@\\
 \mbox{}\verb@        res <- matrix(res, nrow = dim(xt)[1L], ncol = dim(xt)[3])@\\
@@ -3966,7 +4015,8 @@ tables with fixed marginal distributions:
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.resample <- function(res, xt, B = 10000) {@\\
+\mbox{}\verb@.resample <- function(res, xt, B = 10000) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (length(dim(xt)) == 2L)@\\
 \mbox{}\verb@        xt <- as.table(array(xt, dim = c(dim(xt), 1)))@\\
@@ -4020,7 +4070,8 @@ algorithm, mainly because the scores can be mapped to integers:
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.exact <- function(z, grp, w = rep.int(1, length(z))) {@\\
+\mbox{}\verb@.exact <- function(z, grp, w = rep.int(1, length(z))) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    z <- rep(z, times = w)@\\
 \mbox{}\verb@    grp <- rep(grp, times = w)@\\
@@ -4436,7 +4487,8 @@ not as a list of things).
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, nbins = 0, @\\
-\mbox{}\verb@                             varnames = NULL, ...) {@\\
+\mbox{}\verb@                             varnames = NULL, ...) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -4485,7 +4537,8 @@ call to \code{xtabs}:
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, @\\
-\mbox{}\verb@                            varnames = NULL, ...) {@\\
+\mbox{}\verb@                            varnames = NULL, ...) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -4558,7 +4611,8 @@ method allows to obtain effects at alternative scales: probabilistic indices
 \mbox{}\verb@    ret@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@### the next two might go into multcomp@\\
-\mbox{}\verb@terms.free1way <- function(x, ...) {@\\
+\mbox{}\verb@terms.free1way <- function(x, ...) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@    mf <- model.frame(x)@\\
 \mbox{}\verb@    terms(as.formula(paste(names(mf)[1:2], collapse = "~")), @\\
 \mbox{}\verb@          data = mf)@\\
@@ -4636,7 +4690,8 @@ some special cases (\code{wilcox,kruskal,friedman.test}):
 \mbox{}\verb@    return(RVAL)@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@print.free1way <- function(x, ...) {@\\
+\mbox{}\verb@print.free1way <- function(x, ...) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@    print(ret <- .print.free1way(x, ...))@\\
 \mbox{}\verb@    return(invisible(x))@\\
 \mbox{}\verb@}@\\
@@ -4689,7 +4744,8 @@ The \code{summary} method performs population Wald inference unless the
 \mbox{}\verb@    return(ret)@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@print.summary.free1way <- function(x, ...) {@\\
+\mbox{}\verb@print.summary.free1way <- function(x, ...) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@    cat("\nCall:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"), @\\
 \mbox{}\verb@        "\n\n", sep = "")@\\
 \mbox{}\verb@    cat("Coefficients:\n")@\\
@@ -4730,7 +4786,8 @@ the confidence intervals will be in line with one- and two-sided p-values:
 \mbox{}\verb@    if (is.null(object$perm$permStat)) {@\\
 \mbox{}\verb@        qu <- qnorm(conf.level) * c(-1, 1)@\\
 \mbox{}\verb@    } else {@\\
-\mbox{}\verb@        .pq <- function(s, alpha) {@\\
+\mbox{}\verb@        .pq <- function(s, alpha) @\\
+\mbox{}\verb@        {@\\
 \mbox{}\verb@            su <- sort(unique(s)) @\\
 \mbox{}\verb@            ### F = P(T <= t), S = P(T >= t)@\\
 \mbox{}\verb@            Fs <- cumsum(st <- table(match(s, su)))@\\
@@ -4891,7 +4948,8 @@ The upper bound works in the very same way.
 \mbox{}\verb@        wlevel <- 1 - (1 - level) / 2@\\
 \mbox{}\verb@        CINT[] <- confint.default(object, level = wlevel)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@        sfun <- function(value, parm, quantile) {@\\
+\mbox{}\verb@        sfun <- function(value, parm, quantile) @\\
+\mbox{}\verb@        {@\\
 \mbox{}\verb@            x <- object@\\
 \mbox{}\verb@            alternative <- "two.sided"@\\
 \mbox{}\verb@            tol <- .Machine$double.eps@\\
@@ -5247,6 +5305,20 @@ logLik(free1way(time ~ me | id, data = d, link = "loglog"))
 
 Maybe proportional-hazards model better?
 
+\section{Incomplete Block Designs}
+
+\code{friedman.test} expects all blocks to be complete and
+\code{kruskal.test} has no idea about blocks. When blocks are incomplete,
+\code{free1way} can be employed. Replacing the normality assumption inherit
+in \code{aov} \citep[Chapter~8.3.1. in][]{Meier2022} with a semiparametric
+proportional odds model, we get
+<<incomplete>>=
+data("taste", package = "daewr")
+### highly discrete
+table(taste$score)
+summary(free1way(score ~ recipe | panelist, data = taste))
+@
+
 \section{MnNemar Test}
 
 <<McNemar>>=
@@ -5531,7 +5603,8 @@ We put everything together in a \code{plot} method
 \mbox{}\verb@@\\
 \mbox{}\verb@plot.free1way <- function(x, ..., block = 1L, cdf = FALSE, model = TRUE,@\\
 \mbox{}\verb@                          col = seq_len(length(coef(object)) + 1L),@\\
-\mbox{}\verb@                          lty = 1:2, legend = TRUE) {@\\
+\mbox{}\verb@                          lty = 1:2, legend = TRUE) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape extract plot data}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape refit block intercepts}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
@@ -5663,7 +5736,8 @@ the latter for a certain choice of link function:
 \mbox{}\verb@                   main = "P-P plot",@\\
 \mbox{}\verb@                   ..., conf.level = NULL, @\\
 \mbox{}\verb@                   conf.args = list(link = "logit", type = "Wald", @\\
-\mbox{}\verb@                                    col = NA, border = NULL)) {@\\
+\mbox{}\verb@                                    col = NA, border = NULL)) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    force(xlab)@\\
 \mbox{}\verb@    force(ylab)@\\
@@ -5786,7 +5860,8 @@ by post-hoc categorisation.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "loglog")) {@\\
+\mbox{}\verb@.rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "loglog")) @\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    logU <- log(ret <- runif(n))@\\
 \mbox{}\verb@@\\
@@ -5803,6 +5878,7 @@ by post-hoc categorisation.
 \mbox{}\verb@                      strata_ratio = 1, delta = 0, offset = 0, @\\
 \mbox{}\verb@                      link = c("logit", "probit", "cloglog", "loglog"))@\\
 \mbox{}\verb@{@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    B <- blocks@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape design args}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
