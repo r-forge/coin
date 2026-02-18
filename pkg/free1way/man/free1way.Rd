@@ -116,10 +116,10 @@ free1way(y, ...)
 The distribution function \eqn{F_1} of the response in the control group
 (defined by the first factor level of the grouping factor \code{groups}) is
 compared to the distribution functions in the remaining groups \eqn{F_k} for
-\eqn{k = 2, \dots, K}.  No assumptions are made regarding the form of \eqn{F_1},
-all inference procedures are thus distribution-free.  However, a
+\eqn{k = 2, \dots, K}. No assumptions are made regarding the form of \eqn{F_1},
+all inference procedures are thus distribution-free. However, a
 semiparametric model assumes that each distribution function \eqn{F_k} only
-depends on \eqn{F_1} and a scalar parameter \eqn{\delta_k}.  The link
+depends on \eqn{F_1} and a scalar parameter \eqn{\delta_k}. The link
 function \eqn{Q} defines the model
 \deqn{F_k(y) = Q^{-1}(Q(F_1(y)) - \delta_k)}
 such that positive values of the parameter \eqn{\delta_k} correspond to
@@ -161,14 +161,21 @@ Several global test procedures for the null hypothesis that all distribution
 functions are identical (and thus \eqn{\delta_2 = \dots = \delta_K = 0} when
 \code{mu = 0}, otherwise the global null of all \eqn{H_0^k} holding
 simultaneously is tested) can be specified by the \code{test} argument. 
-Parameter-specific confidence
-intervals are obtained via the inversion of a specific test procedure. 
+Parameter-specific confidence intervals are obtained via the inversion 
+of a specific test procedure. 
 
 Parameter interpretation might be easier on transformed scales, such as
-odds-ratios or hazard ratios. In addition, probabilistic indices (\code{what
-= "PI"}, being equivalent to the area under the curve \code{"AUC"})
-or overlap coefficients (\code{what = "OVL"}) are best obtained by inverting
-permutation score, likelihood ratio, or Rao score test.
+odds-ratios or hazard ratios. In addition, the treatment effects in such
+semiparametric models can be transformed into probabilistic indices
+(\code{what = "PI"}, being equivalent to the area under the curve
+\code{"AUC"}) or overlap coefficients (\code{what = "OVL"}), under the
+assumption that the model is correct. These model-based estimators must not
+be confused with assumption-free estimators, such as for example the
+Wilcoxon-Mann-Whitney-U statistic for the AUC
+\bibcitep{free1way::FayMalinovsky2018}. Confidence intervals for the
+model-based measures are best obtained by inverting permutation score,
+likelihood ratio, or Rao score tests \bibcitep{free1way::SewakHothorn2023},
+exploiting their invariance with respect to monotone transformations.
 
 Assuming one of the semiparametric models, the parameter estimates are
 semiparametrically efficient and the corresponding score tests and
@@ -194,7 +201,8 @@ for binary paired comparisons (as in \code{\link{mcnemar.test}}).
 \value{
 An object of class \code{free1way} with corresponding \code{logLik},
 \code{coef} (which returns \eqn{\delta_k - \mu_k}, not \eqn{\delta_k}
-whenever \code{mu != 0}), \code{vcov}, \code{summary}, and \code{confint} methods.
+whenever \code{mu != 0}, because \eqn{\mu_k} enters the model as an offset
+term for the \eqn{k}th group), \code{vcov}, \code{summary}, and \code{confint} methods.
 }
 \references{
   \bibshow{*}
