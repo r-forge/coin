@@ -2124,7 +2124,8 @@ mf <- eval(m, parent.frame())
 
 @d free1way formula
 @{
-free1way.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)
+free1way.formula <- function(formula, data, weights, subset, na.action = na.pass, 
+                             event = NULL, ...)
 {
     cl <- match.call()
 
@@ -2134,8 +2135,11 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
     DNAME <- paste(vn <- c(names(mf)[response], group), collapse = " by ") # works in all cases
     w <- as.vector(model.weights(mf))
     y <- mf[[response]]
-    event <- NULL
     if (inherits(y, "Surv")) {
+        if (!is.null(event))
+            stop(gettextf("Either 'Surv()'in 'formula' or the 'event' argument can be specified in %s",
+                          "free1way"),
+                 domain = NA)
         if (attr(y, "type") != "right")
             stop(gettextf("%s currently only allows independent right-censoring",
                           "free1way"),

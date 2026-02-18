@@ -4247,7 +4247,8 @@ for model specification. We start handling the formula
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@free1way.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)@\\
+\mbox{}\verb@free1way.formula <- function(formula, data, weights, subset, na.action = na.pass, @\\
+\mbox{}\verb@                             event = NULL, ...)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    cl <- match.call()@\\
 \mbox{}\verb@@\\
@@ -4257,8 +4258,11 @@ for model specification. We start handling the formula
 \mbox{}\verb@    DNAME <- paste(vn <- c(names(mf)[response], group), collapse = " by ") # works in all cases@\\
 \mbox{}\verb@    w <- as.vector(model.weights(mf))@\\
 \mbox{}\verb@    y <- mf[[response]]@\\
-\mbox{}\verb@    event <- NULL@\\
 \mbox{}\verb@    if (inherits(y, "Surv")) {@\\
+\mbox{}\verb@        if (!is.null(event))@\\
+\mbox{}\verb@            stop(gettextf("Either 'Surv()'in 'formula' or the 'event' argument can be specified in %s",@\\
+\mbox{}\verb@                          "free1way"),@\\
+\mbox{}\verb@                 domain = NA)@\\
 \mbox{}\verb@        if (attr(y, "type") != "right")@\\
 \mbox{}\verb@            stop(gettextf("%s currently only allows independent right-censoring",@\\
 \mbox{}\verb@                          "free1way"),@\\

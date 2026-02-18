@@ -22,7 +22,8 @@ hazard ratio alternatives with corresponding confidence intervals.
 }
 \usage{
 free1way(y, ...)
-\S3method{free1way}{formula}(formula, data, weights, subset, na.action = na.pass, ...)
+\S3method{free1way}{formula}(formula, data, weights, subset, na.action = na.pass,
+         event = NULL, ...)
 \S3method{free1way}{numeric}(y, groups, blocks = NULL, event = NULL, weights = NULL, nbins = 0, 
          varnames = NULL, ...)
 \S3method{free1way}{factor}(y, groups, blocks = NULL, event = NULL, weights = NULL, 
@@ -55,7 +56,10 @@ free1way(y, ...)
   \item{groups}{a grouping factor with at least two non-empty levels.}
   \item{blocks}{a stratification factor, optional.}
   \item{event}{a logical vector representing events (\code{TRUE}) and
-    independently right-censored observations (\code{FALSE}), optional.}
+    independently right-censored observations (\code{FALSE}), optional.
+    Right-censoring can be specified by either using \code{Surv} as a
+    response in a formula or by a logical \code{event} argument (where
+    \code{FALSE} indicates a right-censored observation).}
   \item{formula}{a formula of the form \code{y ~ groups | blocks} where \code{y} gives 
     the sample outcome values (binary, ordered, numeric, or \code{\link[survival]{Surv}}) 
     and \code{groups} the corresponding groups.
