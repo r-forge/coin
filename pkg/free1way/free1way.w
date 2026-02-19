@@ -303,10 +303,21 @@ right-censoring and the second table contains numbers of events.
 \chapter{Parameter Estimation}
 \label{ch:est}
 
+%%% copy nuweb R code into Sweave chunk
 <<localfun, echo = FALSE>>=
 Nsim <- 100
 options(digits = 5)
-@<table2list@>
+.table2list <- function(x) 
+{
+
+    @<table2list body@>
+
+    ret <- list(xlist = xlist)
+    if (!is.null(xrc))
+        ret$xrclist <- xrclist
+    ret$strata <- strata
+    ret
+}
 @<negative logLik@>
 @<negative score@>
 @<negative score residuals@>
@@ -712,21 +723,6 @@ if (length(dx) == 4L) {
 }
 
 @<determine steps in blocks@>
-@}
-
-@d table2list
-@{
-.table2list <- function(x) 
-{
-
-    @<table2list body@>
-
-    ret <- list(xlist = xlist)
-    if (!is.null(xrc))
-        ret$xrclist <- xrclist
-    ret$strata <- strata
-    ret
-}
 @}
 
 We first extract the shift parameters $\delta_{\cdot}$ and then, separately
@@ -2722,7 +2718,7 @@ confint(ft, test = "LRT")
 The second example is a Wilcoxon test for a single log-odds ratio
 comparing to treatment groups:
 
-<<formula>>=
+<<wilcox-formula>>=
 N <- 25
 w <- gl(2, N)
 y <- rlogis(length(w), location = c(0, 1)[w])

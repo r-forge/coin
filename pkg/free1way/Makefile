@@ -2,17 +2,14 @@
 free1way.Rnw:	free1way.w
 	nuweb -r free1way.w
 	mv free1way.tex free1way.Rnw
+	### this version doesn't contain proper page numbers
+	### but "make" will allow a quick R CMD check run
 	cp free1way.Rnw vignettes
-	# mv Schur.c src
-	#mv Makevars src
-	#mv *def src
 	mv free1way.R R
 	mv linkfun.R R
-	#mv *.Rd man
 
 free1way.R: free1way.Rnw
 	Stangle free1way.Rnw
-#	mv free1way.R tests
 
 free1way.tex:	free1way.Rnw
 	Rdev CMD Sweave free1way.Rnw
@@ -23,10 +20,11 @@ free1way.pdf:	free1way.tex
 	### sort-out page numbers
 	nuweb -r free1way.w
 	mv free1way.tex free1way.Rnw
+	### copy again with correct page numbers
+	cp free1way.Rnw vignettes
 	Rdev CMD Sweave free1way.Rnw
 	pdflatex free1way.tex
 	pdflatex free1way.tex
-	# cp free1way.Rnw vignettes
 
 all:	free1way.pdf
 
