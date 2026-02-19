@@ -593,7 +593,8 @@ options(digits = 5)
     C <- vapply(x, NROW, 0L) ### might differ by stratum
     K <- unique(do.call("c", lapply(x, ncol))) ### the same
     B <- length(x)
-    sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
+    sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), 
+                   levels = seq_len(B))
     bidx <- seq_len(K - 1L)
     delta <- parm[bidx]
     intercepts <- split(parm[-bidx], sidx)
@@ -614,7 +615,8 @@ options(digits = 5)
     C <- vapply(x, NROW, 0L) ### might differ by stratum
     K <- unique(do.call("c", lapply(x, ncol))) ### the same
     B <- length(x)
-    sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
+    sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), 
+                   levels = seq_len(B))
     bidx <- seq_len(K - 1L)
     delta <- parm[bidx]
     intercepts <- split(parm[-bidx], sidx)
@@ -631,14 +633,16 @@ options(digits = 5)
 }
 
 
-.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) 
+.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, 
+                  retMatrix = FALSE) 
 {
 
     
     C <- vapply(x, NROW, 0L) ### might differ by stratum
     K <- unique(do.call("c", lapply(x, ncol))) ### the same
     B <- length(x)
-    sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
+    sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), 
+                   levels = seq_len(B))
     bidx <- seq_len(K - 1L)
     delta <- parm[bidx]
     intercepts <- split(parm[-bidx], sidx)
@@ -662,8 +666,8 @@ options(digits = 5)
                 X <- H$X
                 Z <- H$Z
             } else {
-                Adiag <- c(Adiag, H$A$Adiag) ### Matrix::bdiag(A, H$A)
-                Aoffdiag <- c(Aoffdiag, 0, H$A$Aoffdiag) ### Matrix::bdiag(A, H$A)
+                Adiag <- c(Adiag, H$A$Adiag)
+                Aoffdiag <- c(Aoffdiag, 0, H$A$Aoffdiag)
                 X <- rbind(X, H$X)
                 Z <- Z + H$Z
             }
@@ -711,7 +715,8 @@ options(digits = 5)
     C <- vapply(x, NROW, 0L) ### might differ by stratum
     K <- unique(do.call("c", lapply(x, ncol))) ### the same
     B <- length(x)
-    sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
+    sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), 
+                   levels = seq_len(B))
     bidx <- seq_len(K - 1L)
     delta <- parm[bidx]
     intercepts <- split(parm[-bidx], sidx)
@@ -768,7 +773,6 @@ options(digits = 5)
     fp <- function(q) .dd(link, x = q)
 
     
-
 
     dx <- dim(x)
     if (length(dx) == 1L)
@@ -833,7 +837,6 @@ options(digits = 5)
     xrclist <- xrclist[strata]
     
     
-
     ## allow specification of start = delta and fix = 1:K
     ## for evaluating the likelihood at given delta parameters
     ## without having to specify all intercept parameters
@@ -1049,7 +1052,8 @@ options(digits = 5)
         C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
         B <- length(x)
-        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
+        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), 
+                       levels = seq_len(B))
         bidx <- seq_len(K - 1L)
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
@@ -1070,7 +1074,8 @@ options(digits = 5)
         C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
         B <- length(x)
-        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
+        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), 
+                       levels = seq_len(B))
         bidx <- seq_len(K - 1L)
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
@@ -1087,14 +1092,16 @@ options(digits = 5)
     }
     
     
-    .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) 
+    .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, 
+                      retMatrix = FALSE) 
     {
 
         
         C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
         B <- length(x)
-        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
+        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), 
+                       levels = seq_len(B))
         bidx <- seq_len(K - 1L)
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
@@ -1118,8 +1125,8 @@ options(digits = 5)
                     X <- H$X
                     Z <- H$Z
                 } else {
-                    Adiag <- c(Adiag, H$A$Adiag) ### Matrix::bdiag(A, H$A)
-                    Aoffdiag <- c(Aoffdiag, 0, H$A$Aoffdiag) ### Matrix::bdiag(A, H$A)
+                    Adiag <- c(Adiag, H$A$Adiag)
+                    Aoffdiag <- c(Aoffdiag, 0, H$A$Aoffdiag)
                     X <- rbind(X, H$X)
                     Z <- Z + H$Z
                 }
@@ -1167,7 +1174,8 @@ options(digits = 5)
         C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
         B <- length(x)
-        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
+        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), 
+                       levels = seq_len(B))
         bidx <- seq_len(K - 1L)
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
@@ -1216,6 +1224,7 @@ options(digits = 5)
         }
         return(ret)
     }
+
     .profile <- function(start, fix = seq_len(K - 1)) 
     {
         if (!all(fix %in% seq_len(K - 1)))
@@ -1269,15 +1278,18 @@ options(digits = 5)
                 ret <- suppressWarnings(.profile(start, fix = fix))
                 Hfull <- he(ret$par)
                 Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
-                ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+                return(ret$value - 
+                       .5 * determinant(Hfix, logarithm = TRUE)$modulus)
             }
             if (K == 2) {
                 MLcf <- ret$par[seq_len(K - 1)]
                 Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
-                              method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+                              method = "Brent", lower = MLcf - 5, 
+                              upper = MLcf + 5)
             } else {
                 ### Nelder-Mead
-                Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+                Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                              start = ret$par)
             }
             if (Fret$convergence == 0) {
                 start <- ret$par
@@ -1303,15 +1315,18 @@ options(digits = 5)
                         ret <- suppressWarnings(.profile(start, fix = fix))
                         Hfull <- he(ret$par)
                         Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
-                        ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+                        return(ret$value - 
+                               .5 * determinant(Hfix, logarithm = TRUE)$modulus)
                     }
                     if (K == 2) {
                         MLcf <- ret$par[seq_len(K - 1)]
                         Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
-                                      method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+                                      method = "Brent", lower = MLcf - 5, 
+                                      upper = MLcf + 5)
                     } else {
                         ### Nelder-Mead
-                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                                      start = ret$par)
                     }
                     if (Fret$convergence == 0) {
                         start <- ret$par
@@ -1371,15 +1386,18 @@ options(digits = 5)
                 ret <- suppressWarnings(.profile(start, fix = fix))
                 Hfull <- he(ret$par)
                 Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
-                ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+                return(ret$value - 
+                       .5 * determinant(Hfix, logarithm = TRUE)$modulus)
             }
             if (K == 2) {
                 MLcf <- ret$par[seq_len(K - 1)]
                 Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
-                              method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+                              method = "Brent", lower = MLcf - 5, 
+                              upper = MLcf + 5)
             } else {
                 ### Nelder-Mead
-                Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+                Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                              start = ret$par)
             }
             if (Fret$convergence == 0) {
                 start <- ret$par
@@ -1405,15 +1423,18 @@ options(digits = 5)
                         ret <- suppressWarnings(.profile(start, fix = fix))
                         Hfull <- he(ret$par)
                         Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
-                        ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+                        return(ret$value - 
+                               .5 * determinant(Hfix, logarithm = TRUE)$modulus)
                     }
                     if (K == 2) {
                         MLcf <- ret$par[seq_len(K - 1)]
                         Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
-                                      method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+                                      method = "Brent", lower = MLcf - 5, 
+                                      upper = MLcf + 5)
                     } else {
                         ### Nelder-Mead
-                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                                      start = ret$par)
                     }
                     if (Fret$convergence == 0) {
                         start <- ret$par
@@ -1460,7 +1481,8 @@ options(digits = 5)
         C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
         B <- length(x)
-        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
+        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), 
+                       levels = seq_len(B))
         bidx <- seq_len(K - 1L)
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
@@ -1498,7 +1520,7 @@ options(digits = 5)
     }
     ret$profile <- function(start, fix)
         .free1wayML(xt, link = link, mu = mu, start = start, fix = fix, tol = tol, 
-                   ...) 
+                    ...) 
     ret$table <- xt
 
     ret$strata <- strata
@@ -1563,7 +1585,8 @@ options(digits = 5)
     stat <- 0
     ret <- .SW(res, xt)
     if (dim(xt)[2L] == 2L) {
-        ret$testStat <- c((ret$Statistic - ret$Expectation) / sqrt(c(ret$Covariance)))
+        ret$testStat <- c((ret$Statistic - ret$Expectation) / 
+                          sqrt(c(ret$Covariance)))
     } else {
         ES <- ret$Statistic - ret$Expectation
         ret$testStat <- sum(ES * solve(ret$Covariance, ES))
@@ -1573,12 +1596,14 @@ options(digits = 5)
     if (B) {
         for (j in 1:dim(xt)[3L]) {
            rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
-           stat <- stat + vapply(rt, function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], 
-                                                          m = nrow(x), n = ncol(x) - 1L), 
+           stat <- stat + vapply(rt, 
+               function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], 
+                                    m = nrow(x), n = ncol(x) - 1L), 
                                  FUN.VALUE = rep(0, dim(xt)[[2L]] - 1L))
         }
         if (dim(xt)[2L] == 2L) {
-             ret$permStat <- (stat - ret$Expectation) / sqrt(c(ret$Covariance))
+             ret$permStat <- (stat - ret$Expectation) / 
+                              sqrt(c(ret$Covariance))
         } else {
             ES <- matrix(stat, ncol = B) - ret$Expectation
             ret$permStat <- .colSums(ES * solve(ret$Covariance, ES), 
@@ -1671,7 +1696,9 @@ logit <- function()
             },
             PI2parm = function(p) {
                f <- function(x, PI)
-                   x + (exp(-x) * (PI + exp(2 * x) * (PI - 1) + exp(x)* (1 - 2 * PI)))
+                   x + (exp(-x) * (PI + 
+                                   exp(2 * x) * (PI - 1) + 
+                                   exp(x) * (1 - 2 * PI)))
                ret <- vapply(p, function(p) 
                    uniroot(f, PI = p, interval = 50 * c(-1, 1))$root, 0)
                return(ret)
@@ -1772,7 +1799,9 @@ loglog <- function()
             },
             dddlinkinv = function(x) {
                ex <- exp(-x)
-               ifelse(is.finite(x), exp(-x - ex) * (ex - 1)^2 - exp(-ex - 2 * x), 0.0)
+               ifelse(is.finite(x), exp(-x - ex) * (ex - 1)^2 - 
+                                    exp(-ex - 2 * x), 
+                                    0.0)
             },
             dd2d = function(x) 
                 expm1(-x),
@@ -1795,8 +1824,7 @@ loglog <- function()
                                           objtol = 5e-4, gradtol = 1e-5, 
                                           paramtol = 1e-5, minstepsize = 1e-2, 
                                           tolsolve = .Machine$double.eps),
-                           trace = FALSE
-                           )
+                           trace = FALSE)
 {
 
     theta  <- start # Initialize the parameter vector
@@ -1804,7 +1832,8 @@ loglog <- function()
     objthe <- objective(theta)
     if (!is.finite(objthe)) {
         msg <- "Infeasible starting values"
-        return(list(par = theta, objective = objthe, convergence = 1, message = msg)) 
+        return(list(par = theta, objective = objthe, convergence = 1, 
+                    message = msg)) 
     }
 
     for (iter in seq_len(control$iter.max)) {
@@ -1839,11 +1868,13 @@ loglog <- function()
                     cat("Step size reduced to", step_size, "\n")
 
                 if (step_size <= control$minstepsize) {
-                    msg <- paste("Step size ", step_size, " has reduced below minstepsize")
-                    return(list(par = theta, objective = objthe, convergence = 1, message = msg)) 
+                    msg <- paste("Step size ", step_size, 
+                                 " has reduced below minstepsize")
+                    return(list(par = theta, objective = objthe, convergence = 1, 
+                                message = msg)) 
                 }
             } else {
-                theta  <- new_theta                   # Accept the new parameter vector
+                theta  <- new_theta	# accept the new parameter vector
                 oldobj <- objthe
                 objthe <- objnew_the
                 break
@@ -2453,7 +2484,8 @@ for each stratum, the corresponding contrasts of the intercept parameters:
 \mbox{}\verb@C <- vapply(x, NROW, 0L) ### might differ by stratum@\\
 \mbox{}\verb@K <- unique(do.call("c", lapply(x, ncol))) ### the same@\\
 \mbox{}\verb@B <- length(x)@\\
-\mbox{}\verb@sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))@\\
+\mbox{}\verb@sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), @\\
+\mbox{}\verb@               levels = seq_len(B))@\\
 \mbox{}\verb@bidx <- seq_len(K - 1L)@\\
 \mbox{}\verb@delta <- parm[bidx]@\\
 \mbox{}\verb@intercepts <- split(parm[-bidx], sidx)@\\
@@ -2619,8 +2651,8 @@ the null Hessian for $\thetavec$ as a dense \code{matrix}:
 \mbox{}\verb@        X <- H$X@\\
 \mbox{}\verb@        Z <- H$Z@\\
 \mbox{}\verb@    } else {@\\
-\mbox{}\verb@        Adiag <- c(Adiag, H$A$Adiag) ### Matrix::bdiag(A, H$A)@\\
-\mbox{}\verb@        Aoffdiag <- c(Aoffdiag, 0, H$A$Aoffdiag) ### Matrix::bdiag(A, H$A)@\\
+\mbox{}\verb@        Adiag <- c(Adiag, H$A$Adiag)@\\
+\mbox{}\verb@        Aoffdiag <- c(Aoffdiag, 0, H$A$Aoffdiag)@\\
 \mbox{}\verb@        X <- rbind(X, H$X)@\\
 \mbox{}\verb@        Z <- Z + H$Z@\\
 \mbox{}\verb@    }@\\
@@ -2658,7 +2690,8 @@ and the computation of the Hessian for the shift parameters using
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) @\\
+\mbox{}\verb@.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, @\\
+\mbox{}\verb@                  retMatrix = FALSE) @\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
@@ -2852,7 +2885,9 @@ to Wilcoxon or Kruskal-Wallis type score residuals:
 \mbox{}\verb@            },@\\
 \mbox{}\verb@            PI2parm = function(p) {@\\
 \mbox{}\verb@               f <- function(x, PI)@\\
-\mbox{}\verb@                   x + (exp(-x) * (PI + exp(2 * x) * (PI - 1) + exp(x)* (1 - 2 * PI)))@\\
+\mbox{}\verb@                   x + (exp(-x) * (PI + @\\
+\mbox{}\verb@                                   exp(2 * x) * (PI - 1) + @\\
+\mbox{}\verb@                                   exp(x) * (1 - 2 * PI)))@\\
 \mbox{}\verb@               ret <- vapply(p, function(p) @\\
 \mbox{}\verb@                   uniroot(f, PI = p, interval = 50 * c(-1, 1))$root, 0)@\\
 \mbox{}\verb@               return(ret)@\\
@@ -2912,7 +2947,9 @@ against Lehmann alternatives:
 \mbox{}\verb@            },@\\
 \mbox{}\verb@            dddlinkinv = function(x) {@\\
 \mbox{}\verb@               ex <- exp(-x)@\\
-\mbox{}\verb@               ifelse(is.finite(x), exp(-x - ex) * (ex - 1)^2 - exp(-ex - 2 * x), 0.0)@\\
+\mbox{}\verb@               ifelse(is.finite(x), exp(-x - ex) * (ex - 1)^2 - @\\
+\mbox{}\verb@                                    exp(-ex - 2 * x), @\\
+\mbox{}\verb@                                    0.0)@\\
 \mbox{}\verb@            },@\\
 \mbox{}\verb@            dd2d = function(x) @\\
 \mbox{}\verb@                expm1(-x),@\\
@@ -3095,11 +3132,13 @@ matrix. The following code was adopted from his \pkg{rms} package, function
 \mbox{}\verb@        cat("Step size reduced to", step_size, "\n")@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (step_size <= control$minstepsize) {@\\
-\mbox{}\verb@        msg <- paste("Step size ", step_size, " has reduced below minstepsize")@\\
-\mbox{}\verb@        return(list(par = theta, objective = objthe, convergence = 1, message = msg)) @\\
+\mbox{}\verb@        msg <- paste("Step size ", step_size, @\\
+\mbox{}\verb@                     " has reduced below minstepsize")@\\
+\mbox{}\verb@        return(list(par = theta, objective = objthe, convergence = 1, @\\
+\mbox{}\verb@                    message = msg)) @\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@} else {@\\
-\mbox{}\verb@    theta  <- new_theta                   # Accept the new parameter vector@\\
+\mbox{}\verb@    theta  <- new_theta # accept the new parameter vector@\\
 \mbox{}\verb@    oldobj <- objthe@\\
 \mbox{}\verb@    objthe <- objnew_the@\\
 \mbox{}\verb@    break@\\
@@ -3153,8 +3192,7 @@ matrix. The following code was adopted from his \pkg{rms} package, function
 \mbox{}\verb@                                          objtol = 5e-4, gradtol = 1e-5, @\\
 \mbox{}\verb@                                          paramtol = 1e-5, minstepsize = 1e-2, @\\
 \mbox{}\verb@                                          tolsolve = .Machine$double.eps),@\\
-\mbox{}\verb@                           trace = FALSE@\\
-\mbox{}\verb@                           )@\\
+\mbox{}\verb@                           trace = FALSE)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    theta  <- start # Initialize the parameter vector@\\
@@ -3162,7 +3200,8 @@ matrix. The following code was adopted from his \pkg{rms} package, function
 \mbox{}\verb@    objthe <- objective(theta)@\\
 \mbox{}\verb@    if (!is.finite(objthe)) {@\\
 \mbox{}\verb@        msg <- "Infeasible starting values"@\\
-\mbox{}\verb@        return(list(par = theta, objective = objthe, convergence = 1, message = msg)) @\\
+\mbox{}\verb@        return(list(par = theta, objective = objthe, convergence = 1, @\\
+\mbox{}\verb@                    message = msg)) @\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    for (iter in seq_len(control$iter.max)) {@\\
@@ -3227,7 +3266,7 @@ all.equal(unname(cf$par), unname(cf2))
 \mbox{}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape NewtonRaphson}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape ML estimation}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way generic and table method (main workhorse)}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape free1way methods}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape free1way print}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape free1way summary}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
@@ -3263,9 +3302,7 @@ after merging all treatment groups:
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape table2list body}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\\
 \mbox{}\verb@## allow specification of start = delta and fix = 1:K@\\
 \mbox{}\verb@## for evaluating the likelihood at given delta parameters@\\
 \mbox{}\verb@## without having to specify all intercept parameters@\\
@@ -3400,6 +3437,7 @@ defined first
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    return(ret)@\\
 \mbox{}\verb@}@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@.profile <- function(start, fix = seq_len(K - 1)) @\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    if (!all(fix %in% seq_len(K - 1)))@\\
@@ -3472,15 +3510,18 @@ after correcting the bias.
 \mbox{}\verb@    ret <- suppressWarnings(.profile(start, fix = fix))@\\
 \mbox{}\verb@    Hfull <- he(ret$par)@\\
 \mbox{}\verb@    Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))@\\
-\mbox{}\verb@    ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus@\\
+\mbox{}\verb@    return(ret$value - @\\
+\mbox{}\verb@           .5 * determinant(Hfix, logarithm = TRUE)$modulus)@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@if (K == 2) {@\\
 \mbox{}\verb@    MLcf <- ret$par[seq_len(K - 1)]@\\
 \mbox{}\verb@    Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,@\\
-\mbox{}\verb@                  method = "Brent", lower = MLcf - 5, upper = MLcf + 5)@\\
+\mbox{}\verb@                  method = "Brent", lower = MLcf - 5, @\\
+\mbox{}\verb@                  upper = MLcf + 5)@\\
 \mbox{}\verb@} else {@\\
 \mbox{}\verb@    ### Nelder-Mead@\\
-\mbox{}\verb@    Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)@\\
+\mbox{}\verb@    Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, @\\
+\mbox{}\verb@                  start = ret$par)@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@if (Fret$convergence == 0) {@\\
 \mbox{}\verb@    start <- ret$par@\\
@@ -3591,7 +3632,7 @@ negative residuals as requested:
 \mbox{}\verb@}@\\
 \mbox{}\verb@ret$profile <- function(start, fix)@\\
 \mbox{}\verb@    .free1wayML(xt, link = link, mu = mu, start = start, fix = fix, tol = tol, @\\
-\mbox{}\verb@               ...) @\\
+\mbox{}\verb@                ...) @\\
 \mbox{}\verb@ret$table <- xt@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@ret$strata <- strata@\\
@@ -3766,7 +3807,8 @@ We only need access to the parameter estimates $\hat{\delta}_2, \dots,
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@if (alternative == "two.sided") {@\\
-\mbox{}\verb@    STATISTIC <- c("Wald chi-squared" = c(crossprod(cf, x$hessian %*% cf)))@\\
+\mbox{}\verb@    STATISTIC <- c("Wald chi-squared" = @\\
+\mbox{}\verb@                   c(crossprod(cf, x$hessian %*% cf)))@\\
 \mbox{}\verb@    DF <- c("df" = length(parm))@\\
 \mbox{}\verb@    PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)@\\
 \mbox{}\verb@} else {@\\
@@ -3830,11 +3872,14 @@ computed:
 \mbox{}\verb@par[parm] <- value@\\
 \mbox{}\verb@ret <- x$profile(par, parm)@\\
 \mbox{}\verb@if (alternative == "two.sided") {@\\
-\mbox{}\verb@    STATISTIC <- c("Rao chi-squared" = c(crossprod(ret$negscore, ret$vcov %*% ret$negscore)))@\\
+\mbox{}\verb@    STATISTIC <- c("Rao chi-squared" = c(crossprod(ret$negscore, @\\
+\mbox{}\verb@                                                   ret$vcov %*%@\\
+\mbox{}\verb@                                                   ret$negscore)))@\\
 \mbox{}\verb@    DF <- c("df" = length(parm))@\\
 \mbox{}\verb@    PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)@\\
 \mbox{}\verb@} else {@\\
-\mbox{}\verb@    STATISTIC <- c("Rao Z" = unname(- ret$negscore * sqrt(c(ret$vcov))))@\\
+\mbox{}\verb@    STATISTIC <- c("Rao Z" = unname(- ret$negscore * @\\
+\mbox{}\verb@                                      sqrt(c(ret$vcov))))@\\
 \mbox{}\verb@    PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -3875,7 +3920,8 @@ distribution:
 \mbox{}\verb@    Esc <- sc - x$perm$Expectation@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (alternative == "two.sided" && length(cf) > 1L) {@\\
-\mbox{}\verb@        STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))@\\
+\mbox{}\verb@        STATISTIC <- c("Perm chi-squared" = @\\
+\mbox{}\verb@                       sum(Esc * solve(x$perm$Covariance, Esc)))@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))@\\
 \mbox{}\verb@    }@\\
@@ -3901,7 +3947,8 @@ In addition, we compute permutation p-values
 \mbox{}\verb@@\\
 \mbox{}\verb@if (!is.null(x$exact)) {@\\
 \mbox{}\verb@    PVAL <- switch(alternative,@\\
-\mbox{}\verb@                   "two.sided" = 2 * min(c(x$exact$ple(sc), x$exact$pgr(sc))),@\\
+\mbox{}\verb@                   "two.sided" = 2 * min(c(x$exact$ple(sc), @\\
+\mbox{}\verb@                                           x$exact$pgr(sc))),@\\
 \mbox{}\verb@                   "less" = x$exact$ple(sc),@\\
 \mbox{}\verb@                   "greater" = x$exact$pgr(sc))@\\
 \mbox{}\verb@} else {@\\
@@ -3935,7 +3982,8 @@ In addition, we compute permutation p-values
 \mbox{}\verb@            if (alternative == "two.sided")@\\
 \mbox{}\verb@                PVAL <- pchisq(STATISTIC^2, df = 1, lower.tail = FALSE)@\\
 \mbox{}\verb@            else@\\
-\mbox{}\verb@                PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")@\\
+\mbox{}\verb@                PVAL <- pnorm(STATISTIC, @\\
+\mbox{}\verb@                              lower.tail = alternative == "less")@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
@@ -4025,7 +4073,8 @@ tables with fixed marginal distributions:
 \mbox{}\verb@    stat <- 0@\\
 \mbox{}\verb@    ret <- .SW(res, xt)@\\
 \mbox{}\verb@    if (dim(xt)[2L] == 2L) {@\\
-\mbox{}\verb@        ret$testStat <- c((ret$Statistic - ret$Expectation) / sqrt(c(ret$Covariance)))@\\
+\mbox{}\verb@        ret$testStat <- c((ret$Statistic - ret$Expectation) / @\\
+\mbox{}\verb@                          sqrt(c(ret$Covariance)))@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        ES <- ret$Statistic - ret$Expectation@\\
 \mbox{}\verb@        ret$testStat <- sum(ES * solve(ret$Covariance, ES))@\\
@@ -4035,12 +4084,14 @@ tables with fixed marginal distributions:
 \mbox{}\verb@    if (B) {@\\
 \mbox{}\verb@        for (j in 1:dim(xt)[3L]) {@\\
 \mbox{}\verb@           rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))@\\
-\mbox{}\verb@           stat <- stat + vapply(rt, function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], @\\
-\mbox{}\verb@                                                          m = nrow(x), n = ncol(x) - 1L), @\\
+\mbox{}\verb@           stat <- stat + vapply(rt, @\\
+\mbox{}\verb@               function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], @\\
+\mbox{}\verb@                                    m = nrow(x), n = ncol(x) - 1L), @\\
 \mbox{}\verb@                                 FUN.VALUE = rep(0, dim(xt)[[2L]] - 1L))@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@        if (dim(xt)[2L] == 2L) {@\\
-\mbox{}\verb@             ret$permStat <- (stat - ret$Expectation) / sqrt(c(ret$Covariance))@\\
+\mbox{}\verb@             ret$permStat <- (stat - ret$Expectation) / @\\
+\mbox{}\verb@                              sqrt(c(ret$Covariance))@\\
 \mbox{}\verb@        } else {@\\
 \mbox{}\verb@            ES <- matrix(stat, ncol = B) - ret$Expectation@\\
 \mbox{}\verb@            ret$permStat <- .colSums(ES * solve(ret$Covariance, ES), @\\
@@ -4095,7 +4146,7 @@ algorithm, mainly because the scores can be mapped to integers:
 \mbox{}\verb@@\\
 \mbox{}\verb@    z2x <- function(z) round((z - m * cf[1]) / cf[2])@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    c(ple = function(z) sum(d[s <= z2x(z)]),    ### s and STATISTIC are integers@\\
+\mbox{}\verb@    c(ple = function(z) sum(d[s <= z2x(z)]), # s and STATISTIC are integers@\\
 \mbox{}\verb@      pgr = function(z) sum(d[s >= z2x(z)]), @\\
 \mbox{}\verb@      qle = function(q) c(m, max(s[F < q + 1e-08])) %*% cf,@\\
 \mbox{}\verb@      qgr = function(q) c(m, min(s[S < q + 1e-08])) %*% cf)@\\
@@ -4187,7 +4238,7 @@ results (this is relevant for the one-sided case).
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap48}\raggedright\small
-\NWtarget{nuweb?}{} $\langle\,${\itshape free1way}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way generic and table method (main workhorse)}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4371,7 +4422,8 @@ for model specification. We start handling the formula
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape formula business}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    response <- attr(attr(mf, "terms"), "response")@\\
-\mbox{}\verb@    DNAME <- paste(vn <- c(names(mf)[response], group), collapse = " by ") # works in all cases@\\
+\mbox{}\verb@    DNAME <- paste(vn <- c(names(mf)[response], group), @\\
+\mbox{}\verb@                   collapse = " by ") # works in all cases@\\
 \mbox{}\verb@    w <- as.vector(model.weights(mf))@\\
 \mbox{}\verb@    y <- mf[[response]]@\\
 \mbox{}\verb@    if (inherits(y, "Surv")) {@\\
@@ -4399,12 +4451,13 @@ for model specification. We start handling the formula
 \mbox{}\verb@        mf[[3L]] <- st@\\
 \mbox{}\verb@        ### nlevels(st) == 1L is explicitly allowed@\\
 \mbox{}\verb@        vn <- c(vn, names(mf)[3L])@\\
-\mbox{}\verb@        RVAL <- free1way(y = y, groups = g, blocks = st, event = event, weights = w,@\\
-\mbox{}\verb@                         varnames = vn, ...)@\\
+\mbox{}\verb@        RVAL <- free1way(y = y, groups = g, blocks = st, event = event, @\\
+\mbox{}\verb@                         weights = w, varnames = vn, ...)@\\
 \mbox{}\verb@        DNAME <- paste(DNAME, paste("\n\t stratified by", names(mf)[3L]))@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        ## Call the corresponding method@\\
-\mbox{}\verb@        RVAL <- free1way(y = y, groups = g, event = event, weights = w, varnames = vn, ...)@\\
+\mbox{}\verb@        RVAL <- free1way(y = y, groups = g, event = event, weights = w, @\\
+\mbox{}\verb@                         varnames = vn, ...)@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    RVAL$data <- mf@\\
 \mbox{}\verb@    RVAL$data.name <- DNAME@\\
@@ -4445,7 +4498,8 @@ interpreted as an event and \code{FALSE} as right-censored observation
 \mbox{}\verb@    stop(gettextf("Incorrect argument 'groups' in %s, at least two groups needed",@\\
 \mbox{}\verb@                  "free1way"),@\\
 \mbox{}\verb@         domain = NA)@\\
-\mbox{}\verb@DNAME <- paste(DNAME, paste0("(", paste0(levels(groups), collapse = ", "), ")"))@\\
+\mbox{}\verb@DNAME <- paste(DNAME, paste0("(", paste0(levels(groups), collapse = ", "), @\\
+\mbox{}\verb@                             ")"))@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@if (!is.null(blocks)) {@\\
 \mbox{}\verb@    if (length(unique(blocks)) < 2L) {@\\
@@ -4486,8 +4540,8 @@ not as a list of things).
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, nbins = 0, @\\
-\mbox{}\verb@                             varnames = NULL, ...) @\\
+\mbox{}\verb@free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, @\\
+\mbox{}\verb@                             weights = NULL, nbins = 0, varnames = NULL, ...) @\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
@@ -4503,7 +4557,8 @@ not as a list of things).
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    if (nbins && nbins < length(uy) && is.null(event)) {@\\
 \mbox{}\verb@        nbins <- ceiling(nbins)@\\
-\mbox{}\verb@        breaks <- c(-Inf, quantile(y, probs = seq_len(nbins) / (nbins + 1L)), Inf)@\\
+\mbox{}\verb@        breaks <- c(-Inf, quantile(y, probs = seq_len(nbins) / (nbins + 1L)), @\\
+\mbox{}\verb@                     Inf)@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        breaks <- c(-Inf, uy, Inf)@\\
 \mbox{}\verb@    }@\\
@@ -4536,8 +4591,8 @@ call to \code{xtabs}:
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, @\\
-\mbox{}\verb@                            varnames = NULL, ...) @\\
+\mbox{}\verb@free1way.factor <- function(y, groups, blocks = NULL, event = NULL, @\\
+\mbox{}\verb@                            weights = NULL, varnames = NULL, ...) @\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
@@ -4555,7 +4610,8 @@ call to \code{xtabs}:
 \mbox{}\verb@            stop(gettextf("%s currently only allows independent right-censoring",@\\
 \mbox{}\verb@                          "free1way"),@\\
 \mbox{}\verb@                domain = NA)@\\
-\mbox{}\verb@        d$event <- factor(event, levels = c(FALSE, TRUE), labels = c("FALSE", "TRUE"))@\\
+\mbox{}\verb@        d$event <- factor(event, levels = c(FALSE, TRUE), @\\
+\mbox{}\verb@                          labels = c("FALSE", "TRUE"))@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    tab <- xtabs(w ~ ., data = d)@\\
 \mbox{}\verb@    dn <- dimnames(tab)@\\
@@ -4669,7 +4725,7 @@ some special cases (\code{wilcox,kruskal,friedman.test}):
 \mbox{}\verb@    ### global@\\
 \mbox{}\verb@    cf <- coef(x)@\\
 \mbox{}\verb@    if ((length(cf) > 1L || test == "LRT") && alternative != "two.sided") @\\
-\mbox{}\verb@        stop(gettextf("Cannot compute one-sided p-values in %sError computing the Hessian in %s",@\\
+\mbox{}\verb@        stop(gettextf("Cannot compute one-sided p-values in %s",@\\
 \mbox{}\verb@                      "free1way"),@\\
 \mbox{}\verb@             domain = NA)@\\
 \mbox{}\verb@@\\
@@ -4715,12 +4771,14 @@ The \code{summary} method performs population Wald inference unless the
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@summary.free1way <- function(object, test, alternative = c("two.sided", "less", "greater"), @\\
+\mbox{}\verb@summary.free1way <- function(object, test, @\\
+\mbox{}\verb@                             alternative = c("two.sided", "less", "greater"), @\\
 \mbox{}\verb@                             tol = .Machine$double.eps, ...)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (!missing(test))@\\
-\mbox{}\verb@        return(.print.free1way(object, test = test, alternative = alternative, tol = tol, ...))@\\
+\mbox{}\verb@        return(.print.free1way(object, test = test, @\\
+\mbox{}\verb@                               alternative = alternative, tol = tol, ...))@\\
 \mbox{}\verb@   @\\
 \mbox{}\verb@    alternative <- match.arg(alternative)@\\
 \mbox{}\verb@@\\
@@ -5553,7 +5611,8 @@ followed by a plot of the model-based functions (which can be switched off)
 \mbox{}\verb@@\\
 \mbox{}\verb@if (model)@\\
 \mbox{}\verb@    out <- sapply(seq_len(K), function(k) @\\
-\mbox{}\verb@        lines(j1, FUN(intercepts - cf[k]), type = "s", col = col[k], lty = lty[2]))@\\
+\mbox{}\verb@        lines(j1, FUN(intercepts - cf[k]), type = "s", col = col[k], @\\
+\mbox{}\verb@              lty = lty[2]))@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -5731,8 +5790,10 @@ the latter for a certain choice of link function:
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@ppplot <- function(x, y, plot.it = TRUE,@\\
-\mbox{}\verb@                   xlab = paste("Cumulative probabilities for", deparse1(substitute(x))),@\\
-\mbox{}\verb@                   ylab = paste("Cumulative probabilities for", deparse1(substitute(y))), @\\
+\mbox{}\verb@                   xlab = paste("Cumulative probabilities for", @\\
+\mbox{}\verb@                                deparse1(substitute(x))),@\\
+\mbox{}\verb@                   ylab = paste("Cumulative probabilities for", @\\
+\mbox{}\verb@                                deparse1(substitute(y))), @\\
 \mbox{}\verb@                   main = "P-P plot",@\\
 \mbox{}\verb@                   ..., conf.level = NULL, @\\
 \mbox{}\verb@                   conf.args = list(link = "logit", type = "Wald", @\\
@@ -5860,7 +5921,8 @@ by post-hoc categorisation.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "loglog")) @\\
+\mbox{}\verb@.rfree1way <- function(n, delta = 0, link = c("logit", "probit", @\\
+\mbox{}\verb@                                              "cloglog", "loglog")) @\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    logU <- log(ret <- runif(n))@\\
@@ -6008,7 +6070,8 @@ the relevant discrete density.
 \mbox{}\verb@    p0 <- cumsum(prob)@\\
 \mbox{}\verb@    h0 <- .q(link, p0[-length(p0)]) ### last element of p0 is one@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    h1 <- h0 - matrix(delta, nrow = length(prob) - 1L, ncol = K - 1, byrow = TRUE)@\\
+\mbox{}\verb@    h1 <- h0 - matrix(delta, nrow = length(prob) - 1L, ncol = K - 1, @\\
+\mbox{}\verb@                      byrow = TRUE)@\\
 \mbox{}\verb@    p1 <- rbind(.p(link, h1), 1)@\\
 \mbox{}\verb@    p <- cbind(p0, p1)@\\
 \mbox{}\verb@    ret <- vector(mode = "list", length = n)@\\
@@ -6176,12 +6239,15 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, @\\
+\mbox{}\verb@power.free1way.test(n = n, prob = prob, @\\
+\mbox{}\verb@                    alloc_ratio = alloc_ratio,  @\\
 \mbox{}\verb@                    blocks = blocks,@\\
-\mbox{}\verb@                    strata_ratio = strata_ratio, delta = delta, mu = mu,@\\
+\mbox{}\verb@                    strata_ratio = strata_ratio, @\\
+\mbox{}\verb@                    delta = delta, mu = mu,@\\
 \mbox{}\verb@                    sig.level = sig.level, link = link, @\\
 \mbox{}\verb@                    alternative = alternative, @\\
-\mbox{}\verb@                    nsim = nsim, seed = seed, tol = tol)$power - power@\\
+\mbox{}\verb@                    nsim = nsim, seed = seed, @\\
+\mbox{}\verb@                    tol = tol)$power - power@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -6254,13 +6320,18 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@power.free1way.test <- function(n = NULL, prob = if (is.null(n)) NULL else rep.int(1 / n, n), @\\
-\mbox{}\verb@                                alloc_ratio = 1, blocks = if (is.null(prob)) 1 else NCOL(prob), @\\
+\mbox{}\verb@power.free1way.test <- function(n = NULL, @\\
+\mbox{}\verb@                                prob = if (is.null(n)) NULL else @\\
+\mbox{}\verb@                                                       rep.int(1 / n, n), @\\
+\mbox{}\verb@                                alloc_ratio = 1, @\\
+\mbox{}\verb@                                blocks = if (is.null(prob)) 1 else NCOL(prob), @\\
 \mbox{}\verb@                                strata_ratio = 1, @\\
-\mbox{}\verb@                                delta = NULL, mu = 0, sig.level = .05, power = NULL,@\\
+\mbox{}\verb@                                delta = NULL, mu = 0, @\\
+\mbox{}\verb@                                sig.level = .05, power = NULL,@\\
 \mbox{}\verb@                                link = c("logit", "probit", "cloglog", "loglog"),@\\
 \mbox{}\verb@                                alternative = c("two.sided", "less", "greater"), @\\
-\mbox{}\verb@                                nsim = 100, seed = NULL, tol = .Machine$double.eps^0.25) @\\
+\mbox{}\verb@                                nsim = 100, seed = NULL, @\\
+\mbox{}\verb@                                tol = .Machine$double.eps^0.25) @\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape power args check}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
@@ -6278,7 +6349,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \mbox{}\verb@        if (length(alloc_ratio) > 1L)@\\
 \mbox{}\verb@            stop(gettextf("Effect size can only computed for two sample problems in %s",@\\
 \mbox{}\verb@                          "power.free1way.test"),@\\
-\mbox{}\verb@                 domain = NA)@\\
+\mbox{}\verb@                 domain = NA)   @\\
 \mbox{}\verb@        delta <- uniroot(function(delta) {@\\
 \mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    ### <TH> interval depending on alternative, symmetry? </TH>@\\
@@ -6536,10 +6607,10 @@ free1way(y ~ w, link = "probit", correctFirth = TRUE)
 \item $\langle\,$extract plot data\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$Firth correction\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$formula business\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
-\item $\langle\,$free1way\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way confint\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way factor\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way formula\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way generic and table method (main workhorse)\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way methods\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way numeric\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way permutation tests\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}

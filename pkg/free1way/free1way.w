@@ -737,7 +737,8 @@ for each stratum, the corresponding contrasts of the intercept parameters:
 C <- vapply(x, NROW, 0L) ### might differ by stratum
 K <- unique(do.call("c", lapply(x, ncol))) ### the same
 B <- length(x)
-sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
+sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), 
+               levels = seq_len(B))
 bidx <- seq_len(K - 1L)
 delta <- parm[bidx]
 intercepts <- split(parm[-bidx], sidx)
@@ -851,8 +852,8 @@ for (b in seq_len(B)) {
         X <- H$X
         Z <- H$Z
     } else {
-        Adiag <- c(Adiag, H$A$Adiag) ### Matrix::bdiag(A, H$A)
-        Aoffdiag <- c(Aoffdiag, 0, H$A$Aoffdiag) ### Matrix::bdiag(A, H$A)
+        Adiag <- c(Adiag, H$A$Adiag)
+        Aoffdiag <- c(Aoffdiag, 0, H$A$Aoffdiag)
         X <- rbind(X, H$X)
         Z <- Z + H$Z
     }
@@ -877,7 +878,8 @@ and the computation of the Hessian for the shift parameters using
 
 @d stratified Hessian
 @{
-.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) 
+.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, 
+                  retMatrix = FALSE) 
 {
 
     @<stratum prep@>
@@ -1033,7 +1035,9 @@ logit <- function()
             },
             PI2parm = function(p) {
                f <- function(x, PI)
-                   x + (exp(-x) * (PI + exp(2 * x) * (PI - 1) + exp(x)* (1 - 2 * PI)))
+                   x + (exp(-x) * (PI + 
+                                   exp(2 * x) * (PI - 1) + 
+                                   exp(x) * (1 - 2 * PI)))
                ret <- vapply(p, function(p) 
                    uniroot(f, PI = p, interval = 50 * c(-1, 1))$root, 0)
                return(ret)
@@ -1080,7 +1084,9 @@ loglog <- function()
             },
             dddlinkinv = function(x) {
                ex <- exp(-x)
-               ifelse(is.finite(x), exp(-x - ex) * (ex - 1)^2 - exp(-ex - 2 * x), 0.0)
+               ifelse(is.finite(x), exp(-x - ex) * (ex - 1)^2 - 
+                                    exp(-ex - 2 * x), 
+                                    0.0)
             },
             dd2d = function(x) 
                 expm1(-x),
@@ -1211,11 +1217,13 @@ if (!is.finite(objnew_the) || (objnew_the > objthe + 1e-6)) {
         cat("Step size reduced to", step_size, "\n")
 
     if (step_size <= control$minstepsize) {
-        msg <- paste("Step size ", step_size, " has reduced below minstepsize")
-        return(list(par = theta, objective = objthe, convergence = 1, message = msg)) 
+        msg <- paste("Step size ", step_size, 
+                     " has reduced below minstepsize")
+        return(list(par = theta, objective = objthe, convergence = 1, 
+                    message = msg)) 
     }
 } else {
-    theta  <- new_theta                   # Accept the new parameter vector
+    theta  <- new_theta	# accept the new parameter vector
     oldobj <- objthe
     objthe <- objnew_the
     break
@@ -1243,8 +1251,7 @@ if ((objthe <= oldobj + 1e-6 && (oldobj - objthe < control$objtol)) &&
                                           objtol = 5e-4, gradtol = 1e-5, 
                                           paramtol = 1e-5, minstepsize = 1e-2, 
                                           tolsolve = .Machine$double.eps),
-                           trace = FALSE
-                           )
+                           trace = FALSE)
 {
 
     theta  <- start # Initialize the parameter vector
@@ -1252,7 +1259,8 @@ if ((objthe <= oldobj + 1e-6 && (oldobj - objthe < control$objtol)) &&
     objthe <- objective(theta)
     if (!is.finite(objthe)) {
         msg <- "Infeasible starting values"
-        return(list(par = theta, objective = objthe, convergence = 1, message = msg)) 
+        return(list(par = theta, objective = objthe, convergence = 1, 
+                    message = msg)) 
     }
 
     for (iter in seq_len(control$iter.max)) {
@@ -1304,7 +1312,7 @@ all.equal(unname(cf$par), unname(cf2))
 @{
 @<NewtonRaphson@>
 @<ML estimation@>
-@<free1way@>
+@<free1way generic and table method (main workhorse)@>
 @<free1way methods@>
 @<free1way print@>
 @<free1way summary@>
@@ -1328,9 +1336,7 @@ after merging all treatment groups:
 
 @d setup and starting values
 @{
-
 @<table2list body@>
-
 ## allow specification of start = delta and fix = 1:K
 ## for evaluating the likelihood at given delta parameters
 ## without having to specify all intercept parameters
@@ -1439,6 +1445,7 @@ he <- function(par)
     }
     return(ret)
 }
+
 .profile <- function(start, fix = seq_len(K - 1)) 
 {
     if (!all(fix %in% seq_len(K - 1)))
@@ -1498,15 +1505,18 @@ after correcting the bias.
     ret <- suppressWarnings(.profile(start, fix = fix))
     Hfull <- he(ret$par)
     Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
-    ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+    return(ret$value - 
+           .5 * determinant(Hfix, logarithm = TRUE)$modulus)
 }
 if (K == 2) {
     MLcf <- ret$par[seq_len(K - 1)]
     Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
-                  method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+                  method = "Brent", lower = MLcf - 5, 
+                  upper = MLcf + 5)
 } else {
     ### Nelder-Mead
-    Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+    Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                  start = ret$par)
 }
 if (Fret$convergence == 0) {
     start <- ret$par
@@ -1591,7 +1601,7 @@ if (residuals) {
 }
 ret$profile <- function(start, fix)
     .free1wayML(xt, link = link, mu = mu, start = start, fix = fix, tol = tol, 
-               ...) 
+                ...) 
 ret$table <- xt
 
 ret$strata <- strata
@@ -1727,7 +1737,8 @@ We only need access to the parameter estimates $\hat{\delta}_2, \dots,
 @d Wald statistic
 @{
 if (alternative == "two.sided") {
-    STATISTIC <- c("Wald chi-squared" = c(crossprod(cf, x$hessian %*% cf)))
+    STATISTIC <- c("Wald chi-squared" = 
+                   c(crossprod(cf, x$hessian %*% cf)))
     DF <- c("df" = length(parm))
     PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
 } else {
@@ -1765,11 +1776,14 @@ par <- x$par
 par[parm] <- value
 ret <- x$profile(par, parm)
 if (alternative == "two.sided") {
-    STATISTIC <- c("Rao chi-squared" = c(crossprod(ret$negscore, ret$vcov %*% ret$negscore)))
+    STATISTIC <- c("Rao chi-squared" = c(crossprod(ret$negscore, 
+                                                   ret$vcov %*%
+                                                   ret$negscore)))
     DF <- c("df" = length(parm))
     PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
 } else {
-    STATISTIC <- c("Rao Z" = unname(- ret$negscore * sqrt(c(ret$vcov))))
+    STATISTIC <- c("Rao Z" = unname(- ret$negscore * 
+                                      sqrt(c(ret$vcov))))
     PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
 }
 @}
@@ -1797,7 +1811,8 @@ if (!is.null(x$exact)) {
     Esc <- sc - x$perm$Expectation
 
     if (alternative == "two.sided" && length(cf) > 1L) {
-        STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))
+        STATISTIC <- c("Perm chi-squared" = 
+                       sum(Esc * solve(x$perm$Covariance, Esc)))
     } else {
         STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))
     }
@@ -1810,7 +1825,8 @@ In addition, we compute permutation p-values
 @{
 if (!is.null(x$exact)) {
     PVAL <- switch(alternative,
-                   "two.sided" = 2 * min(c(x$exact$ple(sc), x$exact$pgr(sc))),
+                   "two.sided" = 2 * min(c(x$exact$ple(sc), 
+                                           x$exact$pgr(sc))),
                    "less" = x$exact$ple(sc),
                    "greater" = x$exact$pgr(sc))
 } else {
@@ -1844,7 +1860,8 @@ if (!is.null(x$exact)) {
             if (alternative == "two.sided")
                 PVAL <- pchisq(STATISTIC^2, df = 1, lower.tail = FALSE)
             else
-                PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
+                PVAL <- pnorm(STATISTIC, 
+                              lower.tail = alternative == "less")
         }
     }
 }
@@ -1909,7 +1926,8 @@ tables with fixed marginal distributions:
     stat <- 0
     ret <- .SW(res, xt)
     if (dim(xt)[2L] == 2L) {
-        ret$testStat <- c((ret$Statistic - ret$Expectation) / sqrt(c(ret$Covariance)))
+        ret$testStat <- c((ret$Statistic - ret$Expectation) / 
+                          sqrt(c(ret$Covariance)))
     } else {
         ES <- ret$Statistic - ret$Expectation
         ret$testStat <- sum(ES * solve(ret$Covariance, ES))
@@ -1919,12 +1937,14 @@ tables with fixed marginal distributions:
     if (B) {
         for (j in 1:dim(xt)[3L]) {
            rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
-           stat <- stat + vapply(rt, function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], 
-                                                          m = nrow(x), n = ncol(x) - 1L), 
+           stat <- stat + vapply(rt, 
+               function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], 
+                                    m = nrow(x), n = ncol(x) - 1L), 
                                  FUN.VALUE = rep(0, dim(xt)[[2L]] - 1L))
         }
         if (dim(xt)[2L] == 2L) {
-             ret$permStat <- (stat - ret$Expectation) / sqrt(c(ret$Covariance))
+             ret$permStat <- (stat - ret$Expectation) / 
+                              sqrt(c(ret$Covariance))
         } else {
             ES <- matrix(stat, ncol = B) - ret$Expectation
             ret$permStat <- .colSums(ES * solve(ret$Covariance, ES), 
@@ -1966,7 +1986,7 @@ algorithm, mainly because the scores can be mapped to integers:
 
     z2x <- function(z) round((z - m * cf[1]) / cf[2])
 
-    c(ple = function(z) sum(d[s <= z2x(z)]),    ### s and STATISTIC are integers
+    c(ple = function(z) sum(d[s <= z2x(z)]), # s and STATISTIC are integers
       pgr = function(z) sum(d[s >= z2x(z)]), 
       qle = function(q) c(m, max(s[F < q + 1e-08])) %*% cf,
       qgr = function(q) c(m, min(s[S < q + 1e-08])) %*% cf)
@@ -2035,7 +2055,7 @@ group. Unfortunately, most \code{stats::*.test} procedures use the second
 group as control, so factors need to be releveled to obtain identical
 results (this is relevant for the one-sided case).
 
-@d free1way
+@d free1way generic and table method (main workhorse)
 @{
 free1way <- function(y, ...)
     UseMethod("free1way")
@@ -2178,7 +2198,8 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
     @<formula business@>
 
     response <- attr(attr(mf, "terms"), "response")
-    DNAME <- paste(vn <- c(names(mf)[response], group), collapse = " by ") # works in all cases
+    DNAME <- paste(vn <- c(names(mf)[response], group), 
+                   collapse = " by ") # works in all cases
     w <- as.vector(model.weights(mf))
     y <- mf[[response]]
     if (inherits(y, "Surv")) {
@@ -2206,12 +2227,13 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
         mf[[3L]] <- st
         ### nlevels(st) == 1L is explicitly allowed
         vn <- c(vn, names(mf)[3L])
-        RVAL <- free1way(y = y, groups = g, blocks = st, event = event, weights = w,
-                         varnames = vn, ...)
+        RVAL <- free1way(y = y, groups = g, blocks = st, event = event, 
+                         weights = w, varnames = vn, ...)
         DNAME <- paste(DNAME, paste("\n\t stratified by", names(mf)[3L]))
     } else {
         ## Call the corresponding method
-        RVAL <- free1way(y = y, groups = g, event = event, weights = w, varnames = vn, ...)
+        RVAL <- free1way(y = y, groups = g, event = event, weights = w, 
+                         varnames = vn, ...)
     }
     RVAL$data <- mf
     RVAL$data.name <- DNAME
@@ -2239,7 +2261,8 @@ if (nlevels(groups) < 2L)
     stop(gettextf("Incorrect argument 'groups' in %s, at least two groups needed",
                   "free1way"),
          domain = NA)
-DNAME <- paste(DNAME, paste0("(", paste0(levels(groups), collapse = ", "), ")"))
+DNAME <- paste(DNAME, paste0("(", paste0(levels(groups), collapse = ", "), 
+                             ")"))
 
 if (!is.null(blocks)) {
     if (length(unique(blocks)) < 2L) {
@@ -2267,8 +2290,8 @@ not as a list of things).
 
 @d free1way numeric
 @{
-free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, nbins = 0, 
-                             varnames = NULL, ...) 
+free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, 
+                             weights = NULL, nbins = 0, varnames = NULL, ...) 
 {
 
     @<variable names and checks@>
@@ -2284,7 +2307,8 @@ free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = N
     }
     if (nbins && nbins < length(uy) && is.null(event)) {
         nbins <- ceiling(nbins)
-        breaks <- c(-Inf, quantile(y, probs = seq_len(nbins) / (nbins + 1L)), Inf)
+        breaks <- c(-Inf, quantile(y, probs = seq_len(nbins) / (nbins + 1L)), 
+                     Inf)
     } else {
         breaks <- c(-Inf, uy, Inf)
     }
@@ -2304,8 +2328,8 @@ call to \code{xtabs}:
 
 @d free1way factor
 @{
-free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, 
-                            varnames = NULL, ...) 
+free1way.factor <- function(y, groups, blocks = NULL, event = NULL, 
+                            weights = NULL, varnames = NULL, ...) 
 {
 
     @<variable names and checks@>
@@ -2323,7 +2347,8 @@ free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NU
             stop(gettextf("%s currently only allows independent right-censoring",
                           "free1way"),
                 domain = NA)
-        d$event <- factor(event, levels = c(FALSE, TRUE), labels = c("FALSE", "TRUE"))
+        d$event <- factor(event, levels = c(FALSE, TRUE), 
+                          labels = c("FALSE", "TRUE"))
     }
     tab <- xtabs(w ~ ., data = d)
     dn <- dimnames(tab)
@@ -2411,7 +2436,7 @@ some special cases (\code{wilcox,kruskal,friedman.test}):
     ### global
     cf <- coef(x)
     if ((length(cf) > 1L || test == "LRT") && alternative != "two.sided") 
-        stop(gettextf("Cannot compute one-sided p-values in %sError computing the Hessian in %s",
+        stop(gettextf("Cannot compute one-sided p-values in %s",
                       "free1way"),
              domain = NA)
 
@@ -2444,12 +2469,14 @@ The \code{summary} method performs population Wald inference unless the
 
 @d free1way summary
 @{
-summary.free1way <- function(object, test, alternative = c("two.sided", "less", "greater"), 
+summary.free1way <- function(object, test, 
+                             alternative = c("two.sided", "less", "greater"), 
                              tol = .Machine$double.eps, ...)
 {
 
     if (!missing(test))
-        return(.print.free1way(object, test = test, alternative = alternative, tol = tol, ...))
+        return(.print.free1way(object, test = test, 
+                               alternative = alternative, tol = tol, ...))
    
     alternative <- match.arg(alternative)
 
@@ -3152,7 +3179,8 @@ followed by a plot of the model-based functions (which can be switched off)
 @{
 if (model)
     out <- sapply(seq_len(K), function(k) 
-        lines(j1, FUN(intercepts - cf[k]), type = "s", col = col[k], lty = lty[2]))
+        lines(j1, FUN(intercepts - cf[k]), type = "s", col = col[k], 
+              lty = lty[2]))
 @}
 
 and finally we add a legend
@@ -3278,8 +3306,10 @@ the latter for a certain choice of link function:
 @d ppplot
 @{
 ppplot <- function(x, y, plot.it = TRUE,
-                   xlab = paste("Cumulative probabilities for", deparse1(substitute(x))),
-                   ylab = paste("Cumulative probabilities for", deparse1(substitute(y))), 
+                   xlab = paste("Cumulative probabilities for", 
+                                deparse1(substitute(x))),
+                   ylab = paste("Cumulative probabilities for", 
+                                deparse1(substitute(y))), 
                    main = "P-P plot",
                    ..., conf.level = NULL, 
                    conf.args = list(link = "logit", type = "Wald", 
@@ -3381,7 +3411,8 @@ N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) *
 
 @d rfree1way
 @{
-.rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "loglog")) 
+.rfree1way <- function(n, delta = 0, link = c("logit", "probit", 
+                                              "cloglog", "loglog")) 
 {
 
     logU <- log(ret <- runif(n))
@@ -3516,7 +3547,8 @@ the relevant discrete density.
     p0 <- cumsum(prob)
     h0 <- .q(link, p0[-length(p0)]) ### last element of p0 is one
 
-    h1 <- h0 - matrix(delta, nrow = length(prob) - 1L, ncol = K - 1, byrow = TRUE)
+    h1 <- h0 - matrix(delta, nrow = length(prob) - 1L, ncol = K - 1, 
+                      byrow = TRUE)
     p1 <- rbind(.p(link, h1), 1)
     p <- cbind(p0, p1)
     ret <- vector(mode = "list", length = n)
@@ -3635,12 +3667,15 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 
 @d power call
 @{
-power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
+power.free1way.test(n = n, prob = prob, 
+                    alloc_ratio = alloc_ratio, 	
                     blocks = blocks,
-                    strata_ratio = strata_ratio, delta = delta, mu = mu,
+                    strata_ratio = strata_ratio, 
+                    delta = delta, mu = mu,
                     sig.level = sig.level, link = link, 
                     alternative = alternative, 
-                    nsim = nsim, seed = seed, tol = tol)$power - power
+                    nsim = nsim, seed = seed, 
+                    tol = tol)$power - power
 @}
 
 @d power args check
@@ -3674,13 +3709,18 @@ class(ret) <- "power.htest"
 
 @d power
 @{
-power.free1way.test <- function(n = NULL, prob = if (is.null(n)) NULL else rep.int(1 / n, n), 
-                                alloc_ratio = 1, blocks = if (is.null(prob)) 1 else NCOL(prob), 
+power.free1way.test <- function(n = NULL, 
+                                prob = if (is.null(n)) NULL else 
+                                                       rep.int(1 / n, n), 
+                                alloc_ratio = 1, 
+                                blocks = if (is.null(prob)) 1 else NCOL(prob), 
                                 strata_ratio = 1, 
-                                delta = NULL, mu = 0, sig.level = .05, power = NULL,
+                                delta = NULL, mu = 0, 
+                                sig.level = .05, power = NULL,
                                 link = c("logit", "probit", "cloglog", "loglog"),
                                 alternative = c("two.sided", "less", "greater"), 
-                                nsim = 100, seed = NULL, tol = .Machine$double.eps^0.25) 
+                                nsim = 100, seed = NULL, 
+                                tol = .Machine$double.eps^0.25) 
 {
 
     @<power args check@>
@@ -3698,7 +3738,7 @@ power.free1way.test <- function(n = NULL, prob = if (is.null(n)) NULL else rep.i
         if (length(alloc_ratio) > 1L)
             stop(gettextf("Effect size can only computed for two sample problems in %s",
                           "power.free1way.test"),
-                 domain = NA)
+                 domain = NA)	
         delta <- uniroot(function(delta) {
                  @<power call@>
     ### <TH> interval depending on alternative, symmetry? </TH>

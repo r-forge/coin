@@ -84,7 +84,9 @@ logit <- function()
             },
             PI2parm = function(p) {
                f <- function(x, PI)
-                   x + (exp(-x) * (PI + exp(2 * x) * (PI - 1) + exp(x)* (1 - 2 * PI)))
+                   x + (exp(-x) * (PI + 
+                                   exp(2 * x) * (PI - 1) + 
+                                   exp(x) * (1 - 2 * PI)))
                ret <- vapply(p, function(p) 
                    uniroot(f, PI = p, interval = 50 * c(-1, 1))$root, 0)
                return(ret)
@@ -188,7 +190,9 @@ loglog <- function()
             },
             dddlinkinv = function(x) {
                ex <- exp(-x)
-               ifelse(is.finite(x), exp(-x - ex) * (ex - 1)^2 - exp(-ex - 2 * x), 0.0)
+               ifelse(is.finite(x), exp(-x - ex) * (ex - 1)^2 - 
+                                    exp(-ex - 2 * x), 
+                                    0.0)
             },
             dd2d = function(x) 
                 expm1(-x),

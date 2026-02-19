@@ -7,8 +7,7 @@
                                           objtol = 5e-4, gradtol = 1e-5, 
                                           paramtol = 1e-5, minstepsize = 1e-2, 
                                           tolsolve = .Machine$double.eps),
-                           trace = FALSE
-                           )
+                           trace = FALSE)
 {
 
     theta  <- start # Initialize the parameter vector
@@ -16,7 +15,8 @@
     objthe <- objective(theta)
     if (!is.finite(objthe)) {
         msg <- "Infeasible starting values"
-        return(list(par = theta, objective = objthe, convergence = 1, message = msg)) 
+        return(list(par = theta, objective = objthe, convergence = 1, 
+                    message = msg)) 
     }
 
     for (iter in seq_len(control$iter.max)) {
@@ -53,11 +53,13 @@
                     cat("Step size reduced to", step_size, "\n")
 
                 if (step_size <= control$minstepsize) {
-                    msg <- paste("Step size ", step_size, " has reduced below minstepsize")
-                    return(list(par = theta, objective = objthe, convergence = 1, message = msg)) 
+                    msg <- paste("Step size ", step_size, 
+                                 " has reduced below minstepsize")
+                    return(list(par = theta, objective = objthe, convergence = 1, 
+                                message = msg)) 
                 }
             } else {
-                theta  <- new_theta                   # Accept the new parameter vector
+                theta  <- new_theta # accept the new parameter vector
                 oldobj <- objthe
                 objthe <- objnew_the
                 break
@@ -125,7 +127,6 @@
 
     # setup and starting values
     
-
     # table2list body
 
     dx <- dim(x)
@@ -192,7 +193,6 @@
     xrclist <- xrclist[strata]
     
     
-
     ## allow specification of start = delta and fix = 1:K
     ## for evaluating the likelihood at given delta parameters
     ## without having to specify all intercept parameters
@@ -424,7 +424,8 @@
         C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
         B <- length(x)
-        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
+        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), 
+                       levels = seq_len(B))
         bidx <- seq_len(K - 1L)
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
@@ -447,7 +448,8 @@
         C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
         B <- length(x)
-        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
+        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), 
+                       levels = seq_len(B))
         bidx <- seq_len(K - 1L)
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
@@ -465,7 +467,8 @@
     
     # stratified Hessian
     
-    .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) 
+    .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, 
+                      retMatrix = FALSE) 
     {
 
         # stratum prep
@@ -473,7 +476,8 @@
         C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
         B <- length(x)
-        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
+        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), 
+                       levels = seq_len(B))
         bidx <- seq_len(K - 1L)
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
@@ -498,8 +502,8 @@
                     X <- H$X
                     Z <- H$Z
                 } else {
-                    Adiag <- c(Adiag, H$A$Adiag) ### Matrix::bdiag(A, H$A)
-                    Aoffdiag <- c(Aoffdiag, 0, H$A$Aoffdiag) ### Matrix::bdiag(A, H$A)
+                    Adiag <- c(Adiag, H$A$Adiag)
+                    Aoffdiag <- c(Aoffdiag, 0, H$A$Aoffdiag)
                     X <- rbind(X, H$X)
                     Z <- Z + H$Z
                 }
@@ -549,7 +553,8 @@
         C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
         B <- length(x)
-        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
+        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), 
+                       levels = seq_len(B))
         bidx <- seq_len(K - 1L)
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
@@ -599,6 +604,7 @@
         }
         return(ret)
     }
+
     .profile <- function(start, fix = seq_len(K - 1)) 
     {
         if (!all(fix %in% seq_len(K - 1)))
@@ -654,15 +660,18 @@
                 ret <- suppressWarnings(.profile(start, fix = fix))
                 Hfull <- he(ret$par)
                 Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
-                ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+                return(ret$value - 
+                       .5 * determinant(Hfix, logarithm = TRUE)$modulus)
             }
             if (K == 2) {
                 MLcf <- ret$par[seq_len(K - 1)]
                 Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
-                              method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+                              method = "Brent", lower = MLcf - 5, 
+                              upper = MLcf + 5)
             } else {
                 ### Nelder-Mead
-                Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+                Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                              start = ret$par)
             }
             if (Fret$convergence == 0) {
                 start <- ret$par
@@ -689,15 +698,18 @@
                         ret <- suppressWarnings(.profile(start, fix = fix))
                         Hfull <- he(ret$par)
                         Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
-                        ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+                        return(ret$value - 
+                               .5 * determinant(Hfix, logarithm = TRUE)$modulus)
                     }
                     if (K == 2) {
                         MLcf <- ret$par[seq_len(K - 1)]
                         Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
-                                      method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+                                      method = "Brent", lower = MLcf - 5, 
+                                      upper = MLcf + 5)
                     } else {
                         ### Nelder-Mead
-                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                                      start = ret$par)
                     }
                     if (Fret$convergence == 0) {
                         start <- ret$par
@@ -760,15 +772,18 @@
                 ret <- suppressWarnings(.profile(start, fix = fix))
                 Hfull <- he(ret$par)
                 Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
-                ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+                return(ret$value - 
+                       .5 * determinant(Hfix, logarithm = TRUE)$modulus)
             }
             if (K == 2) {
                 MLcf <- ret$par[seq_len(K - 1)]
                 Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
-                              method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+                              method = "Brent", lower = MLcf - 5, 
+                              upper = MLcf + 5)
             } else {
                 ### Nelder-Mead
-                Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+                Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                              start = ret$par)
             }
             if (Fret$convergence == 0) {
                 start <- ret$par
@@ -795,15 +810,18 @@
                         ret <- suppressWarnings(.profile(start, fix = fix))
                         Hfull <- he(ret$par)
                         Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
-                        ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+                        return(ret$value - 
+                               .5 * determinant(Hfix, logarithm = TRUE)$modulus)
                     }
                     if (K == 2) {
                         MLcf <- ret$par[seq_len(K - 1)]
                         Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
-                                      method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+                                      method = "Brent", lower = MLcf - 5, 
+                                      upper = MLcf + 5)
                     } else {
                         ### Nelder-Mead
-                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                                      start = ret$par)
                     }
                     if (Fret$convergence == 0) {
                         start <- ret$par
@@ -852,7 +870,8 @@
         C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
         B <- length(x)
-        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
+        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), 
+                       levels = seq_len(B))
         bidx <- seq_len(K - 1L)
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
@@ -890,7 +909,7 @@
     }
     ret$profile <- function(start, fix)
         .free1wayML(xt, link = link, mu = mu, start = start, fix = fix, tol = tol, 
-                   ...) 
+                    ...) 
     ret$table <- xt
 
     ret$strata <- strata
@@ -906,7 +925,7 @@
     ret
 }
 
-# free1way
+# free1way generic and table method (main workhorse)
 
 free1way <- function(y, ...)
     UseMethod("free1way")
@@ -1019,7 +1038,8 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
         stat <- 0
         ret <- .SW(res, xt)
         if (dim(xt)[2L] == 2L) {
-            ret$testStat <- c((ret$Statistic - ret$Expectation) / sqrt(c(ret$Covariance)))
+            ret$testStat <- c((ret$Statistic - ret$Expectation) / 
+                              sqrt(c(ret$Covariance)))
         } else {
             ES <- ret$Statistic - ret$Expectation
             ret$testStat <- sum(ES * solve(ret$Covariance, ES))
@@ -1029,12 +1049,14 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
         if (B) {
             for (j in 1:dim(xt)[3L]) {
                rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
-               stat <- stat + vapply(rt, function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], 
-                                                              m = nrow(x), n = ncol(x) - 1L), 
+               stat <- stat + vapply(rt, 
+                   function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], 
+                                        m = nrow(x), n = ncol(x) - 1L), 
                                      FUN.VALUE = rep(0, dim(xt)[[2L]] - 1L))
             }
             if (dim(xt)[2L] == 2L) {
-                 ret$permStat <- (stat - ret$Expectation) / sqrt(c(ret$Covariance))
+                 ret$permStat <- (stat - ret$Expectation) / 
+                                  sqrt(c(ret$Covariance))
             } else {
                 ES <- matrix(stat, ncol = B) - ret$Expectation
                 ret$permStat <- .colSums(ES * solve(ret$Covariance, ES), 
@@ -1084,7 +1106,7 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
 
                 z2x <- function(z) round((z - m * cf[1]) / cf[2])
 
-                c(ple = function(z) sum(d[s <= z2x(z)]),    ### s and STATISTIC are integers
+                c(ple = function(z) sum(d[s <= z2x(z)]), # s and STATISTIC are integers
                   pgr = function(z) sum(d[s >= z2x(z)]), 
                   qle = function(q) c(m, max(s[F < q + 1e-08])) %*% cf,
                   qgr = function(q) c(m, min(s[S < q + 1e-08])) %*% cf)
@@ -1168,7 +1190,7 @@ model.matrix.free1way <- function (object, ...)
     ### global
     cf <- coef(x)
     if ((length(cf) > 1L || test == "LRT") && alternative != "two.sided") 
-        stop(gettextf("Cannot compute one-sided p-values in %sError computing the Hessian in %s",
+        stop(gettextf("Cannot compute one-sided p-values in %s",
                       "free1way"),
              domain = NA)
 
@@ -1182,7 +1204,8 @@ model.matrix.free1way <- function (object, ...)
         # Wald statistic
         
         if (alternative == "two.sided") {
-            STATISTIC <- c("Wald chi-squared" = c(crossprod(cf, x$hessian %*% cf)))
+            STATISTIC <- c("Wald chi-squared" = 
+                           c(crossprod(cf, x$hessian %*% cf)))
             DF <- c("df" = length(parm))
             PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
         } else {
@@ -1208,11 +1231,14 @@ model.matrix.free1way <- function (object, ...)
         par[parm] <- value
         ret <- x$profile(par, parm)
         if (alternative == "two.sided") {
-            STATISTIC <- c("Rao chi-squared" = c(crossprod(ret$negscore, ret$vcov %*% ret$negscore)))
+            STATISTIC <- c("Rao chi-squared" = c(crossprod(ret$negscore, 
+                                                           ret$vcov %*%
+                                                           ret$negscore)))
             DF <- c("df" = length(parm))
             PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
         } else {
-            STATISTIC <- c("Rao Z" = unname(- ret$negscore * sqrt(c(ret$vcov))))
+            STATISTIC <- c("Rao Z" = unname(- ret$negscore * 
+                                              sqrt(c(ret$vcov))))
             PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
         }
         
@@ -1231,7 +1257,8 @@ model.matrix.free1way <- function (object, ...)
             Esc <- sc - x$perm$Expectation
 
             if (alternative == "two.sided" && length(cf) > 1L) {
-                STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))
+                STATISTIC <- c("Perm chi-squared" = 
+                               sum(Esc * solve(x$perm$Covariance, Esc)))
             } else {
                 STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))
             }
@@ -1245,7 +1272,8 @@ model.matrix.free1way <- function (object, ...)
         
         if (!is.null(x$exact)) {
             PVAL <- switch(alternative,
-                           "two.sided" = 2 * min(c(x$exact$ple(sc), x$exact$pgr(sc))),
+                           "two.sided" = 2 * min(c(x$exact$ple(sc), 
+                                                   x$exact$pgr(sc))),
                            "less" = x$exact$ple(sc),
                            "greater" = x$exact$pgr(sc))
         } else {
@@ -1279,7 +1307,8 @@ model.matrix.free1way <- function (object, ...)
                     if (alternative == "two.sided")
                         PVAL <- pchisq(STATISTIC^2, df = 1, lower.tail = FALSE)
                     else
-                        PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
+                        PVAL <- pnorm(STATISTIC, 
+                                      lower.tail = alternative == "less")
                 }
             }
         }
@@ -1301,12 +1330,14 @@ print.free1way <- function(x, ...)
 
 # free1way summary
 
-summary.free1way <- function(object, test, alternative = c("two.sided", "less", "greater"), 
+summary.free1way <- function(object, test, 
+                             alternative = c("two.sided", "less", "greater"), 
                              tol = .Machine$double.eps, ...)
 {
 
     if (!missing(test))
-        return(.print.free1way(object, test = test, alternative = alternative, tol = tol, ...))
+        return(.print.free1way(object, test = test, 
+                               alternative = alternative, tol = tol, ...))
    
     alternative <- match.arg(alternative)
 
@@ -1369,7 +1400,8 @@ confint.free1way <- function(object, parm,
                 # Wald statistic
                 
                 if (alternative == "two.sided") {
-                    STATISTIC <- c("Wald chi-squared" = c(crossprod(cf, x$hessian %*% cf)))
+                    STATISTIC <- c("Wald chi-squared" = 
+                                   c(crossprod(cf, x$hessian %*% cf)))
                     DF <- c("df" = length(parm))
                     PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
                 } else {
@@ -1395,11 +1427,14 @@ confint.free1way <- function(object, parm,
                 par[parm] <- value
                 ret <- x$profile(par, parm)
                 if (alternative == "two.sided") {
-                    STATISTIC <- c("Rao chi-squared" = c(crossprod(ret$negscore, ret$vcov %*% ret$negscore)))
+                    STATISTIC <- c("Rao chi-squared" = c(crossprod(ret$negscore, 
+                                                                   ret$vcov %*%
+                                                                   ret$negscore)))
                     DF <- c("df" = length(parm))
                     PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
                 } else {
-                    STATISTIC <- c("Rao Z" = unname(- ret$negscore * sqrt(c(ret$vcov))))
+                    STATISTIC <- c("Rao Z" = unname(- ret$negscore * 
+                                                      sqrt(c(ret$vcov))))
                     PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
                 }
                 
@@ -1418,7 +1453,8 @@ confint.free1way <- function(object, parm,
                     Esc <- sc - x$perm$Expectation
 
                     if (alternative == "two.sided" && length(cf) > 1L) {
-                        STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))
+                        STATISTIC <- c("Perm chi-squared" = 
+                                       sum(Esc * solve(x$perm$Covariance, Esc)))
                     } else {
                         STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))
                     }
@@ -1589,7 +1625,8 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
     
 
     response <- attr(attr(mf, "terms"), "response")
-    DNAME <- paste(vn <- c(names(mf)[response], group), collapse = " by ") # works in all cases
+    DNAME <- paste(vn <- c(names(mf)[response], group), 
+                   collapse = " by ") # works in all cases
     w <- as.vector(model.weights(mf))
     y <- mf[[response]]
     if (inherits(y, "Surv")) {
@@ -1617,12 +1654,13 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
         mf[[3L]] <- st
         ### nlevels(st) == 1L is explicitly allowed
         vn <- c(vn, names(mf)[3L])
-        RVAL <- free1way(y = y, groups = g, blocks = st, event = event, weights = w,
-                         varnames = vn, ...)
+        RVAL <- free1way(y = y, groups = g, blocks = st, event = event, 
+                         weights = w, varnames = vn, ...)
         DNAME <- paste(DNAME, paste("\n\t stratified by", names(mf)[3L]))
     } else {
         ## Call the corresponding method
-        RVAL <- free1way(y = y, groups = g, event = event, weights = w, varnames = vn, ...)
+        RVAL <- free1way(y = y, groups = g, event = event, weights = w, 
+                         varnames = vn, ...)
     }
     RVAL$data <- mf
     RVAL$data.name <- DNAME
@@ -1632,8 +1670,8 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
 
 # free1way numeric
 
-free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, nbins = 0, 
-                             varnames = NULL, ...) 
+free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, 
+                             weights = NULL, nbins = 0, varnames = NULL, ...) 
 {
 
     # variable names and checks
@@ -1650,7 +1688,8 @@ free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = N
         stop(gettextf("Incorrect argument 'groups' in %s, at least two groups needed",
                       "free1way"),
              domain = NA)
-    DNAME <- paste(DNAME, paste0("(", paste0(levels(groups), collapse = ", "), ")"))
+    DNAME <- paste(DNAME, paste0("(", paste0(levels(groups), collapse = ", "), 
+                                 ")"))
 
     if (!is.null(blocks)) {
         if (length(unique(blocks)) < 2L) {
@@ -1674,7 +1713,8 @@ free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = N
     }
     if (nbins && nbins < length(uy) && is.null(event)) {
         nbins <- ceiling(nbins)
-        breaks <- c(-Inf, quantile(y, probs = seq_len(nbins) / (nbins + 1L)), Inf)
+        breaks <- c(-Inf, quantile(y, probs = seq_len(nbins) / (nbins + 1L)), 
+                     Inf)
     } else {
         breaks <- c(-Inf, uy, Inf)
     }
@@ -1690,8 +1730,8 @@ free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = N
 
 # free1way factor
 
-free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, 
-                            varnames = NULL, ...) 
+free1way.factor <- function(y, groups, blocks = NULL, event = NULL, 
+                            weights = NULL, varnames = NULL, ...) 
 {
 
     # variable names and checks
@@ -1708,7 +1748,8 @@ free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NU
         stop(gettextf("Incorrect argument 'groups' in %s, at least two groups needed",
                       "free1way"),
              domain = NA)
-    DNAME <- paste(DNAME, paste0("(", paste0(levels(groups), collapse = ", "), ")"))
+    DNAME <- paste(DNAME, paste0("(", paste0(levels(groups), collapse = ", "), 
+                                 ")"))
 
     if (!is.null(blocks)) {
         if (length(unique(blocks)) < 2L) {
@@ -1734,7 +1775,8 @@ free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NU
             stop(gettextf("%s currently only allows independent right-censoring",
                           "free1way"),
                 domain = NA)
-        d$event <- factor(event, levels = c(FALSE, TRUE), labels = c("FALSE", "TRUE"))
+        d$event <- factor(event, levels = c(FALSE, TRUE), 
+                          labels = c("FALSE", "TRUE"))
     }
     tab <- xtabs(w ~ ., data = d)
     dn <- dimnames(tab)
@@ -1826,7 +1868,8 @@ plot.free1way <- function(x, ..., block = 1L, cdf = FALSE, model = TRUE,
     
     if (model)
         out <- sapply(seq_len(K), function(k) 
-            lines(j1, FUN(intercepts - cf[k]), type = "s", col = col[k], lty = lty[2]))
+            lines(j1, FUN(intercepts - cf[k]), type = "s", col = col[k], 
+                  lty = lty[2]))
     
     # add legend
     
@@ -1845,8 +1888,10 @@ plot.free1way <- function(x, ..., block = 1L, cdf = FALSE, model = TRUE,
 # ppplot
 
 ppplot <- function(x, y, plot.it = TRUE,
-                   xlab = paste("Cumulative probabilities for", deparse1(substitute(x))),
-                   ylab = paste("Cumulative probabilities for", deparse1(substitute(y))), 
+                   xlab = paste("Cumulative probabilities for", 
+                                deparse1(substitute(x))),
+                   ylab = paste("Cumulative probabilities for", 
+                                deparse1(substitute(y))), 
                    main = "P-P plot",
                    ..., conf.level = NULL, 
                    conf.args = list(link = "logit", type = "Wald", 
@@ -1904,7 +1949,8 @@ ppplot <- function(x, y, plot.it = TRUE,
 
 # rfree1way
 
-.rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "loglog")) 
+.rfree1way <- function(n, delta = 0, link = c("logit", "probit", 
+                                              "cloglog", "loglog")) 
 {
 
     logU <- log(ret <- runif(n))
@@ -1986,13 +2032,18 @@ rfree1way <- function(n, prob = NULL, alloc_ratio = 1,
 
 # power
 
-power.free1way.test <- function(n = NULL, prob = if (is.null(n)) NULL else rep.int(1 / n, n), 
-                                alloc_ratio = 1, blocks = if (is.null(prob)) 1 else NCOL(prob), 
+power.free1way.test <- function(n = NULL, 
+                                prob = if (is.null(n)) NULL else 
+                                                       rep.int(1 / n, n), 
+                                alloc_ratio = 1, 
+                                blocks = if (is.null(prob)) 1 else NCOL(prob), 
                                 strata_ratio = 1, 
-                                delta = NULL, mu = 0, sig.level = .05, power = NULL,
+                                delta = NULL, mu = 0, 
+                                sig.level = .05, power = NULL,
                                 link = c("logit", "probit", "cloglog", "loglog"),
                                 alternative = c("two.sided", "less", "greater"), 
-                                nsim = 100, seed = NULL, tol = .Machine$double.eps^0.25) 
+                                nsim = 100, seed = NULL, 
+                                tol = .Machine$double.eps^0.25) 
 {
 
     # power args check
@@ -2055,7 +2106,8 @@ power.free1way.test <- function(n = NULL, prob = if (is.null(n)) NULL else rep.i
         p0 <- cumsum(prob)
         h0 <- .q(link, p0[-length(p0)]) ### last element of p0 is one
 
-        h1 <- h0 - matrix(delta, nrow = length(prob) - 1L, ncol = K - 1, byrow = TRUE)
+        h1 <- h0 - matrix(delta, nrow = length(prob) - 1L, ncol = K - 1, 
+                          byrow = TRUE)
         p1 <- rbind(.p(link, h1), 1)
         p <- cbind(p0, p1)
         ret <- vector(mode = "list", length = n)
@@ -2075,12 +2127,15 @@ power.free1way.test <- function(n = NULL, prob = if (is.null(n)) NULL else rep.i
         n <- ceiling(uniroot(function(n) {
                  # power call
                  
-                 power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
+                 power.free1way.test(n = n, prob = prob, 
+                                     alloc_ratio = alloc_ratio,  
                                      blocks = blocks,
-                                     strata_ratio = strata_ratio, delta = delta, mu = mu,
+                                     strata_ratio = strata_ratio, 
+                                     delta = delta, mu = mu,
                                      sig.level = sig.level, link = link, 
                                      alternative = alternative, 
-                                     nsim = nsim, seed = seed, tol = tol)$power - power
+                                     nsim = nsim, seed = seed, 
+                                     tol = tol)$power - power
                  
              }, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)
     else if (is.null(delta)) {
@@ -2088,16 +2143,19 @@ power.free1way.test <- function(n = NULL, prob = if (is.null(n)) NULL else rep.i
         if (length(alloc_ratio) > 1L)
             stop(gettextf("Effect size can only computed for two sample problems in %s",
                           "power.free1way.test"),
-                 domain = NA)
+                 domain = NA)   
         delta <- uniroot(function(delta) {
                  # power call
                  
-                 power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
+                 power.free1way.test(n = n, prob = prob, 
+                                     alloc_ratio = alloc_ratio,  
                                      blocks = blocks,
-                                     strata_ratio = strata_ratio, delta = delta, mu = mu,
+                                     strata_ratio = strata_ratio, 
+                                     delta = delta, mu = mu,
                                      sig.level = sig.level, link = link, 
                                      alternative = alternative, 
-                                     nsim = nsim, seed = seed, tol = tol)$power - power
+                                     nsim = nsim, seed = seed, 
+                                     tol = tol)$power - power
                  
     ### <TH> interval depending on alternative, symmetry? </TH>
             }, interval = c(0, 10), tol = tol, extendInt = "upX")$root
@@ -2106,12 +2164,15 @@ power.free1way.test <- function(n = NULL, prob = if (is.null(n)) NULL else rep.i
         sig.level <- uniroot(function(sig.level) {
                 # power call
                 
-                power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
+                power.free1way.test(n = n, prob = prob, 
+                                    alloc_ratio = alloc_ratio,  
                                     blocks = blocks,
-                                    strata_ratio = strata_ratio, delta = delta, mu = mu,
+                                    strata_ratio = strata_ratio, 
+                                    delta = delta, mu = mu,
                                     sig.level = sig.level, link = link, 
                                     alternative = alternative, 
-                                    nsim = nsim, seed = seed, tol = tol)$power - power
+                                    nsim = nsim, seed = seed, 
+                                    tol = tol)$power - power
                 
             }, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
 
