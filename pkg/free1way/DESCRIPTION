@@ -12,7 +12,7 @@ Authors@R: c(person(given = "Torsten", family = "Hothorn", role = c("aut", "cre"
 Description: Basic infrastructure for exact conditional and unconditional as well as
   asymptotic conditional and unconditional distribution-free inference for parameters 
   in stratified oneway layouts.
-Imports: stats, graphics, Matrix
-Suggests: rms, survival, MASS, tram, coin, multcomp, TH.data, Hmisc, latticeExtra, daewr
+Imports: stats, graphics
+Suggests: Matrix, rms, survival, MASS, tram, coin, multcomp, TH.data, Hmisc, latticeExtra, daewr
 Depends: R (>= 4.6.0)
 License: GPL-2

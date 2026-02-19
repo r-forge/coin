@@ -1259,6 +1259,11 @@ if ((objthe <= oldobj + 1e-6 && (oldobj - objthe < control$objtol)) &&
                     message = msg)) 
     }
 
+    if(!suppressPackageStartupMessages(requireNamespace("Matrix")))
+        stop(gettextf("%s needs package 'Matrix' correctly installed",
+                      ".NewtonRaphson"),
+                 domain = NA)
+
     for (iter in seq_len(control$iter.max)) {
 
         @<Newton update@>
@@ -1658,6 +1663,11 @@ problem.
     Q <- function(p) .q(link, p = p)
     f <- function(q) .d(link, x = q)
     fp <- function(q) .dd(link, x = q)
+
+    if(!suppressPackageStartupMessages(requireNamespace("Matrix")))
+        stop(gettextf("%s needs package 'Matrix' correctly installed",
+                      ".free1wayML"),
+                 domain = NA)
 
     @<setup and starting values@>
     @<negative logLik@>
@@ -3103,9 +3113,9 @@ will plot them later on as a means to directly compare the model to the data
 @d refit block intercepts
 @{
 ### refit for this block only
-m1 <- free1way:::.free1wayML(x, link = ln, start = coef(object), 
-                             fix = seq_along(coef(object)),
-                             residuals = FALSE, hessian = FALSE)
+m1 <- .free1wayML(x, link = ln, start = coef(object), 
+                  fix = seq_along(coef(object)),
+                  residuals = FALSE, hessian = FALSE)
 intercepts <- m1$intercepts[[1L]]
 j1 <- which(attr(get("xlist", environment(m1$profile))[[1L]], "idx") > 1)
 j1 <- j1[-length(j1)]
@@ -3128,9 +3138,9 @@ for (k in seq_len(K)) {
         y[,-k,1] <- 0
     }
     start <- numeric(K - 1)
-    m0 <- free1way:::.free1wayML(y, link = ln, start = start, 
-                                 fix = seq_len(K - 1), residuals = FALSE, 
-                                 hessian = FALSE)
+    m0 <- .free1wayML(y, link = ln, start = start, 
+                      fix = seq_len(K - 1), residuals = FALSE, 
+                      hessian = FALSE)
     j <- which(attr(get("xlist", environment(m0$profile))[[1L]], "idx") > 1)
     ret0[j[-length(j)],k] <- m0$intercepts[[1L]]
 }
