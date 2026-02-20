@@ -1,8 +1,8 @@
 Package: free1way
 Title: Semiparametrically Efficient Population- and Permutation-based Inference in 
   Distribution-free Stratified K-sample Oneway Layouts
-Date: 2026-02-18
-Version: 0.5-1
+Date: 2026-02-20
+Version: 0.6-0
 Authors@R: c(person(given = "Torsten", family = "Hothorn", role = c("aut", "cre"),
                     email = "Torsten.Hothorn@R-project.org"),
              person(given = "Kurt", family = "Hornik", role = "aut",
