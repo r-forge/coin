@@ -3966,6 +3966,11 @@ penalisation from \code{free1way} (this argument should be added to
 free1way(y ~ w, link = "probit", MPL_Jeffreys = TRUE)
 @@
 
+\chapter{Acknowledgements}
+
+We would like to thank Frank Harrell, Michael Fay, Bryan Shepherd, and Ioannis Kosmidis
+for insights and valuable discussions.
+
 \chapter*{Index}
 
 \section*{Files}
