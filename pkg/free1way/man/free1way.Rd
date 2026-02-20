@@ -172,17 +172,17 @@ semiparametric models can be transformed into probabilistic indices
 assumption that the model is correct. These model-based estimators must not
 be confused with assumption-free estimators, such as for example the
 Wilcoxon-Mann-Whitney-U statistic for the AUC
-\bibcitep{free1way::FayMalinovsky2018}. Confidence intervals for the
+\bibcitep{R:Fay+Malinovsky:2018}. Confidence intervals for the
 model-based measures are best obtained by inverting permutation score,
-likelihood ratio, or Rao score tests \bibcitep{free1way::SewakHothorn2023},
+likelihood ratio, or Rao score tests \bibcitep{R:Sewak+Hothorn:2023},
 exploiting their invariance with respect to monotone transformations.
 
 Assuming one of the semiparametric models, the parameter estimates are
 semiparametrically efficient and the corresponding score tests and
 confidence intervals are locally most powerful 
-\bibcitep{Chapter 15.5 in |free1way::vdVaart1998|}. An introduction to
+\bibcitep{Chapter 15.5 in |R:Van_der_Vaart:1998|}. An introduction to
 proportional-odds models in this class is available in
-\bibcitet{free1way::Harrell2015RMS}.
+\bibcitet{R:Harrell:2015}.
 
 \code{free1way} allows several classical tests to be performed and enhanced
 with corresonding parameter estimates and a variety of inference

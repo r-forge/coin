@@ -43,7 +43,7 @@ ppplot(x, y, plot.it = TRUE,
 \details{
 
 For independent two samples, denoted \eqn{x} and \eqn{y}, 
-the function produces a probability-probability plot \bibcitep{free1way::WilkGnanadesikan1968} of pairs
+the function produces a probability-probability plot \bibcitep{R:Wilk+Gnanadesikan:1968} of pairs
 \eqn{(\hat{F}_{x}(z), \hat{F}_{y}(z))} for observed data \eqn{z = (x, y)}.
 
 If the data generating process follows a model where the two distribution
@@ -51,7 +51,7 @@ functions, after appropriate transformation, are horizontally shifted
 versions of each other, the probability-probability curve is a simple function of this shift and
 confidence bands can be obtained from a confidence interval for this shift
 parameter, see \code{\link[free1way]{free1way}} for the model and
-\bibcitet{free1way::SewakHothorn2023} for the connection to ROC curves.
+\bibcitet{R:Sewak+Hothorn:2023} for the connection to ROC curves.
 
 Substantial deviations of the empirical (step function) from the theoretical
 (smooth) curve indicates lack of fit of the semiparametric model.
