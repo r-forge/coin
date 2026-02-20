@@ -19,6 +19,11 @@
                     message = msg)) 
     }
 
+    if(!suppressPackageStartupMessages(requireNamespace("Matrix")))
+        stop(gettextf("%s needs package 'Matrix' correctly installed",
+                      ".NewtonRaphson"),
+                 domain = NA)
+
     for (iter in seq_len(control$iter.max)) {
 
         # Newton update
@@ -89,7 +94,7 @@
 
 .free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
                         residuals = TRUE, score = TRUE, hessian = TRUE, 
-                        correctFirth = FALSE,
+                        MPL_Jeffreys = FALSE,
                         ### use nlminb for small sample sizes
                         dooptim = c(".NewtonRaphson", "nlminb")[1 + (sum(x) < 20)],                         
                         control = list(
@@ -124,6 +129,11 @@
     Q <- function(p) .q(link, p = p)
     f <- function(q) .d(link, x = q)
     fp <- function(q) .dd(link, x = q)
+
+    if(!suppressPackageStartupMessages(requireNamespace("Matrix")))
+        stop(gettextf("%s needs package 'Matrix' correctly installed",
+                      ".free1wayML"),
+                 domain = NA)
 
     # setup and starting values
     
@@ -632,7 +642,7 @@
                              he(p)[-fix, -fix, drop = FALSE]
                          })
         opargs$control <- control[[1L]]
-        correctFirth <- FALSE ### turn off Firth correction in .profile
+        MPL_Jeffreys <- FALSE ### turn off Jeffreys penalisation in .profile
 
         # do optim
         
@@ -649,10 +659,10 @@
            }
         }
 
-        if (isTRUE(correctFirth)) {
-            # Firth correction
+        if (isTRUE(MPL_Jeffreys)) {
+            # Jeffreys penalisation
             
-            .Firth_ll <- function(cf, start) 
+            .pll_Jeffreys <- function(cf, start) 
             {
                 fix <- seq_along(cf)
                 start[fix] <- cf
@@ -665,12 +675,12 @@
             }
             if (K == 2) {
                 MLcf <- ret$par[seq_len(K - 1)]
-                Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                Fret <- optim(MLcf, fn = .pll_Jeffreys, start = ret$par,
                               method = "Brent", lower = MLcf - 5, 
                               upper = MLcf + 5)
             } else {
                 ### Nelder-Mead
-                Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                Fret <- optim(ret$par[seq_len(K - 1)], fn = .pll_Jeffreys, 
                               start = ret$par)
             }
             if (Fret$convergence == 0) {
@@ -682,15 +692,15 @@
             
         } else {
             if (ret$convergence > 0) {
-                if (is.na(correctFirth)) { ### only after failure
-                    warning(gettextf(paste("Firth correction was applied in %s because initial optimisation failed with:", 
+                if (is.na(MPL_Jeffreys)) { ### only after failure
+                    warning(gettextf(paste("Jeffreys penalisation was applied in %s because initial optimisation failed with:", 
                                      ret$message),
                                     "free1way"),
                                      domain = NA)
-                    correctFirth <- TRUE
-                    # Firth correction
+                    MPL_Jeffreys <- TRUE
+                    # Jeffreys penalisation
                     
-                    .Firth_ll <- function(cf, start) 
+                    .pll_Jeffreys <- function(cf, start) 
                     {
                         fix <- seq_along(cf)
                         start[fix] <- cf
@@ -703,12 +713,12 @@
                     }
                     if (K == 2) {
                         MLcf <- ret$par[seq_len(K - 1)]
-                        Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                        Fret <- optim(MLcf, fn = .pll_Jeffreys, start = ret$par,
                                       method = "Brent", lower = MLcf - 5, 
                                       upper = MLcf + 5)
                     } else {
                         ### Nelder-Mead
-                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .pll_Jeffreys, 
                                       start = ret$par)
                     }
                     if (Fret$convergence == 0) {
@@ -726,7 +736,7 @@
                                    "free1way"),
                                    domain = NA)
 
-        ret$correctFirth <- correctFirth
+        ret$MPL_Jeffreys <- MPL_Jeffreys
         ret$value <- ret$objective
         ret$objective <- NULL
         
@@ -761,10 +771,10 @@
            }
         }
 
-        if (isTRUE(correctFirth)) {
-            # Firth correction
+        if (isTRUE(MPL_Jeffreys)) {
+            # Jeffreys penalisation
             
-            .Firth_ll <- function(cf, start) 
+            .pll_Jeffreys <- function(cf, start) 
             {
                 fix <- seq_along(cf)
                 start[fix] <- cf
@@ -777,12 +787,12 @@
             }
             if (K == 2) {
                 MLcf <- ret$par[seq_len(K - 1)]
-                Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                Fret <- optim(MLcf, fn = .pll_Jeffreys, start = ret$par,
                               method = "Brent", lower = MLcf - 5, 
                               upper = MLcf + 5)
             } else {
                 ### Nelder-Mead
-                Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                Fret <- optim(ret$par[seq_len(K - 1)], fn = .pll_Jeffreys, 
                               start = ret$par)
             }
             if (Fret$convergence == 0) {
@@ -794,15 +804,15 @@
             
         } else {
             if (ret$convergence > 0) {
-                if (is.na(correctFirth)) { ### only after failure
-                    warning(gettextf(paste("Firth correction was applied in %s because initial optimisation failed with:", 
+                if (is.na(MPL_Jeffreys)) { ### only after failure
+                    warning(gettextf(paste("Jeffreys penalisation was applied in %s because initial optimisation failed with:", 
                                      ret$message),
                                     "free1way"),
                                      domain = NA)
-                    correctFirth <- TRUE
-                    # Firth correction
+                    MPL_Jeffreys <- TRUE
+                    # Jeffreys penalisation
                     
-                    .Firth_ll <- function(cf, start) 
+                    .pll_Jeffreys <- function(cf, start) 
                     {
                         fix <- seq_along(cf)
                         start[fix] <- cf
@@ -815,12 +825,12 @@
                     }
                     if (K == 2) {
                         MLcf <- ret$par[seq_len(K - 1)]
-                        Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                        Fret <- optim(MLcf, fn = .pll_Jeffreys, start = ret$par,
                                       method = "Brent", lower = MLcf - 5, 
                                       upper = MLcf + 5)
                     } else {
                         ### Nelder-Mead
-                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .pll_Jeffreys, 
                                       start = ret$par)
                     }
                     if (Fret$convergence == 0) {
@@ -838,7 +848,7 @@
                                    "free1way"),
                                    domain = NA)
 
-        ret$correctFirth <- correctFirth
+        ret$MPL_Jeffreys <- MPL_Jeffreys
         ret$value <- ret$objective
         ret$objective <- NULL
         
@@ -1124,9 +1134,9 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
     ret$perm <- .resample(res, y, B = B)
     
 
-    if (ret$correctFirth) 
+    if (ret$MPL_Jeffreys) 
         ret$method <- paste(ret$method, 
-            "with Firth bias correction", sep = ", ")
+            "with Jeffreys prior penalisation", sep = ", ")
 
     class(ret) <- "free1way"
     return(ret)
@@ -1813,9 +1823,9 @@ plot.free1way <- function(x, ..., block = 1L, cdf = FALSE, model = TRUE,
     # refit block intercepts
     
     ### refit for this block only
-    m1 <- free1way:::.free1wayML(x, link = ln, start = coef(object), 
-                                 fix = seq_along(coef(object)),
-                                 residuals = FALSE, hessian = FALSE)
+    m1 <- .free1wayML(x, link = ln, start = coef(object), 
+                      fix = seq_along(coef(object)),
+                      residuals = FALSE, hessian = FALSE)
     intercepts <- m1$intercepts[[1L]]
     j1 <- which(attr(get("xlist", environment(m1$profile))[[1L]], "idx") > 1)
     j1 <- j1[-length(j1)]
@@ -1831,9 +1841,9 @@ plot.free1way <- function(x, ..., block = 1L, cdf = FALSE, model = TRUE,
             y[,-k,1] <- 0
         }
         start <- numeric(K - 1)
-        m0 <- free1way:::.free1wayML(y, link = ln, start = start, 
-                                     fix = seq_len(K - 1), residuals = FALSE, 
-                                     hessian = FALSE)
+        m0 <- .free1wayML(y, link = ln, start = start, 
+                          fix = seq_len(K - 1), residuals = FALSE, 
+                          hessian = FALSE)
         j <- which(attr(get("xlist", environment(m0$profile))[[1L]], "idx") > 1)
         ret0[j[-length(j)],k] <- m0$intercepts[[1L]]
     }

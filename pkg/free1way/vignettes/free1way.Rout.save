@@ -52,7 +52,7 @@
 
 > .free1wayML <- function(x, link, mu = 0, start = NULL, 
 +     fix = NULL, residuals = TRUE, score = TRUE, hessian = TRUE, 
-+     correctFirth = FALS .... [TRUNCATED] 
++     MPL_Jeffreys = FALS .... [TRUNCATED] 
 
 > .SW <- function(res, xt) {
 +     if (length(dim(xt)) == 3) {
@@ -1959,10 +1959,10 @@ attr(,"logarithm")
 [1] TRUE
 
 
-> free1way(y ~ w, link = "probit", correctFirth = TRUE)
+> free1way(y ~ w, link = "probit", MPL_Jeffreys = TRUE)
 
 	2-sample van der Waerden normal scores test against latent normal shift
-	alternatives, with Firth bias correction
+	alternatives, with Jeffreys prior penalisation
 
 data:  y by w (1, 2)
 Perm Z = 5, p-value = 5.7e-07
@@ -1972,4 +1972,4 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 37.545   0.143  37.714 
+ 34.966   0.147  35.134 

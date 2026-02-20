@@ -735,7 +735,7 @@ xrclist <- xrclist[strata]
 
 .free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
                         residuals = TRUE, score = TRUE, hessian = TRUE, 
-                        correctFirth = FALSE,
+                        MPL_Jeffreys = FALSE,
                         ### use nlminb for small sample sizes
                         dooptim = c(".NewtonRaphson", "nlminb")[1 + (sum(x) < 20)],                         
                         control = list(
@@ -770,6 +770,11 @@ xrclist <- xrclist[strata]
     Q <- function(p) .q(link, p = p)
     f <- function(q) .d(link, x = q)
     fp <- function(q) .dd(link, x = q)
+
+    if(!suppressPackageStartupMessages(requireNamespace("Matrix")))
+        stop(gettextf("%s needs package 'Matrix' correctly installed",
+                      ".free1wayML"),
+                 domain = NA)
 
     
 
@@ -1251,7 +1256,7 @@ xrclist <- xrclist[strata]
                              he(p)[-fix, -fix, drop = FALSE]
                          })
         opargs$control <- control[[1L]]
-        correctFirth <- FALSE ### turn off Firth correction in .profile
+        MPL_Jeffreys <- FALSE ### turn off Jeffreys penalisation in .profile
 
         
         maxit <- control[[1L]]$iter.max
@@ -1267,9 +1272,9 @@ xrclist <- xrclist[strata]
            }
         }
 
-        if (isTRUE(correctFirth)) {
+        if (isTRUE(MPL_Jeffreys)) {
             
-            .Firth_ll <- function(cf, start) 
+            .pll_Jeffreys <- function(cf, start) 
             {
                 fix <- seq_along(cf)
                 start[fix] <- cf
@@ -1282,12 +1287,12 @@ xrclist <- xrclist[strata]
             }
             if (K == 2) {
                 MLcf <- ret$par[seq_len(K - 1)]
-                Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                Fret <- optim(MLcf, fn = .pll_Jeffreys, start = ret$par,
                               method = "Brent", lower = MLcf - 5, 
                               upper = MLcf + 5)
             } else {
                 ### Nelder-Mead
-                Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                Fret <- optim(ret$par[seq_len(K - 1)], fn = .pll_Jeffreys, 
                               start = ret$par)
             }
             if (Fret$convergence == 0) {
@@ -1299,14 +1304,14 @@ xrclist <- xrclist[strata]
             
         } else {
             if (ret$convergence > 0) {
-                if (is.na(correctFirth)) { ### only after failure
-                    warning(gettextf(paste("Firth correction was applied in %s because initial optimisation failed with:", 
+                if (is.na(MPL_Jeffreys)) { ### only after failure
+                    warning(gettextf(paste("Jeffreys penalisation was applied in %s because initial optimisation failed with:", 
                                      ret$message),
                                     "free1way"),
                                      domain = NA)
-                    correctFirth <- TRUE
+                    MPL_Jeffreys <- TRUE
                     
-                    .Firth_ll <- function(cf, start) 
+                    .pll_Jeffreys <- function(cf, start) 
                     {
                         fix <- seq_along(cf)
                         start[fix] <- cf
@@ -1319,12 +1324,12 @@ xrclist <- xrclist[strata]
                     }
                     if (K == 2) {
                         MLcf <- ret$par[seq_len(K - 1)]
-                        Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                        Fret <- optim(MLcf, fn = .pll_Jeffreys, start = ret$par,
                                       method = "Brent", lower = MLcf - 5, 
                                       upper = MLcf + 5)
                     } else {
                         ### Nelder-Mead
-                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .pll_Jeffreys, 
                                       start = ret$par)
                     }
                     if (Fret$convergence == 0) {
@@ -1342,7 +1347,7 @@ xrclist <- xrclist[strata]
                                    "free1way"),
                                    domain = NA)
 
-        ret$correctFirth <- correctFirth
+        ret$MPL_Jeffreys <- MPL_Jeffreys
         ret$value <- ret$objective
         ret$objective <- NULL
         
@@ -1375,9 +1380,9 @@ xrclist <- xrclist[strata]
            }
         }
 
-        if (isTRUE(correctFirth)) {
+        if (isTRUE(MPL_Jeffreys)) {
             
-            .Firth_ll <- function(cf, start) 
+            .pll_Jeffreys <- function(cf, start) 
             {
                 fix <- seq_along(cf)
                 start[fix] <- cf
@@ -1390,12 +1395,12 @@ xrclist <- xrclist[strata]
             }
             if (K == 2) {
                 MLcf <- ret$par[seq_len(K - 1)]
-                Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                Fret <- optim(MLcf, fn = .pll_Jeffreys, start = ret$par,
                               method = "Brent", lower = MLcf - 5, 
                               upper = MLcf + 5)
             } else {
                 ### Nelder-Mead
-                Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                Fret <- optim(ret$par[seq_len(K - 1)], fn = .pll_Jeffreys, 
                               start = ret$par)
             }
             if (Fret$convergence == 0) {
@@ -1407,14 +1412,14 @@ xrclist <- xrclist[strata]
             
         } else {
             if (ret$convergence > 0) {
-                if (is.na(correctFirth)) { ### only after failure
-                    warning(gettextf(paste("Firth correction was applied in %s because initial optimisation failed with:", 
+                if (is.na(MPL_Jeffreys)) { ### only after failure
+                    warning(gettextf(paste("Jeffreys penalisation was applied in %s because initial optimisation failed with:", 
                                      ret$message),
                                     "free1way"),
                                      domain = NA)
-                    correctFirth <- TRUE
+                    MPL_Jeffreys <- TRUE
                     
-                    .Firth_ll <- function(cf, start) 
+                    .pll_Jeffreys <- function(cf, start) 
                     {
                         fix <- seq_along(cf)
                         start[fix] <- cf
@@ -1427,12 +1432,12 @@ xrclist <- xrclist[strata]
                     }
                     if (K == 2) {
                         MLcf <- ret$par[seq_len(K - 1)]
-                        Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                        Fret <- optim(MLcf, fn = .pll_Jeffreys, start = ret$par,
                                       method = "Brent", lower = MLcf - 5, 
                                       upper = MLcf + 5)
                     } else {
                         ### Nelder-Mead
-                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .pll_Jeffreys, 
                                       start = ret$par)
                     }
                     if (Fret$convergence == 0) {
@@ -1450,7 +1455,7 @@ xrclist <- xrclist[strata]
                                    "free1way"),
                                    domain = NA)
 
-        ret$correctFirth <- correctFirth
+        ret$MPL_Jeffreys <- MPL_Jeffreys
         ret$value <- ret$objective
         ret$objective <- NULL
         
@@ -1834,6 +1839,11 @@ loglog <- function()
         return(list(par = theta, objective = objthe, convergence = 1, 
                     message = msg)) 
     }
+
+    if(!suppressPackageStartupMessages(requireNamespace("Matrix")))
+        stop(gettextf("%s needs package 'Matrix' correctly installed",
+                      ".NewtonRaphson"),
+                 domain = NA)
 
     for (iter in seq_len(control$iter.max)) {
 
@@ -3175,6 +3185,11 @@ matrix. The following code was adopted from his \pkg{rms} package, function
 \mbox{}\verb@                    message = msg)) @\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
+\mbox{}\verb@    if(!suppressPackageStartupMessages(requireNamespace("Matrix")))@\\
+\mbox{}\verb@        stop(gettextf("%s needs package 'Matrix' correctly installed",@\\
+\mbox{}\verb@                      ".NewtonRaphson"),@\\
+\mbox{}\verb@                 domain = NA)@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    for (iter in seq_len(control$iter.max)) {@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@        @\hbox{$\langle\,${\itshape Newton update}\nobreak\ {\footnotesize \NWlink{nuweb22}{22}}$\,\rangle$}\verb@@\\
@@ -3333,17 +3348,17 @@ we encounter optimisation issues and restart at the current solution:
 \mbox{}\verb@   }@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@if (isTRUE(correctFirth)) {@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape Firth correction}\nobreak\ {\footnotesize \NWlink{nuweb28a}{28a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@if (isTRUE(MPL_Jeffreys)) {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Jeffreys penalisation}\nobreak\ {\footnotesize \NWlink{nuweb28a}{28a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@} else {@\\
 \mbox{}\verb@    if (ret$convergence > 0) {@\\
-\mbox{}\verb@        if (is.na(correctFirth)) { ### only after failure@\\
-\mbox{}\verb@            warning(gettextf(paste("Firth correction was applied in %s because initial optimisation failed with:", @\\
+\mbox{}\verb@        if (is.na(MPL_Jeffreys)) { ### only after failure@\\
+\mbox{}\verb@            warning(gettextf(paste("Jeffreys penalisation was applied in %s because initial optimisation failed with:", @\\
 \mbox{}\verb@                             ret$message),@\\
 \mbox{}\verb@                            "free1way"),@\\
 \mbox{}\verb@                             domain = NA)@\\
-\mbox{}\verb@            correctFirth <- TRUE@\\
-\mbox{}\verb@            @\hbox{$\langle\,${\itshape Firth correction}\nobreak\ {\footnotesize \NWlink{nuweb28a}{28a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@            MPL_Jeffreys <- TRUE@\\
+\mbox{}\verb@            @\hbox{$\langle\,${\itshape Jeffreys penalisation}\nobreak\ {\footnotesize \NWlink{nuweb28a}{28a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@   }@\\
 \mbox{}\verb@}@\\
@@ -3352,7 +3367,7 @@ we encounter optimisation issues and restart at the current solution:
 \mbox{}\verb@                           "free1way"),@\\
 \mbox{}\verb@                           domain = NA)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@ret$correctFirth <- correctFirth@\\
+\mbox{}\verb@ret$MPL_Jeffreys <- MPL_Jeffreys@\\
 \mbox{}\verb@ret$value <- ret$objective@\\
 \mbox{}\verb@ret$objective <- NULL@\\
 \mbox{}\verb@@{\NWsep}
@@ -3436,7 +3451,7 @@ defined first
 \mbox{}\verb@                         he(p)[-fix, -fix, drop = FALSE]@\\
 \mbox{}\verb@                     })@\\
 \mbox{}\verb@    opargs$control <- control[[1L]]@\\
-\mbox{}\verb@    correctFirth <- FALSE ### turn off Firth correction in .profile@\\
+\mbox{}\verb@    MPL_Jeffreys <- FALSE ### turn off Jeffreys penalisation in .profile@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape do optim}\nobreak\ {\footnotesize \NWlink{nuweb26}{26}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -3457,9 +3472,10 @@ defined first
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
-Chapter~\ref{ch:Firth} introduces a bias correction \citep{Firth1993},
-essentially by adding a penalty term to the log-likelihood. The
-\code{correctFirth} argument triggers this bias correction to by applied
+Chapter~\ref{ch:penal} introduces a bias correction \citep{Firth1993},
+essentially by adding a penalty (Jeffreys prior) term to the log-likelihood. The
+\code{MPL_Jeffreys} argument triggers this bias correction via
+penalisation with Jeffreys prior to by applied
 when \code{TRUE}, not to be applied when \code{FALSE}, and to applied in
 case the unpenalised ML estimation resulted in a convergance issue
 (\code{NA}). This part is still experimental and needs more testing. It also
@@ -3469,11 +3485,11 @@ after correcting the bias.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap33}\raggedright\small
-\NWtarget{nuweb28a}{} $\langle\,${\itshape Firth correction}\nobreak\ {\footnotesize {28a}}$\,\rangle\equiv$
+\NWtarget{nuweb28a}{} $\langle\,${\itshape Jeffreys penalisation}\nobreak\ {\footnotesize {28a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.Firth_ll <- function(cf, start) @\\
+\mbox{}\verb@.pll_Jeffreys <- function(cf, start) @\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    fix <- seq_along(cf)@\\
 \mbox{}\verb@    start[fix] <- cf@\\
@@ -3486,12 +3502,12 @@ after correcting the bias.
 \mbox{}\verb@}@\\
 \mbox{}\verb@if (K == 2) {@\\
 \mbox{}\verb@    MLcf <- ret$par[seq_len(K - 1)]@\\
-\mbox{}\verb@    Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,@\\
+\mbox{}\verb@    Fret <- optim(MLcf, fn = .pll_Jeffreys, start = ret$par,@\\
 \mbox{}\verb@                  method = "Brent", lower = MLcf - 5, @\\
 \mbox{}\verb@                  upper = MLcf + 5)@\\
 \mbox{}\verb@} else {@\\
 \mbox{}\verb@    ### Nelder-Mead@\\
-\mbox{}\verb@    Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, @\\
+\mbox{}\verb@    Fret <- optim(ret$par[seq_len(K - 1)], fn = .pll_Jeffreys, @\\
 \mbox{}\verb@                  start = ret$par)@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@if (Fret$convergence == 0) {@\\
@@ -3642,7 +3658,7 @@ problem.
 \mbox{}\verb@@\\
 \mbox{}\verb@.free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, @\\
 \mbox{}\verb@                        residuals = TRUE, score = TRUE, hessian = TRUE, @\\
-\mbox{}\verb@                        correctFirth = FALSE,@\\
+\mbox{}\verb@                        MPL_Jeffreys = FALSE,@\\
 \mbox{}\verb@                        ### use nlminb for small sample sizes@\\
 \mbox{}\verb@                        dooptim = c(".NewtonRaphson", "nlminb")[1 + (sum(x) < 20)],                         @\\
 \mbox{}\verb@                        control = list(@\\
@@ -3677,6 +3693,11 @@ problem.
 \mbox{}\verb@    Q <- function(p) .q(link, p = p)@\\
 \mbox{}\verb@    f <- function(q) .d(link, x = q)@\\
 \mbox{}\verb@    fp <- function(q) .dd(link, x = q)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if(!suppressPackageStartupMessages(requireNamespace("Matrix")))@\\
+\mbox{}\verb@        stop(gettextf("%s needs package 'Matrix' correctly installed",@\\
+\mbox{}\verb@                      ".free1wayML"),@\\
+\mbox{}\verb@                 domain = NA)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape setup and starting values}\nobreak\ {\footnotesize \NWlink{nuweb25b}{25b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape negative logLik}\nobreak\ {\footnotesize \NWlink{nuweb3b}{3b}}$\,\rangle$}\verb@@\\
@@ -4248,9 +4269,9 @@ results (this is relevant for the one-sided case).
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape free1way permutation tests}\nobreak\ {\footnotesize \NWlink{nuweb45}{45}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (ret$correctFirth) @\\
+\mbox{}\verb@    if (ret$MPL_Jeffreys) @\\
 \mbox{}\verb@        ret$method <- paste(ret$method, @\\
-\mbox{}\verb@            "with Firth bias correction", sep = ", ")@\\
+\mbox{}\verb@            "with Jeffreys prior penalisation", sep = ", ")@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    class(ret) <- "free1way"@\\
 \mbox{}\verb@    return(ret)@\\
@@ -5458,9 +5479,9 @@ will plot them later on as a means to directly compare the model to the data
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@### refit for this block only@\\
-\mbox{}\verb@m1 <- free1way:::.free1wayML(x, link = ln, start = coef(object), @\\
-\mbox{}\verb@                             fix = seq_along(coef(object)),@\\
-\mbox{}\verb@                             residuals = FALSE, hessian = FALSE)@\\
+\mbox{}\verb@m1 <- .free1wayML(x, link = ln, start = coef(object), @\\
+\mbox{}\verb@                  fix = seq_along(coef(object)),@\\
+\mbox{}\verb@                  residuals = FALSE, hessian = FALSE)@\\
 \mbox{}\verb@intercepts <- m1$intercepts[[1L]]@\\
 \mbox{}\verb@j1 <- which(attr(get("xlist", environment(m1$profile))[[1L]], "idx") > 1)@\\
 \mbox{}\verb@j1 <- j1[-length(j1)]@\\
@@ -5496,9 +5517,9 @@ other groups and refit the intercept parameters.
 \mbox{}\verb@        y[,-k,1] <- 0@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    start <- numeric(K - 1)@\\
-\mbox{}\verb@    m0 <- free1way:::.free1wayML(y, link = ln, start = start, @\\
-\mbox{}\verb@                                 fix = seq_len(K - 1), residuals = FALSE, @\\
-\mbox{}\verb@                                 hessian = FALSE)@\\
+\mbox{}\verb@    m0 <- .free1wayML(y, link = ln, start = start, @\\
+\mbox{}\verb@                      fix = seq_len(K - 1), residuals = FALSE, @\\
+\mbox{}\verb@                      hessian = FALSE)@\\
 \mbox{}\verb@    j <- which(attr(get("xlist", environment(m0$profile))[[1L]], "idx") > 1)@\\
 \mbox{}\verb@    ret0[j[-length(j)],k] <- m0$intercepts[[1L]]@\\
 \mbox{}\verb@}@\\
@@ -6500,14 +6521,15 @@ power.free1way.test(power = .8, prob = prb, delta = delta, seed = 3)
 power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 @
 
-\chapter{Firth Correction} \label{ch:Firth}
+\chapter{Penalisation} \label{ch:penal}
 
 Sometimes, especially under complete separation, the maximum likelihood
 estimator does not exist. We could think of offering the option to add a
 penalty term to the log-likelihood, for example half of the log-determinant
-of the Hessian as suggested by \cite{Firth1993}. Here is an example
+of the Hessian (Jeffreys prior) as suggested by \cite{Firth1993} and studied in
+\cite{KosmidisFirth2020}. Here is an example
 
-<<Firth>>=
+<<Jeffreys>>=
 N <- 20
 w <- gl(2, N)
 y <- rnorm(length(w), mean = c(-2, 3)[w])
@@ -6528,6 +6550,8 @@ pll <- function(cf) {
 ### https://doi.org/10.1186/s12874-017-0313-9
 ### https://files.osf.io/v1/resources/fet4d_v3/providers/osfstorage/682fb176db88f967facacb5a?format=pdf&action=download&direct&version=1
 ### https://doi.org/10.1002/sim.6537
+### https://doi.org/10.1007/s11222-023-10217-3
+### https://arxiv.org/abs/2510.06465
 fun <- function(cf) {
     ret <- pll(cf)
     ret$value - .5 * determinant(ret$hessian, logarithm = TRUE)$modulus
@@ -6540,11 +6564,11 @@ optim(coef(x), fn = fun, method = "Brent",
       lower = min(grd), upper = max(grd))[c("par", "value")]
 @
 
-The \code{correctFirth} argument can be used to request this type of bias
-correction from \code{free1way} (this argument should be added to
+The \code{MPL_Jeffreys} argument can be used to request this type of
+penalisation from \code{free1way} (this argument should be added to
 \code{free1way.table} and documented)
-<<correctFirth>>=
-free1way(y ~ w, link = "probit", correctFirth = TRUE)
+<<MPL_Jeffreys>>=
+free1way(y ~ w, link = "probit", MPL_Jeffreys = TRUE)
 @
 
 \chapter*{Index}
@@ -6576,7 +6600,6 @@ free1way(y ~ w, link = "probit", correctFirth = TRUE)
 \item $\langle\,$estimate Fisher information\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb95}{95}.}
 \item $\langle\,$exact proportional odds\nobreak\ {\footnotesize \NWlink{nuweb40}{40}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb45}{45}.}
 \item $\langle\,$extract plot data\nobreak\ {\footnotesize \NWlink{nuweb77}{77}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb79d}{79d}.}
-\item $\langle\,$Firth correction\nobreak\ {\footnotesize \NWlink{nuweb28a}{28a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb26}{26}.}
 \item $\langle\,$formula business\nobreak\ {\footnotesize \NWlink{nuweb46}{46}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb47}{47}.}
 \item $\langle\,$free1way confint\nobreak\ {\footnotesize \NWlink{nuweb57}{57}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25a}{25a}.}
 \item $\langle\,$free1way factor\nobreak\ {\footnotesize \NWlink{nuweb50}{50}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25a}{25a}.}
@@ -6591,6 +6614,7 @@ free1way(y ~ w, link = "probit", correctFirth = TRUE)
 \item $\langle\,$Hessian\nobreak\ {\footnotesize \NWlink{nuweb7}{7}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb31}{31}.}
 \item $\langle\,$Hessian prep\nobreak\ {\footnotesize \NWlink{nuweb5a}{5a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb7}{7}.}
 \item $\langle\,$intercept / shift contributions to Hessian\nobreak\ {\footnotesize \NWlink{nuweb6}{6}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb7}{7}.}
+\item $\langle\,$Jeffreys penalisation\nobreak\ {\footnotesize \NWlink{nuweb28a}{28a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb26}{26}.}
 \item $\langle\,$link2fun\nobreak\ {\footnotesize \NWlink{nuweb43}{43}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb44}{44}\NWlink{nuweb88}{, 88}\NWlink{nuweb91}{, 91}\NWlink{nuweb93a}{, 93a}.
 }
 \item $\langle\,$linkfun\nobreak\ {\footnotesize \NWlink{nuweb17}{17}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb16}{16}.}

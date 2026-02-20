@@ -1384,17 +1384,17 @@ while(maxit < 10001) {
    }
 }
 
-if (isTRUE(correctFirth)) {
-    @<Firth correction@>
+if (isTRUE(MPL_Jeffreys)) {
+    @<Jeffreys penalisation@>
 } else {
     if (ret$convergence > 0) {
-        if (is.na(correctFirth)) { ### only after failure
-            warning(gettextf(paste("Firth correction was applied in %s because initial optimisation failed with:", 
+        if (is.na(MPL_Jeffreys)) { ### only after failure
+            warning(gettextf(paste("Jeffreys penalisation was applied in %s because initial optimisation failed with:", 
                              ret$message),
                             "free1way"),
                              domain = NA)
-            correctFirth <- TRUE
-            @<Firth correction@>
+            MPL_Jeffreys <- TRUE
+            @<Jeffreys penalisation@>
         }
    }
 }
@@ -1403,7 +1403,7 @@ if (ret$convergence > 0)
                            "free1way"),
                            domain = NA)
 
-ret$correctFirth <- correctFirth
+ret$MPL_Jeffreys <- MPL_Jeffreys
 ret$value <- ret$objective
 ret$objective <- NULL
 @}
@@ -1474,7 +1474,7 @@ he <- function(par)
                          he(p)[-fix, -fix, drop = FALSE]
                      })
     opargs$control <- control[[1L]]
-    correctFirth <- FALSE ### turn off Firth correction in .profile
+    MPL_Jeffreys <- FALSE ### turn off Jeffreys penalisation in .profile
 
     @<do optim@>
 
@@ -1486,9 +1486,10 @@ he <- function(par)
 }
 @}
 
-Chapter~\ref{ch:Firth} introduces a bias correction \citep{Firth1993},
-essentially by adding a penalty term to the log-likelihood. The
-\code{correctFirth} argument triggers this bias correction to by applied
+Chapter~\ref{ch:penal} introduces a bias correction \citep{Firth1993},
+essentially by adding a penalty (Jeffreys prior) term to the log-likelihood. The
+\code{MPL_Jeffreys} argument triggers this bias correction via
+penalisation with Jeffreys prior to by applied
 when \code{TRUE}, not to be applied when \code{FALSE}, and to applied in
 case the unpenalised ML estimation resulted in a convergance issue
 (\code{NA}). This part is still experimental and needs more testing. It also
@@ -1496,9 +1497,9 @@ seems unclear if and how the Fisher information needs additional correction
 and it is certainly unclear if one can proceed with permutation testing
 after correcting the bias.
 
-@d Firth correction
+@d Jeffreys penalisation
 @{
-.Firth_ll <- function(cf, start) 
+.pll_Jeffreys <- function(cf, start) 
 {
     fix <- seq_along(cf)
     start[fix] <- cf
@@ -1511,12 +1512,12 @@ after correcting the bias.
 }
 if (K == 2) {
     MLcf <- ret$par[seq_len(K - 1)]
-    Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+    Fret <- optim(MLcf, fn = .pll_Jeffreys, start = ret$par,
                   method = "Brent", lower = MLcf - 5, 
                   upper = MLcf + 5)
 } else {
     ### Nelder-Mead
-    Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, 
+    Fret <- optim(ret$par[seq_len(K - 1)], fn = .pll_Jeffreys, 
                   start = ret$par)
 }
 if (Fret$convergence == 0) {
@@ -1628,7 +1629,7 @@ problem.
 @{
 .free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
                         residuals = TRUE, score = TRUE, hessian = TRUE, 
-                        correctFirth = FALSE,
+                        MPL_Jeffreys = FALSE,
                         ### use nlminb for small sample sizes
                         dooptim = c(".NewtonRaphson", "nlminb")[1 + (sum(x) < 20)],                         
                         control = list(
@@ -2098,9 +2099,9 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
 
     @<free1way permutation tests@>
 
-    if (ret$correctFirth) 
+    if (ret$MPL_Jeffreys) 
         ret$method <- paste(ret$method, 
-            "with Firth bias correction", sep = ", ")
+            "with Jeffreys prior penalisation", sep = ", ")
 
     class(ret) <- "free1way"
     return(ret)
@@ -3915,14 +3916,15 @@ power.free1way.test(power = .8, prob = prb, delta = delta, seed = 3)
 power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 @@
 
-\chapter{Firth Correction} \label{ch:Firth}
+\chapter{Penalisation} \label{ch:penal}
 
 Sometimes, especially under complete separation, the maximum likelihood
 estimator does not exist. We could think of offering the option to add a
 penalty term to the log-likelihood, for example half of the log-determinant
-of the Hessian as suggested by \cite{Firth1993}. Here is an example
+of the Hessian (Jeffreys prior) as suggested by \cite{Firth1993} and studied in
+\cite{KosmidisFirth2020}. Here is an example
 
-<<Firth>>=
+<<Jeffreys>>=
 N <- 20
 w <- gl(2, N)
 y <- rnorm(length(w), mean = c(-2, 3)[w])
@@ -3943,6 +3945,8 @@ pll <- function(cf) {
 ### https://doi.org/10.1186/s12874-017-0313-9
 ### https://files.osf.io/v1/resources/fet4d_v3/providers/osfstorage/682fb176db88f967facacb5a?format=pdf&action=download&direct&version=1
 ### https://doi.org/10.1002/sim.6537
+### https://doi.org/10.1007/s11222-023-10217-3
+### https://arxiv.org/abs/2510.06465
 fun <- function(cf) {
     ret <- pll(cf)
     ret$value - .5 * determinant(ret$hessian, logarithm = TRUE)$modulus
@@ -3955,11 +3959,11 @@ optim(coef(x), fn = fun, method = "Brent",
       lower = min(grd), upper = max(grd))[c("par", "value")]
 @@
 
-The \code{correctFirth} argument can be used to request this type of bias
-correction from \code{free1way} (this argument should be added to
+The \code{MPL_Jeffreys} argument can be used to request this type of
+penalisation from \code{free1way} (this argument should be added to
 \code{free1way.table} and documented)
-<<correctFirth>>=
-free1way(y ~ w, link = "probit", correctFirth = TRUE)
+<<MPL_Jeffreys>>=
+free1way(y ~ w, link = "probit", MPL_Jeffreys = TRUE)
 @@
 
 \chapter*{Index}
