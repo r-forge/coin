@@ -5,6 +5,7 @@ to stats
 - remove stats::: for C_dpermdist2’ ‘assert_NULL_or_prob’
 - add copyright
 - cp *R
+- \link[free1way] -> \link[stats] in ppplot.Rd
 - cp *Rd
 - make
 - make check-all
