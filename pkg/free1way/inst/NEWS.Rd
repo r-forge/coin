@@ -2,7 +2,7 @@
 \name{NEWS}
 \title{NEWS file for the \pkg{free1way} package}
 
-\section{Changes in Version 0.6-0 (2026-02-24)}{
+\section{Changes in Version 0.6-0 (2026-02-25)}{
   \itemize{
     \item Function \code{free1way} implementing semiparametrically efficient inference
           procedures (likelihood- and permutation-based) in distribution-free
@@ -12,6 +12,7 @@
           generation) power-assessment and sample-size planning as well as 
           model diagnostics (available from a \code{plot} method and 
           probability-probability plots in \code{ppplot}) complement the
-          functionality.
+          functionality. Package \pkg{free1way} provides additional
+          documentation and regression tests.
   }
 }

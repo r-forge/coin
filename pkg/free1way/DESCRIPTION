@@ -1,7 +1,7 @@
 Package: free1way
 Title: Semiparametrically Efficient Population- and Permutation-based Inference in 
-  Distribution-free Stratified K-sample Oneway Layouts
-Date: 2026-02-20
+  Distribution-free Stratified K-sample Oneway Layouts: Documentation and Regression Tests
+Date: 2026-02-25
 Version: 0.6-0
 Authors@R: c(person(given = "Torsten", family = "Hothorn", role = c("aut", "cre"),
                     email = "Torsten.Hothorn@R-project.org"),
@@ -12,7 +12,7 @@ Authors@R: c(person(given = "Torsten", family = "Hothorn", role = c("aut", "cre"
 Description: Basic infrastructure for exact conditional and unconditional as well as
   asymptotic conditional and unconditional distribution-free inference for parameters 
   in stratified oneway layouts.
-Imports: stats, graphics
+Depends: stats, graphics
 Suggests: Matrix, rms, survival, MASS, tram, coin, multcomp, TH.data, Hmisc, latticeExtra, daewr
 Depends: R (>= 4.6.0)
 License: GPL-2
