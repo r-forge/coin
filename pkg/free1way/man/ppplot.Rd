@@ -1,10 +1,15 @@
+% File src/library/stats/man/ppplot.Rd
+% Part of the R package, https://www.R-project.org
+% Copyright 2026 R Core Team
+% Distributed under GPL 2 or later
+
 \name{ppplot}
 \alias{ppplot}
 \title{
 Probability-probability Plots
 }
 \description{
-\code{ppplot} produces a probabiliy-probability (P-P) plot of two numerical
+\code{ppplot} produces a probability-probability (P-P) plot of two numerical
 variables. If \code{conf.level} is given, an estimate and corresponding 
 confidence band for the P-P curve under a 
 distribution-free semiparametric model is plotted.
@@ -34,9 +39,9 @@ ppplot(x, y, plot.it = TRUE,
 }
   \item{conf.args}{list of arguments defining confidence band computation and
          visualisation: \code{link} defines the link function of a
-         distribition-free semiparametric model, \code{type} specifies the
+         distribution-free semiparametric model, \code{type} specifies the
          statistical concept the confidence band is derived from; see
-         \code{\link[free1way]{free1way}} for other options. The remaining
+         \code{\link[stats]{free1way}} for other options. The remaining
          elements govern how the band is plotted.
 }
 }
@@ -50,7 +55,7 @@ If the data generating process follows a model where the two distribution
 functions, after appropriate transformation, are horizontally shifted
 versions of each other, the probability-probability curve is a simple function of this shift and
 confidence bands can be obtained from a confidence interval for this shift
-parameter, see \code{\link[free1way]{free1way}} for the model and
+parameter, see \code{\link[stats]{free1way}} for the model and
 \bibcitet{R:Sewak+Hothorn:2023} for the connection to ROC curves.
 
 Substantial deviations of the empirical (step function) from the theoretical

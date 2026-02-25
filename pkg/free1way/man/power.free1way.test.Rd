@@ -1,3 +1,8 @@
+% File src/library/stats/man/power.free1way.test.Rd
+% Part of the R package, https://www.R-project.org
+% Copyright 2026 R Core Team
+% Distributed under GPL 2 or later
+
 \name{power.free1way.test}
 \alias{rfree1way}
 \alias{power.free1way.test}
