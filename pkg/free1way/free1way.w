@@ -132,6 +132,48 @@ urlcolor={linkcolor}%
 \maketitle
 \tableofcontents
 
+\begin{abstract}
+Starting with \proglang{R} 4.6-0, the \pkg{stats} package provides
+infrastructure for distribution-free model-based inference in possibly stratified $K$-sample
+oneway layouts via the novel \code{free1way} model function. Treatment
+effects to be estimated using \code{free1way} include odds- and hazard
+ratios, Lehmann parameters and a generalised version of Cohen's d for at
+least ordered and possibly right-censored outcomes.
+
+In addition to nonparametric maximum-likelhood estimators of treatment effects,
+the procedure allows Wald, Rao score, and likelihood ratio tests and
+confidence intervals to be computed. Asymptotic and approximate
+Monte-Carlo-based permutation tests and confidence intervals are also
+available. In proportional odds models, exact permutation inference is
+implemented based on exact permutation distributions derived via the
+Streitberg-R\"ohmel algorithm.
+
+Graphical tools for model diagnostics, including model-based confidence
+bands for receiver operating characteristic (ROC) curves in
+probability-probability plots in the new \code{ppplot} function, 
+allow data-driven criticism of model assumptions.
+
+Power assessment and sample-size planning is facilitated either in a
+simulation-based way relying on random number generation via 
+\code{rfree1way} or based on approximations of the information matrix in
+\code{power.free1way.test}, the latter approach being much faster but
+slightly less accurate.
+
+The new \code{free1way} function can be understood as a unification and
+generalisation of some of the classical ``nonparametric'' test procedures in
+\pkg{stats}, including \code{kruskal.test}, \code{wilcox.test},
+\code{friedman.test}, \code{mantelhaen.test},
+\code{prop.test}, \code{mcnemar.test}, \code{power.prop.test} allowing the
+magnitude of treatment effects to be interpreted on various scales,
+providing the possibility to assessment variability by means of confidence intervals and corresponding
+tests for these parameters, and offering tools for sample-size planning and
+model criticism.
+
+This document explains the technical underpinnings of the implementation.
+The \pkg{free1way} package provides this vignette as additional 
+documentation and serves as a home for extensive regression tests.
+\end{abstract}
+
 \chapter*{Introduction}
 
 Comparing two or more independent samples with respect to some outcome
