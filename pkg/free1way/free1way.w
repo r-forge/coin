@@ -137,12 +137,12 @@ Starting with \proglang{R} 4.6-0, the \pkg{stats} package provides
 infrastructure for distribution-free model-based inference in possibly stratified $K$-sample
 oneway layouts via the novel \code{free1way} model function. Treatment
 effects to be estimated using \code{free1way} include odds- and hazard
-ratios, Lehmann parameters and a generalised version of Cohen's d for at
+ratios, Lehmann parameters, and a generalised version of Cohen's d for at
 least ordered and possibly right-censored outcomes.
 
 In addition to nonparametric maximum-likelhood estimators of treatment effects,
-the procedure allows Wald, Rao score, and likelihood ratio tests and
-confidence intervals to be computed. Asymptotic and approximate
+the procedure allows Wald, Rao score, and likelihood ratio tests with
+corresponding confidence intervals to be computed. Asymptotic and approximate
 Monte-Carlo-based permutation tests and confidence intervals are also
 available. In proportional odds models, exact permutation inference is
 implemented based on exact permutation distributions derived via the
@@ -163,7 +163,7 @@ The new \code{free1way} function can be understood as a unification and
 generalisation of some of the classical ``nonparametric'' test procedures in
 \pkg{stats}, including \code{kruskal.test}, \code{wilcox.test},
 \code{friedman.test}, \code{mantelhaen.test},
-\code{prop.test}, \code{mcnemar.test}, \code{power.prop.test} allowing the
+\code{prop.test}, \code{mcnemar.test}, as well as \code{power.prop.test}, allowing the
 magnitude of treatment effects to be interpreted on various scales,
 providing the possibility to assessment variability by means of confidence intervals and corresponding
 tests for these parameters, and offering tools for sample-size planning and
@@ -271,14 +271,13 @@ with the latter two options only for the two-sample case ($K = 2$).
 
 \paragraph{Likelihood}
 
-For an ordered categorical outcome $Y$ from sample space $\samY = \{y_1 < y_2 < \cdots <
-y_C\}$, we parameterise the model in terms of intercept ($\vartheta_\cdot$) and
+For an ordered categorical outcome $Y$ from sample space $\samY = \{\upsilon_1 <
+\upsilon_2 < \cdots < \upsilon_C\}$, we parameterise the model in terms of intercept ($\vartheta_\cdot$) and
 shift ($\delta_\cdot$) parameters
 \begin{eqnarray*}
-F_Y(y_c \mid \rT = k, \rS = b) = F(\vartheta_{c,b} - \delta_k), \quad c = 1, \dots,
-C,
+F_Y(\upsilon_c \mid \rT = k, \rS = b) = F(\vartheta_{c,b} - \delta_k), \quad c = 1, \dots, C,
 \end{eqnarray*}
-that is we replace the transformed control outcome $F^{-1}\left(F_Y(y_c \mid
+that is we replace the transformed control outcome $F^{-1}\left(F_Y(\upsilon_c \mid
 \rT = 1, \rS = b)\right) =
 \vartheta_{c,b}$ with a corresponding intercept parameter.
 These $C - 1$ intercept parameters are block-specific and monotone increasing
@@ -308,13 +307,14 @@ value $-\infty$. \cite{Harrell2024} evaluates unconstrained optimisation in
 this context and recommends Newton-based algorithms leveraging the
 analytically available Hessian (see below).
 
-For the $i$th observation $(y_i = y_c, \rt_i = k, s_i = b)$ from block $b$
+For the $i$th observation $(y_i = \upsilon_c, \rt_i = k, s_i = b)$ from block $b$
 under treatment $k$, the log-likelihood contribution is
 \begin{eqnarray*}
-\log(\Prob(y_{c - 1} < Y \le y_c \mid \rT = k, \rS = b)) = \log(F(\vartheta_{c,b} - \delta_k) - F(\vartheta_{c - 1,b} - \delta_k)).
+\log(\Prob(\upsilon_{c - 1} < Y \le \upsilon_c \mid \rT = k, \rS = b)) = \log(F(\vartheta_{c,b} - \delta_k) - F(\vartheta_{c - 1,b} - \delta_k))
 \end{eqnarray*}
+with $\upsilon_0 = -\infty$.
 
-For an absolutely continuous outcome $Y \in \R$, we define $y_c := y_{(c)}$,
+For an absolutely continuous outcome $Y \in \R$, we define $\upsilon_c := y_{(c)}$,
 the $c$th distinct ordered observation in the sample. The log-likelihood
 above is then the empirical or nonparametric log-likelihood.
 
@@ -323,8 +323,8 @@ event $Y > \tilde{y}$ to the log-likelihood is
 \begin{eqnarray*}
 \log(\Prob(Y > \tilde{y} \mid \rT = k, \rS = b)) = \log(1 - F(\vartheta_{c - 1,b} - \delta_k))
 \end{eqnarray*}
-where $y_{c - 1} = \max \{y \in \samY \mid y \le \tilde{y}\}$, that is,
-observations right-censored between $y_{c - 1}$ and $y_c$ correspond to the
+where $\upsilon_{c - 1} = \max \{\upsilon \in \samY \mid \upsilon \le \tilde{y}\}$, that is,
+observations right-censored between $\upsilon_{c - 1}$ and $\upsilon_c$ correspond to the
 parameter $\vartheta_{c - 1,b}$.
 
 Maximising this form of the log-likelihood leads to semiparametrically efficient
@@ -383,8 +383,9 @@ We start implementing the log-likelihood function for parameters \code{parm}
 $= \thetavec$ (assuming only a single block) with data from a two-way $C
 \times K$ contingency table \code{x}. 
 
-From $\thetavec$, we first extract the shift parameters $\delta_\cdot$ and
-then the intercept parameters $\vartheta_\cdot$ and evaluate the probabilities
+From $\thetavec$, we first extract the shift parameters $\delta_k, k = 2,
+\dots, K$ and
+then the intercept parameters $\vartheta_{c,1}, c = 1, \dots, C - 1$ and evaluate the probabilities
 \code{prb} $ = \Prob(y_{c - 1} < Y \le y_c \mid \rT = k, \rS = 1)$ for all
 groups:
 
@@ -436,7 +437,7 @@ constrained minimisation problem quickly and reliably.
 Next, we implement the gradient of the negative
 log-likelihood, the negative score function for the parameters in
 $\thetavec$. The score function for the empirical likelihood, evaluated at
-parameters $\vartheta_\cdot$ and $\delta_\cdot$ is given in many places
+parameters is given in many places
 \citep[for example in][Formula~(2)]{HothornMoestBuehlmann2017}. 
 We begin computing the ratio of $f(\vartheta_{c,1} -
 \delta_k)$ and the corresponding likelihood
@@ -1868,7 +1869,7 @@ if (!is.null(x$exact)) {
 }
 @}
 
-In addition, we compute permutation p-values
+In addition, we compute permutation $p$-values
 
 @d Permutation p-values
 @{
@@ -2005,7 +2006,7 @@ tables with fixed marginal distributions:
 @}
 
 For the special case of the unstratified Wilcoxon two-sample test, we can
-also provide exact p-values computed via the Streitberg-R\"ohmel shift
+also provide exact $p$-values computed via the Streitberg-R\"ohmel shift
 algorithm, mainly because the scores can be mapped to integers:
 
 @d exact proportional odds
@@ -2046,7 +2047,7 @@ algorithm, mainly because the scores can be mapped to integers:
 As an example, consider the Wilcoxon rank sum test, where the scores under
 the null are a linear function of the ranks of the data. We compute the
 asymptotic and approximated reference distribution and corresponding
-p-values for a test statistics in quadratic form:
+$p$-values for a test statistics in quadratic form:
 
 <<SW>>=
 set.seed(29)
@@ -2559,12 +2560,12 @@ print.summary.free1way <- function(x, ...)
 @}
 
 Confidence intervals are computed by inversion of the corresponding test
-statistics. Because LRT and Rao confidence intervals are invariant wrt to
-transformations, proper LRT or Rao confidence intervals for probabilistic
+statistics. Because LRT and Rao confidence intervals are invariant with
+respect to transformations, proper LRT or Rao confidence intervals for probabilistic
 indices or overlap coefficients can also be computed. 
 
 We begin computing the critical values for permutation tests, making sure
-the confidence intervals will be in line with one- and two-sided p-values:
+the confidence intervals will be in line with one- and two-sided $p$-values:
 @d permutation confint
 @{
 if (length(cf) > 1L)
@@ -2766,10 +2767,17 @@ confint(ft, test = "Rao")
 confint(ft, test = "LRT")
 @@
 
+\chapter{Special Test Procedures}
+
+We now demonstrate that \code{free1way} produces the exact same results as
+some of the classical test procedures implemented in the \pkg{stats}
+package, and how the new implementation extends the existing functionality.
+
 \section{Wilcoxon Test}
 
-The second example is a Wilcoxon test for a single log-odds ratio
-comparing to treatment groups:
+The first example is a Wilcoxon test for a single log-odds ratio
+comparing to treatment groups. The Wilcoxon test is the score test in a
+$2$-sample proportional odds model
 
 <<wilcox-formula>>=
 N <- 25
@@ -2783,13 +2791,13 @@ ft <- free1way(y ~ w)
 summary(ft)
 
 ### Permutation test
-wilcox.test(y ~ w, alternative = "greater", correct = FALSE)$p.value
+wilcox.test(y ~ w, alternative = "greater", correct = FALSE, exact = FALSE)$p.value
 pvalue(wilcox_test(y ~ w, alternative = "greater"))
 summary(ft, test = "Permutation", alternative = "less")$p.value
-wilcox.test(y ~ w, alternative = "less", correct = FALSE)$p.value
+wilcox.test(y ~ w, alternative = "less", correct = FALSE, exact = FALSE)$p.value
 pvalue(wilcox_test(y ~ w, alternative = "less"))
 summary(ft, test = "Permutation", alternative = "greater")$p.value
-wilcox.test(y ~ w, correct = FALSE)$p.value
+wilcox.test(y ~ w, correct = FALSE, exact = FALSE)$p.value
 kruskal.test(y ~ w)$p.value
 pvalue(wilcox_test(y ~ w))
 summary(ft, test = "Permutation")$p.value
@@ -2832,6 +2840,9 @@ confint(ft, test = "Wald")
 
 \section{Mantel-Haenszel Test}
 
+The Cochran-Mantel-Haenszel test for conditional independence in $2 \times 2$
+tables also relies on a proportional odds model.
+
 <<mh>>=
 example(mantelhaen.test, echo = FALSE)
 mantelhaen.test(UCBAdmissions, correct = FALSE)
@@ -2847,6 +2858,10 @@ sapply(dimnames(UCBAdmissions)[[3L]], function(dept)
 
 \section{\code{prop.test}}
 
+For a single $2 \times 2$ table, all tests are nonparametric (as the model
+is saturated) and therefore also inference procedures result in the same
+$p$-values, for example.
+
 <<pt>>=
 prop.test(UCBAdmissions[,,1], correct = FALSE)
 summary(free1way(UCBAdmissions[,,1]), test = "Rao")
@@ -2854,6 +2869,9 @@ summary(free1way(UCBAdmissions[,,1]), test = "Rao")
 
 
 \section{Kruskal-Wallis Test}
+
+The Kruskal-Wallis test is the score test in a $K$-sample proportional odds
+model
 
 <<kw>>=
 example(kruskal.test, echo = FALSE)
@@ -2863,7 +2881,8 @@ free1way(x ~ g)
 
 \section{Savage Test}
 
-We start without censoring (Savage test) and add strata
+The Savage test assumes proportional odds and, consequently, is the score
+test in a proportional odds model. We start without censoring (Savage test) and add strata
 
 <<sw>>=
 library("survival")
@@ -2912,7 +2931,7 @@ summary(ft, test = "Permutation")
 
 And now with censoring. We cannot expect this to be identical with what
 \pkg{survival} reports, as this package is based on the partial likelihood
-and we operate on the full likelihood.
+and we operate on the full likelihood. 
 
 <<sw>>=
 library("survival")
@@ -3009,7 +3028,7 @@ independence_test(y ~ g | s, data = nd, ytrafo = function(...)
 
 \section{Friedman Test}
 
-Each observation is a block
+Each observation is a block in a $K$-sample proportional odds model
 
 \begin{figure}
 <<friedman-data, fig = TRUE>>=
@@ -3049,21 +3068,8 @@ logLik(free1way(time ~ me | id, data = d, link = "loglog"))
 
 Maybe proportional-hazards model better?
 
-\section{Incomplete Block Designs}
-
-\code{friedman.test} expects all blocks to be complete and
-\code{kruskal.test} has no idea about blocks. When blocks are incomplete,
-\code{free1way} can be employed. Replacing the normality assumption inherit
-in \code{aov} \citep[Chapter~8.3.1. in][]{Meier2022} with a semiparametric
-proportional odds model, we get
-<<incomplete>>=
-data("taste", package = "daewr")
-### highly discrete
-table(taste$score)
-summary(free1way(score ~ recipe | panelist, data = taste))
-@@
-
 \section{MnNemar Test}
+
 
 <<McNemar>>=
 example(mcnemar.test, echo = FALSE)
@@ -3084,7 +3090,26 @@ mcnemar.test(Performance, correct = FALSE)
 # Wald inference
 summary(mcn)
 confint(mcn, test = "Wald")
+### because the model is saturated, the link function doesn't affect the
+### p-value (but the coefficients are of course different)
+free1way(xtabs(~ performance + survey + voter, data = x), link = "probit")
 @@
+
+
+\section{Incomplete Block Designs}
+
+\code{friedman.test} expects all blocks to be complete and
+\code{kruskal.test} has no idea about blocks. When blocks are incomplete,
+\code{free1way} can be employed. Replacing the normality assumption inherit
+in \code{aov} \citep[Chapter~8.3.1. in][]{Meier2022} with a semiparametric
+proportional odds model, we get
+<<incomplete>>=
+data("taste", package = "daewr")
+### highly discrete
+table(taste$score)
+summary(free1way(score ~ recipe | panelist, data = taste))
+@@
+
 
 \section{Contrast Tests}
 
