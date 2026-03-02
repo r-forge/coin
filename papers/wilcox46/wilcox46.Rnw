@@ -640,7 +640,7 @@ functions of $\mu$ for the observed $x$ and $y$, using
 Writing
 \begin{displaymath}
   p_L(\mu) =
-  \mathrm{pwilcox}(w_{x,y}(\mu), m, n, z_{x,y}(\mu),
+  \mathrm{pwilcox}(w_{x,y}(\mu), m, n, z_{x,y}(\mu)),
 \end{displaymath}
 the above conditional $p$-value then becomes $p_L(\mu_0)$.
 
