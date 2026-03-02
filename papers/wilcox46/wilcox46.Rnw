@@ -692,14 +692,39 @@ so the corresponding confidence region is
   \mathrm{pwilcox}(w_{x,y}(\mu), m, n, z_{x,y}(\mu)) > \alpha \}
   = \{ \mu: p_L(\mu) > \alpha \}.
 \end{displaymath}
-One can show that the lower tail probability function $p_L$ again is
-non-increasing, and clearly it can change values only for $\mu \in
-\Delta$.  Hence the confidence region indeed is a confidence interval
+Clearly, the lower tail probability function $p_L$ can change values
+only for $\mu \in \Delta$.  If we can show that it is non-increasing, we
+can infer that the confidence region indeed is a confidence interval
 from $-\infty$ to $\mu_U$, where
 \begin{displaymath}
   \mu_U = \max \{ \delta \in \Delta :
   p_L(\delta-) > \alpha, p_L(\delta+) \le \alpha \}.
 \end{displaymath}
+To see that $p_L$ is non-increasing, it helps to employ the rank sum
+form of the test statistic.  Write
+\begin{displaymath}
+  I_x = \{ 1, \ldots, m \}, \qquad
+  I_y = \{ m + 1, \ldots, m + n \}, \qquad
+  I_z = I_x \cup I_y,
+\end{displaymath}
+and for subsets $S$ of $I_z$ if size $m$ and $z \in \mathbb{R}^{m+n}$
+write
+\begin{displaymath}
+  h_S(z) = \sum_{s \in S} z_s.
+\end{displaymath}
+Then $w_{x,y}(\mu) = h_{I_x}(z_{x,y}(\mu)) - m (m+1) / 2$.  For all $S$,
+\begin{eqnarray*}
+  h_S(z) - h_{I_x}(z)
+  &=& (h_{S \cap I_x}(z) + h_{S \setminus I_x}(z)) -
+      (h_{I_x \cap S}(z) + h_{I_x \setminus S}(z)) \\
+  &=& h_{S \setminus I_x}(z) - h_{I_x \setminus S}(z).
+\end{eqnarray*}
+Clearly, for $s \in I_y$, $\mu \mapsto [z_{x,y}(\mu)]_s$ is
+non-decreasing and for $s \in I_x$, $\mu \mapsto [z_{x,y}(\mu)]_s$ is
+non-increasing.  Hence, $h_S(z_{x,y}(\mu)) - h_{I_x}(z_{x,y}(\mu))$ is
+non-decreasing in $\mu$.  As $p_L(\mu)$ is the fraction of subsets $S$
+for which $h_S(z_{x,y}(\mu)) \le h_{I_x}(z_{x,y}(\mu))$, it is therefore
+non-increasing in $\mu$.
 
 Similarly, for testing $H_0: \mu = \mu_0$ against the one-sided
 alternative $H_A: \mu > \mu_0$, it is clearly natural to reject the null
@@ -708,7 +733,8 @@ With the upper tail probability function
 \begin{displaymath}
   p_U(\mu) = \Fge{\mathrm{pwilcox}}(w_{x,y}(\mu), m, n, z_{x,y}(\mu)),
 \end{displaymath}
-the conditional $p$-value is $p_U(\mu_0)$ and the confidence region
+the conditional $p$-value is $p_U(\mu_0)$ and (as the above implies that
+$p_U$ is non-decreasing), the confidence region
 \begin{displaymath}
   \{ \mu : p_U(\mu) > \alpha \}
 \end{displaymath}
