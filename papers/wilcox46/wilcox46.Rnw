@@ -1,0 +1,813 @@
+\documentclass[a4paper,fleqn]{article}
+\usepackage{amsfonts,amsmath,amsthm}
+\renewcommand{\P}{\mathbb{P}}
+\newtheorem{lemma}{Lemma}
+
+%\VignetteEncoding{UTF-8}
+\usepackage{Sweave}
+
+\newcommand{\Fge}[1]{{#1}_{\ge}}
+
+\title{Exact Pvals and Cints for Wilcoxon Tests}
+\author{Kurt Hornik}
+
+\begin{document}
+\maketitle
+
+\section{Preliminaries}
+
+In what follows, it will be convenient to have some notation for upper
+tail probabilities.  If $F$ is a distribution function, we write
+\begin{displaymath}
+  \Fge{F}(t) = 1 - F(t-).
+\end{displaymath}
+Then if $T \sim F$, $\P(T \ge t) = \Fge{F}(t)$.
+
+\begin{lemma}
+  Let $T$ be a random variable and $c > 0$.  Then for all $\lambda$,
+  \begin{displaymath}
+    \P( |T - \lambda| \ge c) =
+    \P( T \le \lambda - c ) + \P( T \ge \lambda + c).
+  \end{displaymath}
+  If the distribution of $T$ is symmetric about $\lambda$,
+  \begin{displaymath}
+    \P( |T - \lambda| \ge c) =
+    2 \, \P( T \le \lambda - c ) =
+    2 \, \P( T \ge \lambda + c).
+  \end{displaymath}
+\end{lemma}
+\begin{proof}
+  The former follows from
+  \begin{displaymath}
+    \P( |T - \lambda | \ge c )
+    = \P ( T - \lambda \le -c ) + \P ( T - \lambda \ge c),
+  \end{displaymath}
+  the second is immediate.
+\end{proof}
+
+\begin{lemma}
+  Let $T$ be a random variable.  Then for all $t \ne \lambda$,
+  \begin{displaymath}
+    \P( |T - \lambda | \ge |t - \lambda| )
+    = \P( T \le \min(t, 2\lambda - t) )
+    + \P( T \ge \max(t, 2\lambda - t) ).
+  \end{displaymath}
+  If the distribution of $T$ is symmetric about $\lambda$,
+  \begin{displaymath}
+    \P( |T - \lambda | \ge |t - \lambda| )
+    = 2 \, \P( T \le \min(t, 2\lambda - t) )
+    = 2 \, \P( T \ge \max(t, 2\lambda - t) ).
+  \end{displaymath}
+\end{lemma}
+\begin{proof}
+  We can use the previous lemma with $c = |t - \lambda|$ to obtain
+  \begin{displaymath}
+    p = \P( |T - \lambda | \ge |t - \lambda| )
+    = \P ( T \le \lambda - |t - \lambda| )
+    + \P ( T \ge \lambda + |t - \lambda| ).
+  \end{displaymath}
+  Hence if $t < \lambda$, $| t - \lambda | = \lambda - t$ and thus
+  \begin{displaymath}
+    p = \P ( T \le t ) + \P (T \ge 2 \lambda - t),
+  \end{displaymath}
+  and if $t > \lambda$, $| t - \lambda | = t - \lambda$ such that
+  \begin{displaymath}
+    p = \P ( T \le 2 \lambda - t ) + \P (T \ge t),
+  \end{displaymath}
+  Noting that $t - (2\lambda - t) = 2 (t - \lambda)$, we see that the
+  first term always is $\P( T \le \min(t, 2\lambda - t) )$ and the
+  second always is $\P( T \ge \max(t, 2\lambda - t) )$.  The
+  specialization for the symmetric case is immediate.
+\end{proof}
+\section{Wilcoxon-Mann-Whitney Test}
+
+Suppose $X = (X_1, \ldots X_m)$ are i.i.d.\ with distribution function
+$F(x)$ and independent from $Y = (Y_1, \ldots, Y_n)$ which are i.i.d.\
+with distribution function $F(y - \mu)$, and that we use the
+Wilcoxon-Mann-Whitney test for inference about~$\mu$.
+
+This uses the test statistic
+\begin{displaymath}
+  \omega(x, y) =
+  \sum_{i=1}^m \sum_{j=1}^n (1 + \mathrm{sign}(x_i - y_j)) / 2
+\end{displaymath}
+
+Under $H_0: \mu = \mu_0$ the $X_i - \mu_0$ and $Y_j$ are i.i.d., and in
+the classical case where $F$ is (absolutely) continuous all
+$X_i - \mu_0$ and $Y_j$ are distinct with probability one, the
+distribution of $\omega(X - \mu_0, Y)$ does not depend on $F$ and
+hence only on $m$ and $n$, and in R is referred to as the ``Wilcoxon
+(rank sum) distribution'':
+\begin{displaymath}
+  \omega(X - \mu_0, Y) \sim \mathrm{Wilcoxon}_{m,n} \quad [P_{\mu_0}]
+\end{displaymath}
+This distribution is supported on $\{0, \ldots, mn \}$ and is symmetric
+about its mean $mn/2$.
+
+For a two-sided test of $H_0: \mu = \mu_0$ against $H_A: \mu \ne \mu_0$,
+it is natural to use the test statistic
+\begin{displaymath}
+  T = |\omega(X - \mu_0, Y) - mn/2|
+\end{displaymath}
+and reject for large values of $T$.  Thus, when observing $x$ and $y$
+and computing $w = \omega(x - \mu_0, y)$, the $p$-value is
+$ p = \P( | \mathrm{Wilcoxon}_{m,n} - mn / 2| \ge | w - mn / 2 | ) $.
+Using Lemma~2, 
+\begin{eqnarray*}
+  p
+  &=& \P( | \mathrm{Wilcoxon}_{m,n} - mn / 2| \ge | w - mn/2| ) \\
+  &=& 2 \, \P ( \mathrm{Wilcoxon}_{m,n} \le \min(w, mn - w) ) \\
+  &=& 2 \, \mathrm{pwilcox}( \min(w, mn - w), m, n)
+\end{eqnarray*}
+if $w \ne mn / 2$ and 1 otherwise, or more compactly,
+\begin{displaymath}
+  p = \min( 2 \, \mathrm{pwilcox}( \min(w, mn - w), m, n), 1).
+\end{displaymath}
+
+We can also obtain confidence regions for $\mu$ corresponding to this
+test.  If we choose a critical value $c$, then for all $\mu$
+\begin{displaymath}
+  P_{\mu} ( | \omega(X - \mu, Y) - mn / 2 | \ge c )
+  = \P ( | \mathrm{Wilcoxon}_{m,n} - mn / 2 | \ge c )
+  := \alpha_c.
+\end{displaymath}
+Thus,
+\begin{eqnarray*}
+  \lefteqn{ \{ \mu : | \omega(X - \mu, Y) - mn / 2 | < c \} } \\
+  &=& \{ \mu : -c < \omega(X - \mu, Y) - mn / 2 < c \} \\  
+  &=& \{ \mu: mn / 2 - c < \omega(X - \mu, Y) < mn / 2 -c \}
+\end{eqnarray*}
+is a $1 - \alpha_c$ confidence region for $\mu$.  This actually gives
+confidence \emph{intervals} which can straightforwardly be obtained.
+Write
+\begin{displaymath}
+  q_L = mn / 2 - c, \quad
+  q_U = mn / 2 + c.
+\end{displaymath}
+Note that (again, if there are no ties) we may assume without loss of
+generality that $q_L$ and $q_U$ are integer (if both $m$ and $n$ are
+odd, then $mn/2$ is an odd multiple of $1/2$ and hence $c$ is too), as
+\begin{displaymath}
+  \alpha_c / 2
+  = \P ( \mathrm{Wilcoxon}_{m,n} \le q_L )
+  = \P ( \mathrm{Wilcoxon}_{m,n} \le \mathrm{floor}(q_L) )
+\end{displaymath}
+and
+\begin{displaymath}
+  \alpha_c / 2
+  = \P ( \mathrm{Wilcoxon}_{m,n} \ge q_U )
+  = \P ( \mathrm{Wilcoxon}_{m,n} \ge \mathrm{ceiling}(q_L) ).
+\end{displaymath}
+
+Writing $\delta_{ij} = x_i - y_j$,
+\begin{eqnarray*}
+  \omega(x - \mu, y)
+  &=& \sum_{i=1}^m \sum_{j=1}^n
+      \frac{1 + \mathrm{sign}((x_i - \mu) - y_j)}{2} \\
+  &=& \sum_{i=1}^m \sum_{j=1}^n
+      \frac{1 + \mathrm{sign}(\delta_{ij} - \mu)}{2} \\
+  &=& \# \{ (i,j): \delta_{ij} > \mu \} +
+      \# \{ (i,j): \delta_{ij} = \mu \} / 2.
+\end{eqnarray*}
+
+So clearly $\mu \mapsto \omega(x - \mu, y)$ is nonincreasing, with value
+$mn$ for $\mu < \min_{i,j} \delta_{ij}$ and value $0$ for
+$\mu > \max_{i,j} \delta_{ij}$, and in between is piecewise constant
+with jumps at the unique values of the differences $\delta_{ij}$.
+The confidence region
+\begin{displaymath}
+  \{ \mu: q_L < \omega(x - \mu, y) < q_U \}
+\end{displaymath}
+therefore is a confidence \emph{interval} which goes from
+\begin{displaymath}
+  \mu_L = \inf \{ \mu : \omega(x - \mu, y) < q_U \}
+\end{displaymath}
+to
+\begin{displaymath}
+  \mu_U = \sup \{ \mu : \omega(x - \mu, y) > q_L \}.
+\end{displaymath}
+
+
+If all differences are distinct and we write
+$\delta_{(1)} < \cdots < \delta_{(mn)}$ for the sorted values and
+$\delta_{(0)} = -\infty$ and $\delta_{(mn+1)} = \infty$, then for
+$k \in \{0, \ldots, mn \}$ we have
+\begin{displaymath}
+  \omega(x - \mu, y) = mn - k, \qquad
+  \delta_{(k)} < \mu < \delta_{(k+1)}.
+\end{displaymath}
+
+
+Write $\Delta = \{ \delta_{(1)}, \ldots, \delta_{(mn)} \}$ for the set
+of the observed differences $\delta_{ij}$.
+From above, for $\mu \not\in \Delta$,
+\begin{displaymath}
+  \omega(x - \mu, y) > mn - k
+  \quad \leftrightarrow \quad
+  \mu < \delta_{(k)}
+\end{displaymath}
+so that with $k = mn - q_L$, 
+\begin{displaymath}
+  \omega(x - \mu, y) > q_L
+  \quad \leftrightarrow \quad
+  \mu < \delta_{(mn - q_L)}.
+\end{displaymath}
+Thus,
+\begin{displaymath}
+  \mu_U
+  = \sup \{ \mu : \omega(x - \mu, y) > q_L \}
+  = \sup \{ \mu \not\in \Delta : \omega(x - \mu, y) > q_L \}
+  = \delta_{(mn - q_L)}.
+\end{displaymath}
+Similarly, for $\mu \not\in \Delta$,
+\begin{displaymath}
+  \omega(x - \mu, y) < mn - k
+  \quad \leftrightarrow \quad
+  \mu > \delta_{(k+1)}.
+\end{displaymath}
+so that with $k = mn - q_U$,
+\begin{displaymath}
+  \omega(x - \mu, y) < q_U
+  \quad \leftrightarrow \quad
+  \mu > \delta_{(mn - q_U + 1)}.
+\end{displaymath}
+Thus,
+\begin{displaymath}
+  \mu_L
+  = \inf \{ \mu : \omega(x - \mu, y) < q_U \}
+  = \inf \{ \mu \not\in \Delta : \omega(x - \mu, y) < q_U \}
+  = \delta_{(mn - q_U + 1)}.
+\end{displaymath}
+
+The above proceeded by first choosing $c$ to determine the corresponding
+size $\alpha_c$ and confidence level $1 - \alpha_c$.  If instead we
+start with a prescribed confidence level $1 - \alpha$, we will typically
+be unable to choose $c$ to obtain exactly this level, or equivalently
+tests of size exactly $\alpha$ (ignoring the possibility of ``solving''
+this problem by having randomized tests and corresponding ``fuzzy''
+confidence intervals).  In these cases, it seems customary to look for
+tests of size \emph{not above} the prescribed significance level
+$\alpha$, or equivalently for confidence intervals with confidence level
+\emph{not below} $1 - \alpha$.  I.e., we should choose $q_L$ and $q_U$
+as
+\begin{eqnarray*}
+  q_L
+  &=& \max \{ q~\mathrm{integer} :
+      \P (  \mathrm{Wilcoxon}_{m,n} \le q ) \le \alpha / 2 \} \\
+  &=& \max \{ q~\mathrm{integer} :
+      \mathrm{pwilcox}(q, m, n) \le \alpha/2 \}
+\end{eqnarray*}
+and
+\begin{eqnarray*}
+  q_U
+  &=& \min \{ q~\mathrm{integer}:
+      \P (  \mathrm{Wilcoxon}_{m,n} \ge q ) \le \alpha / 2 \} \\
+  &=& \min \{ q~\mathrm{integer}:
+      \Fge{\mathrm{pwilcox}}(q, m, n) \le \alpha / 2 \}.
+\end{eqnarray*}
+Note that $q_L$ and $q_U$ are \emph{not} the $\alpha/2$ and $1-\alpha/2$
+quantiles of the Wilcoxon (rank sum) distribution.  We have
+\begin{displaymath}
+  \mathrm{qwilcox}(\alpha/2, m, n)
+  = \min \{ q~\mathrm{integer} :
+  \mathrm{pwilcox}(q, m, n) \ge \alpha / 2 \}
+\end{displaymath}
+so that
+\begin{displaymath}
+  q_L =
+  \begin{cases}
+    \mathrm{qwilcox}(\alpha/2, m, n) &
+    \text{if $\mathrm{pwilcox}(\mathrm{qwilcox}(\alpha/2, m, n), m, n)
+                                       = \alpha / 2$}, \\
+    \mathrm{qwilcox}(\alpha/2, m, n) - 1 & \text{otherwise}.
+  \end{cases}
+\end{displaymath}
+
+In R up to 4.5.x, exact confidence intervals (again, in the case of no
+ties) were computed using 
+<<>>=
+wmw2x_cint_A <- function(x, y, conf.level = 0.95) {
+    n.x <- length(x)
+    n.y <- length(y)
+    alpha <- 1 - conf.level
+    diffs <- sort(outer(x, y, `-`))
+    qu <- qwilcox(alpha/2, n.x, n.y)
+    if(qu == 0) qu <- 1
+    ql <- n.x*n.y - qu
+    achieved.alpha <- 2 * pwilcox(trunc(qu) - 1, n.x, n.y)
+    c(diffs[qu], diffs[ql + 1], 1 - achieved.alpha)
+}
+@ 
+In terms of the notation used above,
+\begin{displaymath}
+  q_L = \text{$\texttt{qu} - 1$ unless
+    $\mathrm{pwilcox}(\texttt{qu}, m, n) = \alpha / 2$}
+\end{displaymath}
+and
+\begin{displaymath}
+  q_U = \text{$\texttt{ql} + 1$ unless
+    $\Fge{\mathrm{pwilcox}}(\texttt{ql}, m, n) = \alpha / 2$}.
+\end{displaymath}
+When not in the ``unless'' case, the confidence interval is
+\begin{displaymath}
+  (\delta_{(mn - q_U + 1)}, \delta_{(mn - q_L)})
+  = (\delta_{(mn - \texttt{ql})}, \delta_{(mn - \texttt{qu} + 1)})
+  = (\delta_{(\texttt{qu})}, \delta_{(\texttt{ql} + 1)}).
+\end{displaymath}
+So the code in R up to 4.5.x in fact implements the confidence intervals
+obtained by inverting the natural two-sided test unless (a) \texttt{qu}
+= 0 or (b) $\mathrm{pwilcox}(\texttt{qu}, m, n) = \alpha / 2$.
+
+In case (a),
+$\mathrm{pwilcox}(0, m, n) = \mathrm{dwilcox}(0, m, n) > \alpha / 2$,
+and the confidence intervals should be from $-\infty$ to $\infty$, so
+the coverage probability of the 4.5.x confidence intervals is too low.
+E.g.,
+<<>>=
+dwilcox(0, 3, 3)
+wmw2x_cint_A(1:3, 4:6, 0.95)
+@ 
+In case (b), the confidence intervals should use $q_L = \texttt{qu}$ and
+$q_U = \texttt{ql}$, and hence by from $\delta_{(\texttt{qu} + 1)}$ to
+$\delta_{(\texttt{ql})}$, so the coverage probability of the 4.5.x
+confidence intervals is too high.  E.g., 
+<<>>=
+pwilcox(1, 3, 3)
+wmw2x_cint_A(1:3, 4:6, 0.80)
+@ 
+(Of course, testing the condition for (b) with exact equality is ill
+defined in floating point arithmetic, so one needs to use the same fuzz
+employed for computing the p and q functions, which is currently $10 \,
+\texttt{eps}$.)
+
+The following modification would fix the confidence intervals obtained
+for cases (a) and (b):
+<<>>=
+wmw2x_cint_B <- function(x, y, conf.level = 0.95) {
+    n.x <- length(x)
+    n.y <- length(y)
+    alpha <- 1 - conf.level
+    diffs <- sort(outer(x, y, `-`))
+    qu <- qwilcox(alpha/2, n.x, n.y)
+    ## Case (b):
+    if( pwilcox(qu, n.x, n.y) <= (alpha / 2 + 10 * .Machine$double.eps) )
+        qu <- qu + 1
+    ## Case (a):
+    if(qu == 0)
+        return(c(-Inf, Inf, 1))
+    ql <- n.x*n.y - qu
+    achieved.alpha <- 2 * pwilcox(trunc(qu) - 1, n.x, n.y)
+    c(diffs[qu], diffs[ql + 1], 1 - achieved.alpha)
+}
+@ 
+With this,
+<<>>=
+wmw2x_cint_B(1:3, 4:6, 0.95)
+wmw2x_cint_B(1:3, 4:6, 0.80)
+@ 
+
+Equivalently, we can obtain the confidence intervals as follows.  For
+the two-sided test of $H_0: \mu = \mu_0$ against $H_A: \mu \ne \mu_0$,
+when observing $w = \omega(x - \mu, y)$ we reject the null at level
+$\alpha$ iff
+\begin{eqnarray*}
+  \lefteqn{\min \left(
+  P_{\mu_0}( \omega(X - \mu_0, Y) \le w),
+  P_{\mu_0}( \omega(X - \mu_0, Y) \ge w) \right)} \\
+  &=& \min \left(
+      \mathrm{pwilcox}(w, m, n),
+      \Fge{\mathrm{pwilcox}}(w, m, n) \right) \\
+  &\le& \alpha / 2.
+\end{eqnarray*}
+Now $\mu \mapsto \omega(x - \mu, y)$ is nonincreasing and can change
+values only for $\mu \in \Delta$.  Therefore, the lower probability
+function
+\begin{displaymath}
+  \mu \mapsto p_L(\mu) =
+  \mathrm{pwilcox}(\omega(x - \mu, y), m, n)
+\end{displaymath}
+is nonincreasing and can change values only for $\mu \in \Delta$, and
+the upper probability function
+\begin{displaymath}
+  \mu \mapsto p_U(\mu) =
+  \Fge{\mathrm{pwilcox}}(\omega(x - \mu, y), m, n)
+\end{displaymath}
+is nondecreasing and can change values only for $\mu \in \Delta$.
+
+Informally, if for $\delta_{(k)} < \mu < \delta_{(k+1)}$ we have
+$p_L(\mu) \le \alpha / 2$, $\mu$ is not in the confidence interval
+because it is too large, so we must have $\mu_U \le \delta_{(k)}$.
+Similarly, if $p_U(\mu) \le \alpha / 2$, $\mu$ is not in the confidence
+interval because it is too small, so we must have $\mu_L \ge
+\delta_{(k+1)}$.  Formally,
+\begin{eqnarray*}
+  \mu_U
+  &=& \max \{ \delta_{(k)}:
+      1 \le k \le mn,
+      p_L(\delta_{(k)}-) > \alpha/2,
+      p_L(\delta_{(k)}+) \le \alpha/2 \} \\
+  &=& \max \{ \delta \in \Delta :
+      p_L(\delta-) > \alpha/2,
+      p_L(\delta+) \le \alpha/2 \} 
+\end{eqnarray*}
+(and hence $\infty$ if there is no such $\delta \in \Delta$, i.e., iff
+$\mathrm{dwilcox}(0, m, n) > \alpha / 2$), and
+\begin{eqnarray*}
+  \mu_L
+  &=& \min \{ \delta_{(k)}:
+      1 \le k \le mn,
+      p_U(\delta_{(k)}-) \le \alpha/2,
+      p_U(\delta_{(k)}+) > \alpha / 2 \} \\
+  &=& \min \{ \delta \in \Delta :
+      p_U(\delta-) \le \alpha/2,
+      p_U(\delta+) > \alpha/2 \} 
+\end{eqnarray*}
+(and hence $-\infty$ if there is no such $\delta \in \Delta$, i.e., iff
+$\mathrm{dwilcox}(mn, m, n) > \alpha / 2$).
+
+I.e., to compute $\mu_U$, we first check whether
+$\mathrm{dwilcox}(0, m, n) > \alpha / 2$.  If so, $\mu_U = \infty$.
+Otherwise, we go from right to left over the intervals $\delta_{(k)} <
+\mu < \delta_{(k+1)}$ and compute $p_L(\mu)$ for such $\mu$, for example
+via the midpoint $ (\delta_{(k)} + \delta_{(k+1)}) / 2$, stopping when
+the lower tail probability is above $\alpha/2$, and taking $\mu_U$ as
+the upper end point of this interval.
+Similarly, to compute $\mu_L$, we first check whether
+$\mathrm{dwilcox}(mn, m, n) > \alpha / 2$.  If so, $\mu_L = -\infty$.
+Otherwise, we go from left to right over the intervals $\delta_{(k)} <
+\mu < \delta_{(k+1)}$ and compute $p_U(\mu)$ for such $\mu$, for example
+via the midpoint $ (\delta_{(k)} + \delta_{(k+1)}) / 2$, stopping when
+the upper tail probability is above $\alpha/2$, and taking $\mu_L$ as
+the lower end point of this interval.
+
+Computing $\mu_L$ needs the upper tail probabilities $ \P( W \ge w )$
+for $W \sim \mathrm{Wilcoxon}_{m,n}$ and $w = \omega(x - \mu, y)$, which
+are not directly available in R.  One can either compute these as
+\begin{eqnarray*}
+  \P( W \ge w )
+  &=& \P( W > w ) + \P( W = w) \\
+  &=& \texttt{pwilcox}(w, m, n, \texttt{lower.tail = FALSE})
+      + \texttt{dwilcox}(w, m, n),
+\end{eqnarray*}
+or upon observing that as the Wilcoxon rank sum distribution has integer
+support and the value of $w$ always is a multiple of $1/2$,
+\begin{eqnarray*}
+  \P( W \ge w)
+  &=& \P (W > w - 1/4) \\
+  &=& \texttt{pwilcox}(w - 1/4, m, n, \texttt{lower.tail = FALSE}).
+\end{eqnarray*}
+
+The following function provides an implementation of the above, also
+tracking the tail probabilities for conveniently obtaining the achieved
+$\alpha$ and confidence level:
+<<>>=
+wmw2x_cint_C <- function(x, y, conf.level = 0.95) {
+    m <- length(x)
+    n <- length(y)
+    alpha <- 1 - conf.level
+    diffs <- sort(outer(x, y, `-`))
+    omega <- function(mu) {
+        sum(rank(c(x - mu, y))[seq_len(m)]) - m * (m + 1) / 2
+    }
+    lower <- function(alpha) {
+        tprob <- alpha + 10 * .Machine$double.eps
+        pi <- 0
+        mu <- -Inf
+        if(dwilcox(m * n, m, n) > tprob)
+            return(c(mu, pi))
+        for(k in seq_len( (m * n - 1) )) {
+            w <- omega( (diffs[k] + diffs[k + 1]) / 2 )
+            p <- pwilcox(w - 1/4, m, n, lower.tail = FALSE)
+            if(p > tprob) {
+                mu <- diffs[k]
+                break
+            }
+            pi <- p
+        }
+        c(mu, pi)
+    }
+    upper <- function(alpha) {
+        tprob <- alpha + 10 * .Machine$double.eps
+        pi <- 0
+        mu <- Inf
+        if(dwilcox(0, m, n) > tprob)
+            return(c(mu, pi))
+        for(k in rev(seq_len(m * n - 1))) {
+            w <- omega( (diffs[k] + diffs[k + 1]) / 2 )
+            p <- pwilcox(w, m, n)
+            if(p > tprob) {
+                mu <- diffs[k + 1]
+                break
+            }
+            pi <- p
+        }
+        c(mu, pi)
+    }
+    l <- lower(alpha / 2)
+    u <- upper(alpha / 2)
+    c(l[1L], u[1L], 1 - (l[2L] + u[2L]))
+}
+@
+(This has the computations of the lower and upper endpoints in separate
+functions which could be re-used for the one-sided tests, see below.)
+With this,
+<<>>=
+wmw2x_cint_C(1:3, 4:6, 0.95)
+wmw2x_cint_C(1:3, 4:6, 0.80)
+@ 
+as for the fixed variant B above.
+
+This admittedly looks more complicated than the previous variants, but
+has the advantages that it avoids computing quantiles and, more
+importantly, it only uses the fact that $p_L$ and $p_U$ are piecewise
+constant and, respectively, nonincreasing and nondecreasing, which
+allows also using this approach when using conditional distributions in
+the case of ties in the data, see further below.
+
+For testing $H_0: \mu = \mu_0$ against the one-sided alternative $H_A:
+\mu < \mu_0$, it is clearly natural to reject the null for small values
+of $\omega(X - \mu_0, Y)$.  Thus, when observing $x$ and $y$ and
+computing $w = \omega(x - \mu_0, y)$, the $p$-value is
+\begin{displaymath}
+  p = \P ( \mathrm{Wilcoxon}_{m,n} \le w ) = \mathrm{pwilcox}(w, m, n).
+\end{displaymath}
+For a given integer critical value $c$,
+\begin{displaymath}
+  P_\mu ( \omega(X - \mu, Y) \le c )
+  = \mathrm{pwilcox}(c, m, n)
+  := \alpha_c
+\end{displaymath}
+for all $\mu$, so a $1 - \alpha_c$ confidence region for $\mu$ is
+obtained as
+\begin{displaymath}
+  \{ \mu: \omega(X - \mu, Y) > c \}
+\end{displaymath}
+which is the confidence interval with endpoints $-\infty$ and $\mu_U$,
+where with $q_L = c$,
+\begin{displaymath}
+  \mu_U = \sup \{ \mu : \omega(x - \mu, y) > c \}
+\end{displaymath}
+(which in case of no ties in the differences $\delta_{ij}$ equals
+$\delta_{(mn - q_L)}$).  For a prescribed confidence level $1 - \alpha$,
+this needs
+\begin{displaymath}
+  q_L =
+  \max \{ q~\mathrm{integer} :
+  \mathrm{pwilcox}(q, m, n) \le \alpha \} .
+\end{displaymath}
+Equivalently,
+\begin{displaymath}
+  \mu_U =
+  \max \{ \delta \in \Delta :
+  p_L(\delta-) > \alpha, p_L(\delta+) \le \alpha \}.
+\end{displaymath}
+
+For testing $H_0: \mu = \mu_0$ against the one-sided alternative $H_A:
+\mu > \mu_0$, it is clearly natural to reject the null for large values
+of $\omega(X - \mu_0, Y)$.  This has $p$-value
+\begin{displaymath}
+  p
+  = \P ( \mathrm{Wilcoxon}_{m,n} \ge w )
+  = \Fge{\mathrm{pwilcox}}(w, m, n).
+\end{displaymath}
+For a given integer critical value $c$,
+\begin{displaymath}
+  P_\mu ( \omega(X - \mu, Y) \ge c )
+  = \Fge{\mathrm{pwilcox}}(c, m, n)
+  := \alpha_c
+\end{displaymath}
+for all $\mu$, so a $1 - \alpha_c$ confidence region for $\mu$ is
+obtained as
+\begin{displaymath}
+  \{ \mu: \omega(X - \mu, Y) < c \}
+\end{displaymath}
+which is the confidence interval with endpoints $\mu_L$ and $\infty$,
+where with $q_U = c$,
+\begin{displaymath}
+  \mu_L = \inf \{ \mu : \omega(x - \mu, y) < q_U \}
+\end{displaymath}
+(which in case of no ties in the differences $\delta_{ij}$ equals
+$\delta_{(mn - q_U + 1)}$).  For a prescribed confidence level $1 -
+\alpha$, 
+this needs
+\begin{displaymath}
+  q_U =
+  \min \{ q~\mathrm{integer} :
+  \P( \mathrm{Wilcoxon}_{m,n} \ge q) \le \alpha \} .
+\end{displaymath}
+
+
+The real challenge lies with exact $p$-values and confidence intervals
+in case of ties.  In this case, we use the conditional distribution of
+$\omega(X - \mu, Y)$ given the observed $x$ and $y$, which is the
+frequency distribution of $\omega(x^*, y^*)$ with $(x^*, y^*)$ a random
+permutation of the pooled values $v = c(x - \mu, y)$ (equivalently, with
+$x^*$ and $y^*$ running over all partitions of the set of values in $v$
+into subsets of size $m$ and $n$, respectively).  In R, these
+distributions are available via (currently internal) pdq functions
+parametrized by $m$, $n$ and scores $z = \mathrm{rank}(c(x - \mu, y))$.
+%% (In hindsight, it may have been more natural to parametrize by the
+%% pooled values $c(x - \mu, y)$: this could still be changed?)
+
+In what follows, it will be convenient to write
+$\mathrm{Wilcoxon}_{m,n,z}$ for this distribution, and
+$\mathrm{pwilcox}(\cdot, m, n, z)$ and
+$\mathrm{qwilcox}(\cdot, m, n, z)$ for the corresponding probability and
+quantile functions.  Note that if all values in $c(x - \mu, y)$ are
+distinct, then $z$ is a permutation of the values $\{ 1, \ldots, mn \}$
+and $ \mathrm{Wilcoxon}_{m,n,z} $ coincides with the ``classical''
+Wilcoxon rank sum distribution $\mathrm{Wilcoxon}_{m,n}$.  On the other
+hand, even when the observed values $x$ and $y$ are all distinct, the
+distributions differs when $\mu$ is one of the differences
+$\delta_{ij} = x_i - y_j$.
+
+It helps to first consider testing $H_0: \mu = \mu_0$ against the
+one-sided alternative $H_A: \mu < \mu_0$.  In this case, it is clearly
+``natural'' to reject the null in favor of the alternative for small
+values of $\omega(X - \mu_0, Y)$.  When observing $x$ and $y$, the
+corresponding (conditional) $p$-value is then given by
+\begin{displaymath}
+  p = \mathrm{pwilcox}(w, m, n, z),
+  \quad w = \omega(x - \mu_0, y),
+  \quad z = \mathrm{rank}(c(x - \mu_0, y)).
+\end{displaymath}
+In what follows, it will be convenient to write the above $w$ and $z$ as
+functions of $\mu$ for the observed $x$ and $y$, using
+\begin{displaymath}
+  w_{x,y}(\mu) = \omega(x - \mu, y), \quad
+  z_{x,y}(\mu) = \mathrm{rank}(c(x - \mu, y)).
+\end{displaymath}
+Writing
+\begin{displaymath}
+  p_L(\mu) =
+  \mathrm{pwilcox}(w_{x,y}(\mu), m, n, z_{x,y}(\mu),
+\end{displaymath}
+the above conditional $p$-value then becomes $p_L(\mu_0)$.
+
+Care is needed to formally write down the acceptance regions of the
+above one-sided tests when employing these for obtaining the
+corresponding confidence intervals.  Write
+\begin{displaymath}
+  \mathcal{S}
+  = \{ 0, 1/2, 1, 3/2, \ldots, mn \}
+  = \{ k / 2, 0 \le k \le 2 mn \}.
+\end{displaymath}
+Then for any $x$, $y$ and $\mu$, $\omega(x - \mu, y) \in \mathcal{S}$,
+so $\mathcal{S}$ is the support of all $\mathrm{Wilcoxon}_{m,n,z}$
+distributions.  The acceptance region of the one-sided conditional
+level $\alpha$ test for $H_0: \mu = \mu_0$ against $H_A: \mu < \mu_0$
+is
+\begin{displaymath}
+  A_{x,y}(\mu_0) = \{ w \in \mathcal{S} : w > q_{L,x,y}(\mu_0) \}
+\end{displaymath}
+where
+\begin{displaymath}
+  q_{L,x,y}(\mu)
+  = \max \left\{
+    q \in \mathcal{S} :
+    \mathrm{pwilcox}(q, m, n, z_{x,y}(\mu)) \le \alpha
+  \right\}.
+\end{displaymath}
+Note that, unlike in the ``classical'' case, the critical values and
+hence also the acceptance regions depend on $\mu$ (as the underlying
+conditional distributions do so too).  The corresponding confidence
+regions are then obtained as
+\begin{displaymath}
+  \{ \mu: w_{x,y}(\mu) \in A_{x,y}(\mu) \}
+  = \{ \mu: w_{x,y}(\mu) > q_{L,x,y}(\mu) \}.
+\end{displaymath}
+However, from this formulation one cannot infer that this actually gives
+confidence intervals (in fact, neither $q_{L,x,y}$ nor the difference
+$w_{x,y} - q_{L,x,y}$ are monotone).  It helps to reformulate in terms
+of tail probabilities as already illustrated for the classical case.  We
+have
+\begin{displaymath}
+  A_{x,y}(\mu_0)
+  = \{ w \in \mathcal{S} :
+  \mathrm{pwilcox}(w, m, n, z_{x,y}(\mu_0)) > \alpha \}
+\end{displaymath}
+so the corresponding confidence region is
+\begin{displaymath}
+  \{ \mu : 
+  \mathrm{pwilcox}(w_{x,y}(\mu), m, n, z_{x,y}(\mu)) > \alpha \}
+  = \{ \mu: p_L(\mu) > \alpha \}.
+\end{displaymath}
+One can show that the lower tail probability function $p_L$ again is
+non-increasing, and clearly it can change values only for $\mu \in
+\Delta$.  Hence the confidence region indeed is a confidence interval
+from $-\infty$ to $\mu_U$, where
+\begin{displaymath}
+  \mu_U = \max \{ \delta \in \Delta :
+  p_L(\delta-) > \alpha, p_L(\delta+) \le \alpha \}.
+\end{displaymath}
+
+Similarly, for testing $H_0: \mu = \mu_0$ against the one-sided
+alternative $H_A: \mu > \mu_0$, it is clearly natural to reject the null
+in favor of the alternative for large values of $\omega(X - \mu_0, Y)$.
+With the upper tail probability function
+\begin{displaymath}
+  p_U(\mu) = \Fge{\mathrm{pwilcox}}(w_{x,y}(\mu), m, n, z_{x,y}(\mu)),
+\end{displaymath}
+the conditional $p$-value is $p_U(\mu_0)$ and the confidence region
+\begin{displaymath}
+  \{ \mu : p_U(\mu) > \alpha \}
+\end{displaymath}
+is the confidence interval from $\mu_L$ to $\infty$, where
+\begin{displaymath}
+  \mu_L = \min \{ \delta \in \Delta :
+  p_U(\delta-) \le \alpha, p_U(\delta+) > \alpha \}.
+\end{displaymath}
+
+In the two-sided case, we additionally face the challenge that there is
+no longer a ``natural'' test statistic to use, as the conditional
+distribution of $W = \omega(X - \mu, Y)$ in general is neither
+symmetric about its mean $mn/2$ nor unimodal (the latter ruling out
+using the density as test statistic, as clearly one should reject the
+null iff $W$ is either too small or too large).  This leaves the
+approach of rejecting when one of the one-sided tests is signficant at
+level $\alpha / 2$.
+
+\section{Wilcoxon Signed Rank Test}
+
+Suppose $X = (X_1, \ldots, X_n)$ are i.i.d.\ with distribution function
+$F$ symmetric about some unknown $\mu$, and that we use the Wilcoxon
+signed rank test for inference about $\mu$.
+
+This uses the test statistic
+\begin{displaymath}
+  \upsilon(x) = \sum_{i=1}^n I(x_i > 0) r_i(x),
+\end{displaymath}
+where $r_i(x)$ is the rank of $|x_i|$ in $|x_1|, \ldots, |x_n|$.  Using
+\begin{eqnarray*}
+  \lefteqn{I(x_i > \mu, | x_j - \mu | < | x_i - \mu | )} \\
+  &=& I(x_i > \mu, | x_j - \mu | < ( x_i - \mu ) ) \\
+  &=& I( | x_j - \mu | < ( x_i - \mu ) ) \\
+  &=& I( \mu - x_i < x_j - \mu < x_i - \mu ) \\
+  &=& I\left( \frac{x_i + x_j}{2} > \mu, x_j < x_i \right)
+\end{eqnarray*}
+and
+\begin{eqnarray*}
+  \lefteqn{I(x_i > \mu, | x_j - \mu | = | x_i - \mu | )} \\
+  &=& I(x_i > \mu, | x_j - \mu | = ( x_i - \mu ) ) \\
+  &=& I(x_i > \mu, x_j - \mu = x_i - \mu ) + I(x_i > \mu, \mu - x_j =
+      x_i - \mu) \\
+  &=& I(x_i > \mu, x_j = x_i ) +
+      I \left( \frac{x_i + x_j}{2} = \mu, x_i > \mu \right) \\
+  &=& I\left( \frac{x_i + x_j}{2} > \mu, x_j = x_i \right) +
+      I \left( \frac{x_i + x_j}{2} = \mu, x_j < x_i \right) \\
+\end{eqnarray*}
+and writing
+\begin{displaymath}
+  \delta_{ij} = \frac{x_i + x_j}{2}
+\end{displaymath}
+for the \emph{Walsh averages}, we find that in general,
+\begin{eqnarray*}
+  \lefteqn{\upsilon(x - \mu)} \\
+  &=& \sum_{i=1}^n I(x_i - \mu)
+      \sum_{j=1}^n \left( I(|x_j - \mu| < |x_i - \mu|)
+      + \frac{1}{2} I( |x_j - \mu| = |x_i - \mu|) \right) \\
+  &=& \sum_{i,j}
+      \left(
+      I( \delta_{ij} > \mu, x_j < x_i )
+      + \frac{1}{2} I( \delta_{ij} > \mu, x_j = x_i)
+      + \frac{1}{2} I( \delta_{ij} = \mu, x_j < x_i) 
+      \right) \\
+  &=& \frac{1}{2} \sum_{i,j}
+      \left(
+      I(\delta_{ij} > \mu, x_j < x_i)
+      + I(\delta_{ij} \ge \mu, x_j < x_i )
+      + I(\delta_{ij} > \mu, x_j = x_i)
+      \right)
+\end{eqnarray*}
+which is clearly non-increasing in $\mu$ and can change value only for
+$\mu \in \Delta = \{ \delta_{ij}, 1 \le i \le j \le n \}$.  If there are
+no ties in the data, the third term vanishes and for all $\mu$,
+\begin{eqnarray*}
+  \upsilon(x - \mu)
+  &=& \frac{1}{2}
+      \left(
+      \# \{ \delta_{ij} \in \Delta: \delta_{ij} > \mu \} +
+      \# \{ \delta_{ij} \in \Delta: \delta_{ij} \ge \mu \}      
+      \right),
+\end{eqnarray*}
+if in addition $\mu \not\in \Delta$,
+\begin{eqnarray*}
+  \upsilon(x - \mu)
+  = \# \{ \delta_{ij} \in \Delta: \delta_{ij} > \mu \}
+  = \# \{ \delta_{ij} \in \Delta: \delta_{ij} \ge \mu \}.
+\end{eqnarray*}
+
+Under $H_0: \mu = \mu_0$, the $X_i - \mu_0$ are i.i.d.~with distribution
+symmetric about 0.  In the classical case where $F$ is (absolutely)
+continuous, the distribution of $\upsilon(X - \mu_0)$ does not depend on
+$F$ and hence only on $n$, and in R is referred to as the ``Wilcoxon
+signed rank distribution'':
+\begin{displaymath}
+  \upsilon(X - \mu_0) \sim \mathrm{Signrank}_{n} \quad [P_{\mu_0}].
+\end{displaymath}
+This distribution is supported on $\{0, \ldots, n(n+1)/2\}$ and is
+symmetric about its mean $n(n+1)/4$.
+
+
+
+\end{document}
