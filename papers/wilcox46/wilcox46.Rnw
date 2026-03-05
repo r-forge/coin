@@ -328,7 +328,7 @@ dwilcox(0, 3, 3)
 wmw2x_cint_A(1:3, 4:6, 0.95)
 @ 
 In case (b), the confidence intervals should use $q_L = \texttt{qu}$ and
-$q_U = \texttt{ql}$, and hence by from $\delta_{(\texttt{qu} + 1)}$ to
+$q_U = \texttt{ql}$, and hence be from $\delta_{(\texttt{qu} + 1)}$ to
 $\delta_{(\texttt{ql})}$, so the coverage probability of the 4.5.x
 confidence intervals is too high.  E.g., 
 <<>>=
@@ -348,14 +348,15 @@ wmw2x_cint_B <- function(x, y, conf.level = 0.95) {
     n.y <- length(y)
     alpha <- 1 - conf.level
     diffs <- sort(outer(x, y, `-`))
-    qu <- qwilcox(alpha/2, n.x, n.y)
+    toler <- 10 * .Machine$double.eps
+    qu <- qwilcox(alpha / 2, n.x, n.y)
     ## Case (b):
-    if( pwilcox(qu, n.x, n.y) <= (alpha / 2 + 10 * .Machine$double.eps) )
+    if( pwilcox(qu, n.x, n.y) <= (alpha / 2 + toler) )
         qu <- qu + 1
     ## Case (a):
     if(qu == 0)
         return(c(-Inf, Inf, 1))
-    ql <- n.x*n.y - qu
+    ql <- n.x * n.y - qu
     achieved.alpha <- 2 * pwilcox(trunc(qu) - 1, n.x, n.y)
     c(diffs[qu], diffs[ql + 1], 1 - achieved.alpha)
 }
@@ -380,14 +381,14 @@ $\alpha$ iff
   &\le& \alpha / 2.
 \end{eqnarray*}
 Now $\mu \mapsto \omega(x - \mu, y)$ is nonincreasing and can change
-values only for $\mu \in \Delta$.  Therefore, the lower probability
+values only for $\mu \in \Delta$.  Therefore, the lower tail probability
 function
 \begin{displaymath}
   \mu \mapsto p_L(\mu) =
   \mathrm{pwilcox}(\omega(x - \mu, y), m, n)
 \end{displaymath}
 is nonincreasing and can change values only for $\mu \in \Delta$, and
-the upper probability function
+the upper tail probability function
 \begin{displaymath}
   \mu \mapsto p_U(\mu) =
   \Fge{\mathrm{pwilcox}}(\omega(x - \mu, y), m, n)
@@ -402,6 +403,7 @@ interval because it is too small, so we must have $\mu_L \ge
 \delta_{(k+1)}$.  Formally,
 \begin{eqnarray*}
   \mu_U
+  &=& \sup \{ \mu: p_L(\mu) > \alpha / 2 \} \\
   &=& \max \{ \delta_{(k)}:
       1 \le k \le mn,
       p_L(\delta_{(k)}-) > \alpha/2,
@@ -414,6 +416,7 @@ interval because it is too small, so we must have $\mu_L \ge
 $\mathrm{dwilcox}(0, m, n) > \alpha / 2$), and
 \begin{eqnarray*}
   \mu_L
+  &=& \inf \{ \mu : p_U(\mu) > \alpha / 2 \} \\
   &=& \min \{ \delta_{(k)}:
       1 \le k \le mn,
       p_U(\delta_{(k)}-) \le \alpha/2,
@@ -466,41 +469,46 @@ wmw2x_cint_C <- function(x, y, conf.level = 0.95) {
     n <- length(y)
     alpha <- 1 - conf.level
     diffs <- sort(outer(x, y, `-`))
+    toler <- 10 * .Machine$double.eps
     omega <- function(mu) {
         sum(rank(c(x - mu, y))[seq_len(m)]) - m * (m + 1) / 2
     }
     lower <- function(alpha) {
-        tprob <- alpha + 10 * .Machine$double.eps
+        alpha <- alpha + toler
         pi <- 0
         mu <- -Inf
-        if(dwilcox(m * n, m, n) > tprob)
+        if(dwilcox(m * n, m, n) > alpha)
             return(c(mu, pi))
         for(k in seq_len( (m * n - 1) )) {
             w <- omega( (diffs[k] + diffs[k + 1]) / 2 )
             p <- pwilcox(w - 1/4, m, n, lower.tail = FALSE)
-            if(p > tprob) {
+            if(p > alpha) {
                 mu <- diffs[k]
                 break
             }
             pi <- p
         }
+        if(!is.finite(mu))
+            mu <- diffs[m * n]
         c(mu, pi)
     }
     upper <- function(alpha) {
-        tprob <- alpha + 10 * .Machine$double.eps
+        alpha <- alpha + toler
         pi <- 0
         mu <- Inf
-        if(dwilcox(0, m, n) > tprob)
+        if(dwilcox(0, m, n) > alpha)
             return(c(mu, pi))
         for(k in rev(seq_len(m * n - 1))) {
             w <- omega( (diffs[k] + diffs[k + 1]) / 2 )
             p <- pwilcox(w, m, n)
-            if(p > tprob) {
+            if(p > alpha) {
                 mu <- diffs[k + 1]
                 break
             }
             pi <- p
         }
+        if(!is.finite(mu))
+            mu <- diffs[1L]
         c(mu, pi)
     }
     l <- lower(alpha / 2)
@@ -557,8 +565,9 @@ this needs
 \end{displaymath}
 Equivalently,
 \begin{displaymath}
-  \mu_U =
-  \max \{ \delta \in \Delta :
+  \mu_U
+  = \sup \{ \mu: p_L(\mu) > \alpha \}
+  = \max \{ \delta \in \Delta :
   p_L(\delta-) > \alpha, p_L(\delta+) \le \alpha \}.
 \end{displaymath}
 
@@ -595,7 +604,14 @@ this needs
   \min \{ q~\mathrm{integer} :
   \P( \mathrm{Wilcoxon}_{m,n} \ge q) \le \alpha \} .
 \end{displaymath}
-
+Equivalently,
+\begin{displaymath}
+  \mu_L
+  = \inf \{ \mu : p_U(\mu) > \alpha \}
+  = \min \{ \delta \in \Delta :
+  p_U(\delta-) \le \alpha/2,
+  p_U(\delta+) > \alpha/2 \} 
+\end{displaymath}
 
 The real challenge lies with exact $p$-values and confidence intervals
 in case of ties.  In this case, we use the conditional distribution of
@@ -740,7 +756,9 @@ $p_U$ is non-decreasing), the confidence region
 \end{displaymath}
 is the confidence interval from $\mu_L$ to $\infty$, where
 \begin{displaymath}
-  \mu_L = \min \{ \delta \in \Delta :
+  \mu_L
+  = \inf \{ \mu : p_U(\mu) > \alpha \}
+  = \min \{ \delta \in \Delta :
   p_U(\delta-) \le \alpha, p_U(\delta+) > \alpha \}.
 \end{displaymath}
 
