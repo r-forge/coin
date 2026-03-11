@@ -1203,7 +1203,7 @@ population stratification.
 We would like to thank Andreas Ziegler and Inke R. Koenig for providing
 us with the psoriasis data.
 
-\bibliography{references}
+\bibliography{\Sexpr{gsub("\\.bib", "", system.file("REFERENCES.bib", package = "coin"))}}
 
 \newpage
 

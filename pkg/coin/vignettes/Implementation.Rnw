@@ -1157,7 +1157,7 @@ Henric Winell provided clarification and examples for the Stuart-Maxwell test an
 identifying bugs. The work of Torsten Hothorn was supported by Deutsche Forschungsgemeinschaft (DFG)
 under grant HO 3242/1-3.
 
-\bibliography{coin}
+\bibliography{\Sexpr{gsub("\\.bib", "", system.file("REFERENCES.bib", package = "coin"))}}
 
 \begin{appendix}
 

@@ -1,7 +1,7 @@
 \name{NEWS}
 \title{News for Package \pkg{coin}}
 
-\section{Changes in version 1.4-4 (20YY-MM-DD)}{
+\section{Changes in version 1.4-4 (2026-03-10)}{
   \subsection{Bug fixes}{
     \itemize{
       \item \code{zheng_trafo()} using \code{increment = 1} failed to print in
@@ -14,7 +14,7 @@
   }
   \subsection{User-visible changes}{
     \itemize{
-      \item Documentation updates.
+      \item Documentation updates; use \code{REFERENCES.bib}
     }
   }
   \subsection{Other changes}{

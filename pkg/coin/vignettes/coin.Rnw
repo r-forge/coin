@@ -506,6 +506,6 @@ We would like to thank Helmut Strasser for discussions on the theoretical framew
 Henric Winell provided clarification and examples for the Stuart-Maxwell test.
 
 \bibliographystyle{jss}
-\bibliography{coin}
+\bibliography{\Sexpr{gsub("\\.bib", "", system.file("REFERENCES.bib", package = "coin"))}}
 
 \end{document}

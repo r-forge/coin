@@ -960,7 +960,7 @@ adequate Lego bricks.
 %%\setlength{\bibsep}{2mm}
 
 \bibliographystyle{jss}
-\bibliography{LegoCondInf}
+\bibliography{\Sexpr{gsub("\\.bib", "", system.file("REFERENCES.bib", package = "coin"))}}
 
 \clearpage
 
