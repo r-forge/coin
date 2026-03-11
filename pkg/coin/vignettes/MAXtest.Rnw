@@ -486,6 +486,7 @@ structure(list(Study = structure(c(1L, 1L, 1L, 1L, 1L, 1L, 1L,
 %\VignetteIndexEntry{Order-restricted Scores Test}
 %\VignetteKeywords{genetic association, case-control study, robust trend test, maximum test, conditional inference}
 %\VignettePackage{coin}
+%\VignetteDepends{coin}
 
 \title{Order-restricted Scores Test for the Evaluation of \\
        Population-based Case-control Studies when the \\

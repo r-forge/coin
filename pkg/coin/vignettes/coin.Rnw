@@ -9,6 +9,9 @@
 \let\proglang=\textsf
 \newcommand{\pkg}[1]{{\normalfont\fontseries{b}\selectfont #1}}
 
+%% hyperlinked dois in jss refstyle
+\newcommand{\doi}[1]{\href{https://doi.org/#1}{\normalfont\texttt{\@doi{#1}}}}
+
 
 \SweaveOpts{engine=R, eps=FALSE, keep.source = TRUE}
 

@@ -10,7 +10,11 @@
 %%\usepackage[nolists]{endfloat}
 %%\usepackage{Sweave}
 
+%% hyperlinked dois in jss refstyle
+\newcommand{\doi}[1]{\href{https://doi.org/#1}{\normalfont\texttt{\@doi{#1}}}}
+
 %%\VignetteIndexEntry{A Lego System for Conditional Inference}
+%\VignetteDepends{coin}
 
 \newcommand{\Rpackage}[1]{{\normalfont\fontseries{b}\selectfont #1}}
 \newcommand{\Robject}[1]{\texttt{#1}}
