@@ -1,8 +1,8 @@
 
 Package: libcoin
 Title: Linear Test Statistics for Permutation Inference
-Date: 2026-03-06
-Version: 1.0-11
+Date: 2026-03-11
+Version: 1.0-12
 Authors@R: c(person("Torsten", "Hothorn", role = c("aut", "cre"),
                     email = "Torsten.Hothorn@R-project.org",
                     comment = c(ORCID = "0000-0001-8301-0471")),
