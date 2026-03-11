@@ -486,7 +486,7 @@ structure(list(Study = structure(c(1L, 1L, 1L, 1L, 1L, 1L, 1L,
 %\VignetteIndexEntry{Order-restricted Scores Test}
 %\VignetteKeywords{genetic association, case-control study, robust trend test, maximum test, conditional inference}
 %\VignettePackage{coin}
-%\VignetteDepends{coin}
+%\VignetteDepends{coin,xtable}
 
 \title{Order-restricted Scores Test for the Evaluation of \\
        Population-based Case-control Studies when the \\
@@ -512,7 +512,6 @@ structure(list(Study = structure(c(1L, 1L, 1L, 1L, 1L, 1L, 1L,
   Ludwigstra{\ss}e 33\\
   DE-80539 M\"unchen, Germany \\
   E-mail: \email{Torsten.Hothorn@R-project.org}\\
-  URL: \url{http://www.stat.uni-muenchen.de/~hothorn/}\\
 }
 
 
@@ -520,7 +519,7 @@ structure(list(Study = structure(c(1L, 1L, 1L, 1L, 1L, 1L, 1L,
 This is an preprint of an article to be published in
 \emph{Biometrical Journal}. Copyright \copyright{} 2009 WILEY-VCH
 Verlag GmbH \& Co. KGaA, Weinheim;
-available online at \url{http://www.biometrical-journal.com}.
+available online at \url{https://doi.org/10.1002/bimj.200800203}.
 
 The Cochran-Armitage linear trend test for proportions is often
 used for genotype-based analysis of candidate gene association. Depending on

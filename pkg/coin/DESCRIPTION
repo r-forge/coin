@@ -21,7 +21,7 @@ Depends: R (>= 3.6.0), survival
 Imports: methods, parallel, stats, stats4, utils, libcoin (>= 1.0-9),
          matrixStats (>= 0.54.0), modeltools (>= 0.2-9), mvtnorm (>= 1.0-5),
          multcomp
-Suggests: xtable, e1071, vcd, TH.data (>= 1.0-7)
+Suggests: xtable, e1071, vcd, TH.data (>= 1.0-7), bibtex
 LinkingTo: libcoin (>= 1.0-9)
 LazyData: yes
 NeedsCompilation: yes

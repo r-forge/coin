@@ -121,7 +121,7 @@ anonymous <- FALSE
 \footnote{This is a preprint of an article published in
 The American Statistician, Volume 60, Number 3, Pages 257--263.
 Copyright \copyright{} 2006 American Statistical Association; available online at
-\url{http://www.amstat.org/publications/tas/}.}}
+\url{https://doi.org/10.1198/000313006X118430}.}}
 
 
 <<authors, echo = FALSE, results = tex>>=

@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2025-06-24 r88352 ucrt) -- "Unsuffered Consequences"
-Copyright (C) 2025 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64
+R Under development (unstable) (2026-03-11 r89601) -- "Unsuffered Consequences"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -20,7 +20,6 @@ Type 'q()' to quit R.
 > pkgname <- "coin"
 > source(file.path(R.home("share"), "R", "examples-header.R"))
 > options(warn = 1)
-> options(pager = "console")
 > library('coin')
 Loading required package: survival
 > 
@@ -1150,11 +1149,13 @@ sample estimates:
 > 
 > ## Breast cancer data (Hothorn and Lausen, 2003, Sec. 7.3)
 > ## Asymptotic maximally selected statistics
-> data("sphase", package = "TH.data")
-> maxstat_test(Surv(RFS, event) ~  SPF, data = sphase,
-+              ytrafo = function(data)
-+                  trafo(data, surv_trafo = function(y)
-+                      logrank_trafo(y, ties.method = "Hothorn-Lausen")))
+> if (requireNamespace("TH.data")) {
++   data("sphase", package = "TH.data")
++   maxstat_test(Surv(RFS, event) ~  SPF, data = sphase,
++                ytrafo = function(data)
++                    trafo(data, surv_trafo = function(y)
++                        logrank_trafo(y, ties.method = "Hothorn-Lausen")))
++ }
 
 	Asymptotic Generalized Maximally Selected Statistics
 
@@ -3220,7 +3221,7 @@ Right.Eye                  -3.448397
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  15.34 1.74 17.25 NA NA 
+Time elapsed:  5.861 0.427 6.31 0 0 
 > grDevices::dev.off()
 null device 
           1 

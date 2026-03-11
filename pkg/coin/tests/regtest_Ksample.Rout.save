@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2023-07-23 r84741 ucrt) -- "Unsuffered Consequences"
-Copyright (C) 2023 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64
+R Under development (unstable) (2026-03-11 r89601) -- "Unsuffered Consequences"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -631,4 +631,4 @@ alternative hypothesis: greater
 > 
 > proc.time()
    user  system elapsed 
-   1.78    0.17    1.92 
+  0.801   0.080   0.877 
