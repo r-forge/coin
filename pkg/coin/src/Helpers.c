@@ -36,28 +36,6 @@ SEXP R_unpack_sym(SEXP x, SEXP names, SEXP diagonly) {
     return(libcoin_R_unpack_sym(x, names, diagonly));
 }
 
-int nrow(SEXP x) {
-    SEXP a;
-
-    a = getAttrib(x, R_DimSymbol);
-    if (a == R_NilValue) {
-        return(LENGTH(x));
-    } else {
-        return(INTEGER(a)[0]);
-    }
-}
-
-int ncol(SEXP x) {
-    SEXP a;
-
-    a = getAttrib(x, R_DimSymbol);
-    if (a == R_NilValue) {
-        return(1);
-    } else {
-        return(INTEGER(a)[1]);
-    }
-}
-
 SEXP R_maxstattrafo(SEXP x, SEXP cutpoints) {
 
     int n, nc, jn;
@@ -87,65 +65,6 @@ SEXP R_maxstattrafo(SEXP x, SEXP cutpoints) {
             }
         }
     }
-    UNPROTECT(1);
-    return(ans);
-}
-
-/**
-    Computes the outer sum of two matrices\n
-    *\param A matrix
-    *\param m nrow(A)
-    *\param n ncol(A)
-    *\param B matrix
-    *\param r nrow(B)
-    *\param s ncol(B)
-    *\param ans return value; a pointer to a REALSXP-vector of length (mr x ns)
-*/
-
-void C_outersum (const double *A, const int m, const int n,
-                 const double *B, const int r, const int s,
-                 double *ans) {
-
-    int mr, js, ir;
-    double y;
-
-    mr = m * r;
-    for (int i = 0; i < m; i++) {
-        ir = i * r;
-        for (int j = 0; j < n; j++) {
-            js = j * s;
-            y = A[j*m + i];
-            for (int k = 0; k < r; k++) {
-                for (int l = 0; l < s; l++) {
-                    ans[(js + l) * mr + ir + k] = y + B[l * r + k];
-                }
-            }
-        }
-    }
-}
-
-
-/**
-    R-interface to C_outersum\n
-    *\param A matrix
-    *\param B matrix
-*/
-
-SEXP R_outersum(SEXP A, SEXP B) {
-
-    int m, n, r, s;
-    SEXP ans;
-
-    if (!isReal(A) || !isReal(B))
-        error("R_outersum: A and / or B are not of type REALSXP");
-
-    m = nrow(A);
-    n = ncol(A);
-    r = nrow(B);
-    s = ncol(B);
-
-    PROTECT(ans = allocVector(REALSXP, m * n * r * s));
-    C_outersum(REAL(A), m, n, REAL(B), r, s, REAL(ans));
     UNPROTECT(1);
     return(ans);
 }
