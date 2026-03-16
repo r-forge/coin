@@ -1,7 +1,7 @@
 \name{NEWS}
 \title{News for Package \pkg{coin}}
 
-\section{Changes in version 1.4-4 (2026-03-10)}{
+\section{Changes in version 1.4-4 (2026-03-16)}{
   \subsection{Bug fixes}{
     \itemize{
       \item \code{zheng_trafo()} using \code{increment = 1} failed to print in
@@ -21,6 +21,7 @@
     \itemize{
       \item Clarifying comments and more reasonable argument names
             in coin/src/StreitbergRoehmel.c
+      \item Replace custom \code{R_outersum} with \code{outer}
     }
   }
 }
