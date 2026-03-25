@@ -1,9 +1,15 @@
 
+making changes:
+
+- change code in free1way.w
+- uncomment .Rbuildignore
+- make / make all
+- build / check
+
 to stats
 
 - NAMESPACE
-- remove stats::: for C_dpermdist2’ ‘assert_NULL_or_prob’
-- add copyright
+- remove stats::: for C_dpermdist2’
 - cp *R
 - \link[free1way] -> \link[stats] in ppplot.Rd
 - cp *Rd
