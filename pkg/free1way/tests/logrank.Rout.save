@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2026-02-20 r89443) -- "Unsuffered Consequences"
+R Under development (unstable) (2026-03-25 r89697) -- "Unsuffered Consequences"
 Copyright (C) 2026 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -111,6 +111,7 @@ Perm Z = 0.0152, p-value = 0.99
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > perm_test(m)
+Loading required namespace: coin
 
 	Asymptotic Permutation Transformation Score Test
 
@@ -219,4 +220,4 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 > 
 > proc.time()
    user  system elapsed 
-  1.234   0.092   1.322 
+  1.297   0.068   1.369 

@@ -7,6 +7,7 @@ free1way.Rnw:	free1way.w
 	cp free1way.Rnw vignettes
 	mv free1way.R R
 	mv linkfun.R R
+	mv utils.R R
 
 free1way.R: free1way.Rnw
 	Stangle free1way.Rnw

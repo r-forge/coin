@@ -6,7 +6,7 @@
 > .table2list <- function(x) {
 +     dx <- dim(x)
 +     if (length(dx) == 1) 
-+         stop("Incorrect dimensions")
++         stop("incorrect dimensions")
 +     if (length(dx) == 2) 
 +     .... [TRUNCATED] 
 
@@ -628,8 +628,9 @@ Coefficients:
    log-odds ratio Std. Error z value P(>|z|)
 w2          1.290      0.524   2.462    0.01
 
-> wilcox.test(y ~ w, alternative = "greater", correct = FALSE)$p.value
-[1] 0.99282
+> wilcox.test(y ~ w, alternative = "greater", correct = FALSE, 
++     exact = FALSE)$p.value
+[1] 0.99215
 
 > pvalue(wilcox_test(y ~ w, alternative = "greater"))
 [1] 0.99215
@@ -638,8 +639,9 @@ w2          1.290      0.524   2.462    0.01
  Perm Z 
 0.99215 
 
-> wilcox.test(y ~ w, alternative = "less", correct = FALSE)$p.value
-[1] 0.0075971
+> wilcox.test(y ~ w, alternative = "less", correct = FALSE, 
++     exact = FALSE)$p.value
+[1] 0.0078535
 
 > pvalue(wilcox_test(y ~ w, alternative = "less"))
 [1] 0.0078535
@@ -648,8 +650,8 @@ w2          1.290      0.524   2.462    0.01
    Perm Z 
 0.0078535 
 
-> wilcox.test(y ~ w, correct = FALSE)$p.value
-[1] 0.015194
+> wilcox.test(y ~ w, correct = FALSE, exact = FALSE)$p.value
+[1] 0.015707
 
 > kruskal.test(y ~ w)$p.value
 [1] 0.015707
@@ -1474,24 +1476,6 @@ Wide Angle - Narrow Angle == 0    -2.02
 > logLik(free1way(time ~ me | id, data = d, link = "loglog"))
 [1] -55.624
 
-> data("taste", package = "daewr")
-
-> table(taste$score)
-
-4 5 6 7 8 
-4 6 6 6 2 
-
-> summary(free1way(score ~ recipe | panelist, data = taste))
-
-Call:
-free1way.formula(formula = score ~ recipe | panelist, data = taste)
-
-Coefficients:
-        log-odds ratio Std. Error z value P(>|z|)
-recipeB          2.483      2.118   1.172    0.24
-recipeC          2.930      1.933   1.515    0.13
-recipeD         -1.696      1.793  -0.946    0.34
-
 > example(mcnemar.test, echo = FALSE)
 
 > s <- gl(2, 1, labels = dimnames(Performance)[[1]])
@@ -1544,6 +1528,36 @@ survey2nd          1.113      0.191   5.816       0
 > confint(mcn, test = "Wald")
             2.5 % 97.5 %
 survey2nd 0.73767 1.4875
+
+> free1way(xtabs(~performance + survey + voter, data = x), 
++     link = "probit")
+
+	Stratified 2-sample van der Waerden normal scores test against latent
+	normal shift alternatives
+
+data:  performance by survey (c("1st", "2nd")) 
+	 stratified by voter
+Perm Z = 4.17, p-value = 3.1e-05
+alternative hypothesis: true generalised Cohen's d is not equal to 0
+
+
+> data("taste", package = "daewr")
+
+> table(taste$score)
+
+4 5 6 7 8 
+4 6 6 6 2 
+
+> summary(free1way(score ~ recipe | panelist, data = taste))
+
+Call:
+free1way.formula(formula = score ~ recipe | panelist, data = taste)
+
+Coefficients:
+        log-odds ratio Std. Error z value P(>|z|)
+recipeB          2.483      2.118   1.172    0.24
+recipeC          2.930      1.933   1.515    0.13
+recipeD         -1.696      1.793  -0.946    0.34
 
 > tk <- free1way(Ozone ~ Month, data = airquality)
 
@@ -1920,9 +1934,9 @@ NOTE: 'n' is sample size in control group of first stratum
 
 > x <- free1way(y ~ w, link = "probit")
 Warning in .free1wayML(y, link = link, mu = mu, ...) :
-  Unsuccessful optimisation in free1way: Step size  0.0078125  has reduced below minstepsize
+  unsuccessful optimisation in free1way: Step size  0.0078125  has reduced below minstepsize
 Warning in .profile(start, fix = fix) :
-  Unsuccessful optimisation in free1way: Step size  0.0078125  has reduced below minstepsize
+  unsuccessful optimisation in free1way: Step size  0.0078125  has reduced below minstepsize
 
 > coef(x)
     w2 
@@ -1949,7 +1963,7 @@ Warning in .profile(start, fix = fix) :
 > optim(coef(x), fn = fun, method = "Brent", lower = min(grd), 
 +     upper = max(grd))[c("par", "value")]
 Warning in .profile(start, fix = fix) :
-  Unsuccessful optimisation in free1way: Step size  0.0078125  has reduced below minstepsize
+  unsuccessful optimisation in free1way: Step size  0.0078125  has reduced below minstepsize
 $par
 [1] 4.7194
 
@@ -1972,4 +1986,4 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 34.966   0.147  35.134 
+ 36.127   0.135  36.279 

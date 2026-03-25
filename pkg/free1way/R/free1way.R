@@ -1,4 +1,22 @@
 
+#  File src/library/stats/R/free1way.R
+#  Part of the R package, https://www.R-project.org
+#
+#  Copyright (C) 2026 The R Core Team
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  A copy of the GNU General Public License is available at
+#  https://www.R-project.org/Licenses/
+
 # NewtonRaphson
 
 ### adopted from rms:::lrm.fit
@@ -114,9 +132,7 @@
     ### convert to three-way table
     xt <- x
     if (!is.table(x))
-      stop(gettextf("Incorrect argument 'x' in %s",
-                    "free1way"),
-           domain = NA)
+        stop(gettextf("invalid argument '%s'", "x"), domain = NA) # 'y' in free1way ...
     dx <- dim(x)
     dn <- dimnames(x)
     if (length(dx) == 2L) {
@@ -141,19 +157,19 @@
 
     dx <- dim(x)
     if (length(dx) == 1L)
-        stop("Incorrect dimensions")
+        stop("incorrect dimensions")
     if (length(dx) == 2L)
         x <- as.table(array(x, dim = c(dx, 1)))
     dx <- dim(x)
     if (length(dx) < 3L)
-        stop("Incorrect dimensions")
+        stop("incorrect dimensions")
     C <- dim(x)[1L]
     K <- dim(x)[2L]
     B <- dim(x)[3L]
     if (C < 2L)
-        stop("At least two response categories required")
+        stop("at least two response categories required")
     if (K < 2L)
-        stop("At least two groups required")
+        stop("at least two groups required")
     xrc <- NULL
     if (length(dx) == 4L) {
         if (dx[4] == 2L) {
@@ -545,7 +561,7 @@
             }
             sAH <- tryCatch(Matrix::solve(H$A, H$X), error = function(e) NULL)
             if (is.null(sAH))
-                stop(gettextf("Error computing the Hessian in %s",
+                stop(gettextf("error computing the Hessian in %s",
                               "free1way"),
                      domain = NA)
             ret <- ret + (H$Z - crossprod(H$X, sAH))
@@ -618,9 +634,7 @@
     .profile <- function(start, fix = seq_len(K - 1)) 
     {
         if (!all(fix %in% seq_len(K - 1)))
-            stop(gettextf("Incorrect argument 'fix' in %s",
-                          "free1way"),
-                 domain = NA)
+            stop(gettextf("invalid argument '%s'", "fix"), domain = NA)
         delta <- start[fix]
         opargs <- list(start = start[-fix], 
                          objective = function(par) {
@@ -693,10 +707,9 @@
         } else {
             if (ret$convergence > 0) {
                 if (is.na(MPL_Jeffreys)) { ### only after failure
-                    warning(gettextf(paste("Jeffreys penalisation was applied in %s because initial optimisation failed with:", 
-                                     ret$message),
-                                    "free1way"),
-                                     domain = NA)
+                    warning(gettextf("Jeffreys penalisation was applied in %s because initial optimisation failed with:",
+                                     "free1way"),
+                            "\n  ", ret$message, domain = NA)
                     MPL_Jeffreys <- TRUE
                     # Jeffreys penalisation
                     
@@ -732,9 +745,8 @@
            }
         }
         if (ret$convergence > 0)
-            warning(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
-                                   "free1way"),
-                                   domain = NA)
+            warning(gettextf("unsuccessful optimisation in %s", "free1way"),
+                    ": ", ret$message, domain = NA)
 
         ret$MPL_Jeffreys <- MPL_Jeffreys
         ret$value <- ret$objective
@@ -805,10 +817,9 @@
         } else {
             if (ret$convergence > 0) {
                 if (is.na(MPL_Jeffreys)) { ### only after failure
-                    warning(gettextf(paste("Jeffreys penalisation was applied in %s because initial optimisation failed with:", 
-                                     ret$message),
-                                    "free1way"),
-                                     domain = NA)
+                    warning(gettextf("Jeffreys penalisation was applied in %s because initial optimisation failed with:",
+                                     "free1way"),
+                            "\n  ", ret$message, domain = NA)
                     MPL_Jeffreys <- TRUE
                     # Jeffreys penalisation
                     
@@ -844,9 +855,8 @@
            }
         }
         if (ret$convergence > 0)
-            warning(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
-                                   "free1way"),
-                                   domain = NA)
+            warning(gettextf("unsuccessful optimisation in %s", "free1way"),
+                    ": ", ret$message, domain = NA)
 
         ret$MPL_Jeffreys <- MPL_Jeffreys
         ret$value <- ret$objective
@@ -965,7 +975,7 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
     
 
     if (!(length(mu) == 1L || length(mu) == d[2L] - 1L)) {
-        warning(gettextf("Incompatible length of argument 'mu' in %s",
+        warning(gettextf("incompatible length of argument 'mu' in %s",
                          "free1way"),
                 domain = NA)
         mu <- rep(mu, length.out = d[2L] - 1L)
@@ -1126,7 +1136,7 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
                                 w = c(y))
             B <- 0
         } else {
-            warning(gettextf("Cannot compute exact permutation distribution in %s",
+            warning(gettextf("cannot compute exact permutation distribution in %s",
                              "free1way"),
                     domain = NA)
         }
@@ -1200,7 +1210,7 @@ model.matrix.free1way <- function (object, ...)
     ### global
     cf <- coef(x)
     if ((length(cf) > 1L || test == "LRT") && alternative != "two.sided") 
-        stop(gettextf("Cannot compute one-sided p-values in %s",
+        stop(gettextf("cannot compute one-sided p-values in %s",
                       "free1way"),
              domain = NA)
 
@@ -1482,7 +1492,7 @@ confint.free1way <- function(object, parm,
             # permutation confint
             
             if (length(cf) > 1L)
-                stop(gettextf("Permutation confidence intervals only available for 2-sample comparisons in %s",
+                stop(gettextf("permutation confidence intervals only available for 2-sample comparisons in %s",
                               "confint.free1way"),
                      domain = NA)
             if (!is.null(object$exact)) {
@@ -1546,7 +1556,7 @@ confint.free1way <- function(object, parm,
                 }
             }
             if (is.na(CINT[p,1]))
-                warning(gettextf("Failed to compute confidence interval in %s",
+                warning(gettextf("failed to compute confidence interval in %s",
                                  "confint.free1way"),
                         domain = NA)
 
@@ -1583,7 +1593,7 @@ confint.free1way <- function(object, parm,
                 }
             }
             if (is.na(CINT[p,2]))
-                warning(gettextf("Failed to compute confidence interval in %s",
+                warning(gettextf("failed to compute confidence interval in %s",
                                  "confint.free1way"),
                         domain = NA)
             
@@ -1615,7 +1625,8 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
           (formula[[3L]][[1L]] != as.name("|")) || 
           (length(formula[[3L]][[2L]]) !=  1L) || 
           (length(formula[[3L]][[3L]]) != 1L)) 
-        stop("incorrect specification for 'formula'")
+          stop(gettextf("incorrect specification for '%s'", "formula"),
+               domain = NA)
       formula[[3L]][[1L]] <- as.name("+")
     }
 
@@ -1641,7 +1652,7 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
     y <- mf[[response]]
     if (inherits(y, "Surv")) {
         if (!is.null(event))
-            stop(gettextf("Either 'Surv()'in 'formula' or the 'event' argument can be specified in %s",
+            stop(gettextf("cannot have both a 'Surv()' response and an 'event' argument in %s",
                           "free1way"),
                  domain = NA)
         if (attr(y, "type") != "right")
@@ -1656,7 +1667,7 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
     lev <- levels(g)
     DNAME <- paste(DNAME, paste0("(", paste0(lev, collapse = ", "), ")"))
     if (nlevels(g) < 2L)
-        stop(gettextf("Incorrect argument 'groups' in %s, at least two groups needed",
+        stop(gettextf("incorrect argument 'groups' in %s: at least two groups needed",
                       "free1way"),
              domain = NA)
     if (stratum) {
@@ -1695,7 +1706,7 @@ free1way.numeric <- function(y, groups, blocks = NULL, event = NULL,
     DNAME <- paste(varnames[1], "by", varnames[2])
     groups <- factor(groups)
     if (nlevels(groups) < 2L)
-        stop(gettextf("Incorrect argument 'groups' in %s, at least two groups needed",
+        stop(gettextf("incorrect argument 'groups' in %s: at least two groups needed",
                       "free1way"),
              domain = NA)
     DNAME <- paste(DNAME, paste0("(", paste0(levels(groups), collapse = ", "), 
@@ -1755,7 +1766,7 @@ free1way.factor <- function(y, groups, blocks = NULL, event = NULL,
     DNAME <- paste(varnames[1], "by", varnames[2])
     groups <- factor(groups)
     if (nlevels(groups) < 2L)
-        stop(gettextf("Incorrect argument 'groups' in %s, at least two groups needed",
+        stop(gettextf("incorrect argument 'groups' in %s: at least two groups needed",
                       "free1way"),
              domain = NA)
     DNAME <- paste(DNAME, paste0("(", paste0(levels(groups), collapse = ", "), 
@@ -1995,11 +2006,11 @@ rfree1way <- function(n, prob = NULL, alloc_ratio = 1,
     if (length(alloc_ratio) == 1L) 
         alloc_ratio <- rep_len(alloc_ratio, K - 1)
     if (length(alloc_ratio) != K - 1L)
-        stop("Incorrect argument 'alloc_ratio'")
+        stop(gettextf("invalid argument '%s'", "alloc_ratio"), domain = NA)
     if (length(strata_ratio) == 1L) 
         strata_ratio <- rep_len(strata_ratio, B - 1)
     if (length(strata_ratio) != B - 1L)
-        stop("Incorrect argument 'strata_ratio'")
+        stop(gettextf("invalid argument '%s'", "strata_ratio"), domain = NA)
     ### sample size per group (columns) and stratum (rows)
     N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
              matrix(c(1, strata_ratio), nrow = B, ncol = K)
@@ -2026,7 +2037,7 @@ rfree1way <- function(n, prob = NULL, alloc_ratio = 1,
     if (!is.matrix(prob))
         prob <- matrix(prob, nrow = NROW(prob), ncol = B)
     if (ncol(prob) != B)
-        stop(gettextf("Incorrect number of columns for 'prob' in %s",
+        stop(gettextf("incorrect number of columns for 'prob' in %s",
                       "rfree1way"),
              domain = NA)
     prob <- prop.table(prob, margin = 2L)
@@ -2061,8 +2072,8 @@ power.free1way.test <- function(n = NULL,
     if (sum(vapply(list(n, delta, power, sig.level), is.null, 
         NA)) != 1) 
         stop("exactly one of 'n', 'delta', 'power', and 'sig.level' must be NULL")
-    stats:::assert_NULL_or_prob(sig.level)
-    stats:::assert_NULL_or_prob(power)
+    assert_NULL_or_prob(sig.level)
+    assert_NULL_or_prob(power)
     
 
     # random seed
@@ -2086,16 +2097,16 @@ power.free1way.test <- function(n = NULL,
     {
 
         if (length(n <- as.integer(n)) == 0L || (n < 0) || is.na(n)) 
-            stop("invalid argument 'n'")
+            stop(gettextf("invalid argument '%s'", "n"), domain = NA)
         colsums <- c
         if (length(colsums[] <- as.integer(c)) <= 1L || 
             any(colsums < 0) || anyNA(colsums)) 
-            stop("invalid argument 'c'")
+            stop(gettextf("invalid argument '%s'", "c"), domain = NA)
 
         prob <- r
         if (length(prob[] <- as.double(r / sum(r))) <= 1L || 
             any(prob < 0) || anyNA(prob)) 
-            stop("invalid argument 'r'")
+            stop(gettextf("invalid argument '%s'", "r"), domain = NA)
 
         if (is.null(names(prob))) 
             names(prob) <- paste0("i", seq_along(prob))
@@ -2151,7 +2162,7 @@ power.free1way.test <- function(n = NULL,
     else if (is.null(delta)) {
         ### 2-sample only
         if (length(alloc_ratio) > 1L)
-            stop(gettextf("Effect size can only computed for two sample problems in %s",
+            stop(gettextf("effect size can only be computed for two-sample problems in %s",
                           "power.free1way.test"),
                  domain = NA)   
         delta <- uniroot(function(delta) {
@@ -2219,11 +2230,11 @@ power.free1way.test <- function(n = NULL,
     if (length(alloc_ratio) == 1L) 
         alloc_ratio <- rep_len(alloc_ratio, K - 1)
     if (length(alloc_ratio) != K - 1L)
-        stop("Incorrect argument 'alloc_ratio'")
+        stop(gettextf("invalid argument '%s'", "alloc_ratio"), domain = NA)
     if (length(strata_ratio) == 1L) 
         strata_ratio <- rep_len(strata_ratio, B - 1)
     if (length(strata_ratio) != B - 1L)
-        stop("Incorrect argument 'strata_ratio'")
+        stop(gettextf("invalid argument '%s'", "strata_ratio"), domain = NA)
     ### sample size per group (columns) and stratum (rows)
     N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
              matrix(c(1, strata_ratio), nrow = B, ncol = K)
