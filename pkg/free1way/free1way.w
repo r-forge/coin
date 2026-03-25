@@ -134,7 +134,7 @@ DOI <- paste0("10.32614/CRAN.package.", packageDescription("free1way")$Package)
 
 \title{\Sexpr{title}\footnote{Please cite this document as: Torsten Hothorn and Kurt Hornik
 (\Sexpr{yr}), \Sexpr{title}, \proglang{R} package vignette version \Sexpr{vs},
-\href{DOI:\Sexpr{DOI}}{https://doi.org/\Sexpr{DOI}}}
+\href{https://doi.org/\Sexpr{DOI}}{DOI:\Sexpr{DOI}}}
 }
 \date{\Sexpr{format(dt)}}
 

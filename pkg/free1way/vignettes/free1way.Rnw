@@ -136,7 +136,7 @@ urlcolor={linkcolor}%
 
 
 <<citation, echo = FALSE>>=
-yr <- format(as.Date(packageDescription("free1way")$Date), "%Y")
+yr <- format(dt <- as.Date(packageDescription("free1way")$Date), "%Y")
 vs <- packageDescription("free1way")$Version
 title <- "Semiparametrically Efficient Population and Permutation Inference in 
        Distribution-free Stratified $K$-sample Oneway Layouts"
@@ -149,15 +149,14 @@ DOI <- paste0("10.32614/CRAN.package.", packageDescription("free1way")$Package)
 
 \title{\Sexpr{title}\footnote{Please cite this document as: Torsten Hothorn and Kurt Hornik
 (\Sexpr{yr}), \Sexpr{title}, \proglang{R} package vignette version \Sexpr{vs},
-\href{DOI:\Sexpr{DOI}}{https://doi.org/\Sexpr{DOI}}}
+\href{https://doi.org/\Sexpr{DOI}}{DOI:\Sexpr{DOI}}}
 }
+\date{\Sexpr{format(dt)}}
 
 \begin{document}
 
 \pagenumbering{roman}
 \maketitle
-
-
 
 \tableofcontents
 
