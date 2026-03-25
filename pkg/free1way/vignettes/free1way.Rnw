@@ -135,16 +135,30 @@ urlcolor={linkcolor}%
 \newcommand{\rt}{g}
 
 
+<<citation, echo = FALSE>>=
+yr <- format(as.Date(packageDescription("free1way")$Date), "%Y")
+vs <- packageDescription("free1way")$Version
+title <- "Semiparametrically Efficient Population and Permutation Inference in 
+       Distribution-free Stratified $K$-sample Oneway Layouts"
+DOI <- paste0("10.32614/CRAN.package.", packageDescription("free1way")$Package)
+@
+
+
 \author{Torsten Hothorn \\ Universit\"at Z\"urich \and
         Kurt Hornik \\ WU Wirtschaftsuniversit\"at Wien}
 
-\title{Semiparametrically Efficient Population and Permutation Inference in 
-       Distribution-free Stratified $K$-sample Oneway Layouts}
+\title{\Sexpr{title}\footnote{Please cite this document as: Torsten Hothorn and Kurt Hornik
+(\Sexpr{yr}), \Sexpr{title}, \proglang{R} package vignette version \Sexpr{vs},
+\href{DOI:\Sexpr{DOI}}{https://doi.org/\Sexpr{DOI}}}
+}
 
 \begin{document}
 
 \pagenumbering{roman}
 \maketitle
+
+
+
 \tableofcontents
 
 \begin{abstract}
