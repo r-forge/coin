@@ -16,8 +16,11 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > 
-> library("free1way")
-> library("rms")
+> pkgs <- c("free1way", "rms", "survival")
+> if (!all(sapply(pkgs, require, character.only = TRUE)))
++     quit()
+Loading required package: free1way
+Loading required package: rms
 Loading required package: Hmisc
 
 Attaching package: 'Hmisc'
@@ -26,6 +29,10 @@ The following objects are masked from 'package:base':
 
     format.pval, units
 
+Loading required package: survival
+> 
+> library("free1way")
+> library("rms")
 > library("survival")
 > options(digits = 5)
 > set.seed(29)
@@ -301,4 +308,4 @@ attr(,"Attained level")
 > 
 > proc.time()
    user  system elapsed 
-  3.536   0.096   3.627 
+  3.536   0.112   3.643 

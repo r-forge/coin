@@ -1,4 +1,8 @@
 
+pkgs <- c("free1way", "rms", "survival")
+if (!all(sapply(pkgs, require, character.only = TRUE)))
+    quit()
+
 library("free1way")
 library("rms")
 library("survival")

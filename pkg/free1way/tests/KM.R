@@ -2,8 +2,10 @@
 ### check blockwise parameterisation and null parameter estimation
 ### against Kaplan-Meier
 
-library("free1way")
-library("survival")
+pkgs <- c("free1way", "survival")
+if (!all(sapply(pkgs, require, character.only = TRUE)))
+    quit()
+
 set.seed(29)
 N <- 10L
 B <- 10L

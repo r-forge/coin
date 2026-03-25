@@ -1,8 +1,8 @@
 
-library("free1way")
-library("MASS")
-library("tram")
-library("coin")
+pkgs <- c("free1way", "coin", "MASS", "tram")
+if (!all(sapply(pkgs, require, character.only = TRUE)))
+    quit()
+
 options(digits = 5)
 set.seed(29)
 

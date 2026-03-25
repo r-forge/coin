@@ -16,9 +16,23 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > 
-> library("coin")
+> pkgs <- c("free1way", "coin", "multcomp")
+> if (!all(sapply(pkgs, require, character.only = TRUE)))
++     quit()
+Loading required package: free1way
+Loading required package: coin
 Loading required package: survival
-> library("free1way")
+Loading required package: multcomp
+Loading required package: mvtnorm
+Loading required package: TH.data
+Loading required package: MASS
+
+Attaching package: 'TH.data'
+
+The following object is masked from 'package:MASS':
+
+    geyser
+
 > 
 > jstab <- jobsatisfaction
 > 
@@ -105,17 +119,6 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > 
 > ### post-hoc
-> library("multcomp")
-Loading required package: mvtnorm
-Loading required package: TH.data
-Loading required package: MASS
-
-Attaching package: 'TH.data'
-
-The following object is masked from 'package:MASS':
-
-    geyser
-
 > glht(ft, linfct = mcp(Income = "Dunnett"))
 
 	 General Linear Hypotheses
@@ -132,4 +135,4 @@ Linear Hypotheses:
 > 
 > proc.time()
    user  system elapsed 
-  0.889   0.036   0.921 
+  0.877   0.051   0.924 

@@ -1,6 +1,7 @@
 
-library("coin")
-library("free1way")
+pkgs <- c("free1way", "coin")
+if (!all(sapply(pkgs, require, character.only = TRUE)))
+    quit()
 
 set.seed(29)
 

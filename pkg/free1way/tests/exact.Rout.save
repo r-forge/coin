@@ -16,9 +16,12 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > 
-> library("coin")
+> pkgs <- c("free1way", "coin")
+> if (!all(sapply(pkgs, require, character.only = TRUE)))
++     quit()
+Loading required package: free1way
+Loading required package: coin
 Loading required package: survival
-> library("free1way")
 > 
 > set.seed(29)
 > 
@@ -51,4 +54,4 @@ Loading required package: survival
 > 
 > proc.time()
    user  system elapsed 
-  5.965   0.215   6.177 
+  6.014   0.199   6.210 

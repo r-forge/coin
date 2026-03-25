@@ -1,9 +1,10 @@
 
 set.seed(29)
 options(digits = 5)
-library("survival")
-library("free1way")
-library("tram")
+
+pkgs <- c("free1way", "survival", "tram")
+if (!all(sapply(pkgs, require, character.only = TRUE)))
+    quit()
 
 beta <- 1
 N <- 10

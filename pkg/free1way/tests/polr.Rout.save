@@ -16,22 +16,26 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > 
-> library("free1way")
-> library("MASS")
-> library("tram")
+> pkgs <- c("free1way", "coin", "MASS", "tram")
+> if (!all(sapply(pkgs, require, character.only = TRUE)))
++     quit()
+Loading required package: free1way
+Loading required package: coin
+Loading required package: survival
+Loading required package: MASS
+Loading required package: tram
 Loading required package: mlt
 Loading required package: basefun
 Loading required package: variables
-Loading required package: mvtnorm
-> library("coin")
-Loading required package: survival
 
-Attaching package: 'coin'
+Attaching package: 'variables'
 
-The following object is masked from 'package:variables':
+The following object is masked from 'package:coin':
 
     support
 
+Loading required package: mvtnorm
+> 
 > options(digits = 5)
 > set.seed(29)
 > 
@@ -476,4 +480,4 @@ attr(,"Attained level")
 > 
 > proc.time()
    user  system elapsed 
-  3.603   0.099   3.700 
+  3.737   0.105   3.839 

@@ -1,6 +1,8 @@
 
-library("free1way")
-library("rms")
+pkgs <- c("free1way", "rms")
+if (!all(sapply(pkgs, require, character.only = TRUE)))
+    quit()
+
 set.seed(2908)
 
 ### speed comparisons for larger sample sizes
