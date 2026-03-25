@@ -1,5 +1,5 @@
 
-libcoin.Rnw:	libcoin.w
+libcoin.Rnw: libcoin.w
 	nuweb -r libcoin.w
 	mv libcoin.tex libcoin.Rnw
 	mv *.h src
@@ -10,15 +10,15 @@ libcoin.Rnw:	libcoin.w
 	mv *.Rd man
 
 libcoin.R: libcoin.Rnw
-	Stangle libcoin.Rnw
+	R CMD Stangle libcoin.Rnw
 #	mv libcoin.R tests
 
-libcoin.tex:	libcoin.Rnw
+libcoin.tex: libcoin.Rnw
 	R CMD Sweave libcoin.Rnw
-	
-libcoin.pdf:	libcoin.tex
+
+libcoin.pdf: libcoin.tex
 	texi2dvi --pdf libcoin.tex
-	### NEED to run nuweb TWICE to
+	### NEED to run nuweb AGAIN to
 	### sort-out page numbers
 	nuweb -r libcoin.w
 	mv libcoin.tex libcoin.Rnw
@@ -27,9 +27,9 @@ libcoin.pdf:	libcoin.tex
 	pdflatex libcoin.tex
 	cp libcoin.Rnw vignettes
 
-all:	libcoin.pdf
+all: libcoin.pdf
 
-clean:	
+clean:
 	./cleanup
 	rm -rf *~
 	rm -rf libcoin.pdf
@@ -40,7 +40,7 @@ clean:
 	rm -rf *.c
 	rm -rf *.h
 	rm -rf *.o
-	rm -rf *.so	
+	rm -rf *.so
 	rm -rf *.def
 	rm -rf *.Rd
 	rm -rf *.R
@@ -56,4 +56,3 @@ distclean: clean
 	rm -rf man/*
 	rm -rf vignettes/*Rnw
 	rm -rf tests/libcoin.R*
-	
