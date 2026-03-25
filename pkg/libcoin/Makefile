@@ -1,3 +1,8 @@
+ifeq ($(OS), Windows_NT)
+	TEXI2DVI = texify --pdf --quiet
+else
+	TEXI2DVI = texi2dvi --pdf --quiet
+endif
 
 libcoin.Rnw: libcoin.w
 	nuweb -r libcoin.w
@@ -17,14 +22,13 @@ libcoin.tex: libcoin.Rnw
 	R CMD Sweave libcoin.Rnw
 
 libcoin.pdf: libcoin.tex
-	texi2dvi --pdf libcoin.tex
+	$(TEXI2DVI) libcoin.tex
 	### NEED to run nuweb AGAIN to
 	### sort-out page numbers
 	nuweb -r libcoin.w
 	mv libcoin.tex libcoin.Rnw
 	R CMD Sweave libcoin.Rnw
-	pdflatex libcoin.tex
-	pdflatex libcoin.tex
+	$(TEXI2DVI) libcoin.tex
 	cp libcoin.Rnw vignettes
 
 all: libcoin.pdf
