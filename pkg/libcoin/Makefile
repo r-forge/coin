@@ -7,6 +7,7 @@ endif
 libcoin.Rnw: libcoin.w
 	nuweb -r libcoin.w
 	mv libcoin.tex libcoin.Rnw
+	mv NEWS.Rd inst/
 	mv *.Rd man/
 	mv *.R R/
 	mv *.c *.def *.h Makevars src/
