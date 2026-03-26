@@ -7109,6 +7109,7 @@ function(libpath)
 
 @o DESCRIPTION -cp
 @{
+@<R Header@>
 Package: libcoin
 Title: Linear Test Statistics for Permutation Inference
 Date: 20YY-MM-DD
@@ -7132,6 +7133,7 @@ License: GPL-2
 
 @o NAMESPACE -cp
 @{
+@<R Header@>
 useDynLib(libcoin, .registration = TRUE)
 
 importFrom("stats", complete.cases, vcov)
