@@ -1049,6 +1049,7 @@ max(abs(t1[-1, -1] - t2))
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape Rd Header}\nobreak\ {\footnotesize \NWlink{nuweb155b}{155b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@\name{LinStatExpCov}@\\
 \mbox{}\verb@\alias{LinStatExpCov}@\\
 \mbox{}\verb@\alias{lmult}@\\
@@ -1137,6 +1138,7 @@ max(abs(t1[-1, -1] - t2))
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape Rd Header}\nobreak\ {\footnotesize \NWlink{nuweb155b}{155b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@\name{doTest}@\\
 \mbox{}\verb@\alias{doTest}@\\
 \mbox{}\verb@\title{@\\
@@ -1190,6 +1192,7 @@ max(abs(t1[-1, -1] - t2))
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape Rd Header}\nobreak\ {\footnotesize \NWlink{nuweb155b}{155b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@\name{ctabs}@\\
 \mbox{}\verb@\alias{ctabs}@\\
 \mbox{}\verb@\title{@\\
@@ -1252,7 +1255,7 @@ header files.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C Header}\nobreak\ {\footnotesize \NWlink{nuweb155b}{155b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C Header}\nobreak\ {\footnotesize \NWlink{nuweb156}{156}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape R Includes}\nobreak\ {\footnotesize \NWlink{nuweb20b}{20b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape C Macros}\nobreak\ {\footnotesize \NWlink{nuweb21a}{21a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape C Global Variables}\nobreak\ {\footnotesize \NWlink{nuweb21b}{21b}}$\,\rangle$}\verb@@\\
@@ -1379,7 +1382,7 @@ function at \proglang{C} level (at your own risk, of course!).
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C Header}\nobreak\ {\footnotesize \NWlink{nuweb155b}{155b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C Header}\nobreak\ {\footnotesize \NWlink{nuweb156}{156}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@#include "libcoin_internal.h"@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape Function Prototypes}\nobreak\ {\footnotesize \NWlink{nuweb22b}{22b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
@@ -1443,7 +1446,7 @@ functions and corresponding \proglang{R} interfaces.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C Header}\nobreak\ {\footnotesize \NWlink{nuweb155b}{155b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C Header}\nobreak\ {\footnotesize \NWlink{nuweb156}{156}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@#include "libcoin_internal.h"@\\
 \mbox{}\verb@#include <R_ext/stats_stubs.h>  /* for S_rcont2 */@\\
 \mbox{}\verb@#include <mvtnormAPI.h>         /* for calling mvtnorm */@\\
@@ -2211,7 +2214,7 @@ This function can be called from other packages.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C Header}\nobreak\ {\footnotesize \NWlink{nuweb155b}{155b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C Header}\nobreak\ {\footnotesize \NWlink{nuweb156}{156}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@#include <R_ext/Rdynload.h>@\\
 \mbox{}\verb@#include <libcoin.h>@\\
 \mbox{}\verb@@\\
@@ -3850,7 +3853,7 @@ This function can be called from other packages.
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb50a}{50a}.
-\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_Covariance@\nobreak\ \NWlink{nuweb144c}{144c}, \verb@C_get_Expectation@\nobreak\ \NWlink{nuweb144a}{144a}, \verb@C_get_LinearStatistic@\nobreak\ \NWlink{nuweb143d}{143d}, \verb@C_get_nresample@\nobreak\ \NWlink{nuweb147b}{147b}, \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb147c}{147c}, \verb@C_get_tol@\nobreak\ \NWlink{nuweb147d}{147d}, \verb@C_get_Variance@\nobreak\ \NWlink{nuweb144b}{144b}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb143b}{143b}, \verb@C_maxtype@\nobreak\ \NWlink{nuweb63}{63}, \verb@C_maxtype_pvalue@\nobreak\ \NWlink{nuweb67}{67}, \verb@C_perm_pvalue@\nobreak\ \NWlink{nuweb65}{65}, \verb@GE@\nobreak\ \NWlink{nuweb21a}{21a}, \verb@LE@\nobreak\ \NWlink{nuweb21a}{21a}, \verb@LECV@\nobreak\ \NWlink{nuweb142b}{142b}, \verb@P@\nobreak\ \NWlink{nuweb24a}{24a}, \verb@Q@\nobreak\ \NWlink{nuweb24e}{24e}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_Covariance@\nobreak\ \NWlink{nuweb144c}{144c}, \verb@C_get_Expectation@\nobreak\ \NWlink{nuweb144a}{144a}, \verb@C_get_LinearStatistic@\nobreak\ \NWlink{nuweb143d}{143d}, \verb@C_get_nresample@\nobreak\ \NWlink{nuweb147b}{147b}, \verb@C_get_tol@\nobreak\ \NWlink{nuweb147d}{147d}, \verb@C_get_Variance@\nobreak\ \NWlink{nuweb144b}{144b}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb143b}{143b}, \verb@C_maxtype@\nobreak\ \NWlink{nuweb63}{63}, \verb@C_maxtype_pvalue@\nobreak\ \NWlink{nuweb67}{67}, \verb@C_perm_pvalue@\nobreak\ \NWlink{nuweb65}{65}, \verb@GE@\nobreak\ \NWlink{nuweb21a}{21a}, \verb@LE@\nobreak\ \NWlink{nuweb21a}{21a}, \verb@LECV@\nobreak\ \NWlink{nuweb142b}{142b}, \verb@P@\nobreak\ \NWlink{nuweb24a}{24a}, \verb@Q@\nobreak\ \NWlink{nuweb24e}{24e}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -10749,7 +10752,7 @@ This function can be called from other packages.
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb142a}{142a}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb39a}{39a}\NWlink{nuweb51}{, 51}\NWlink{nuweb54}{, 54}\NWlink{nuweb71}{, 71}.\item \NWtxtIdentsUsed\nobreak\  \verb@LECV@\nobreak\ \NWlink{nuweb142b}{142b}, \verb@PermutedLinearStatistic_SLOT@\nobreak\ \NWlink{nuweb21b}{21b}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb39a}{39a}\NWlink{nuweb51}{, 51}\NWlink{nuweb71}{, 71}.\item \NWtxtIdentsUsed\nobreak\  \verb@LECV@\nobreak\ \NWlink{nuweb142b}{142b}, \verb@PermutedLinearStatistic_SLOT@\nobreak\ \NWlink{nuweb21b}{21b}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -11176,7 +11179,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C Header}\nobreak\ {\footnotesize \NWlink{nuweb155b}{155b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C Header}\nobreak\ {\footnotesize \NWlink{nuweb156}{156}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@#include "libcoin.h"@\\
 \mbox{}\verb@#include <R_ext/Rdynload.h>@\\
 \mbox{}\verb@#include <R_ext/Visibility.h>@\\
@@ -11295,7 +11298,44 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap323}\raggedright\small
-\NWtarget{nuweb155b}{} $\langle\,${\itshape C Header}\nobreak\ {\footnotesize {155b}}$\,\rangle\equiv$
+\NWtarget{nuweb155b}{} $\langle\,${\itshape Rd Header}\nobreak\ {\footnotesize {155b}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@%%%    Copyright (C) 2016-2026 Torsten Hothorn@\\
+\mbox{}\verb@%%%@\\
+\mbox{}\verb@%%%    This file is part of the 'libcoin' R add-on package.@\\
+\mbox{}\verb@%%%@\\
+\mbox{}\verb@%%%    'libcoin' is free software: you can redistribute it and/or modify@\\
+\mbox{}\verb@%%%    it under the terms of the GNU General Public License as published by@\\
+\mbox{}\verb@%%%    the Free Software Foundation, version 2.@\\
+\mbox{}\verb@%%%@\\
+\mbox{}\verb@%%%    'libcoin' is distributed in the hope that it will be useful,@\\
+\mbox{}\verb@%%%    but WITHOUT ANY WARRANTY; without even the implied warranty of@\\
+\mbox{}\verb@%%%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the@\\
+\mbox{}\verb@%%%    GNU General Public License for more details.@\\
+\mbox{}\verb@%%%@\\
+\mbox{}\verb@%%%    You should have received a copy of the GNU General Public License@\\
+\mbox{}\verb@%%%    along with 'libcoin'.  If not, see <http://www.gnu.org/licenses/>.@\\
+\mbox{}\verb@%%%@\\
+\mbox{}\verb@%%%@\\
+\mbox{}\verb@%%%    DO NOT EDIT THIS FILE@\\
+\mbox{}\verb@%%%@\\
+\mbox{}\verb@%%%    Edit 'libcoin.w' and run 'nuweb -r libcoin.w'@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb17}{17}\NWlink{nuweb18}{, 18}\NWlink{nuweb19}{, 19}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap324}\raggedright\small
+\NWtarget{nuweb156}{} $\langle\,${\itshape C Header}\nobreak\ {\footnotesize {156}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11372,7 +11412,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \item $\langle\,$C colSums Input\nobreak\ {\footnotesize \NWlink{nuweb107c}{107c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb107a}{107a}\NWlink{nuweb108b}{, 108b}\NWlink{nuweb108c}{c}\NWlink{nuweb108d}{d}\NWlink{nuweb109a}{, 109a}.
 }
 \item $\langle\,$C Global Variables\nobreak\ {\footnotesize \NWlink{nuweb21b}{21b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
-\item $\langle\,$C Header\nobreak\ {\footnotesize \NWlink{nuweb155b}{155b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}\NWlink{nuweb22a}{, 22a}\NWlink{nuweb22c}{c}\NWlink{nuweb30d}{, 30d}\NWlink{nuweb154}{, 154}.
+\item $\langle\,$C Header\nobreak\ {\footnotesize \NWlink{nuweb156}{156}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}\NWlink{nuweb22a}{, 22a}\NWlink{nuweb22c}{c}\NWlink{nuweb30d}{, 30d}\NWlink{nuweb154}{, 154}.
 }
 \item $\langle\,$C integer B Input\nobreak\ {\footnotesize \NWlink{nuweb27a}{27a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb27b}{27b}\NWlink{nuweb32}{, 32}\NWlink{nuweb150b}{, 150b}\NWlink{nuweb151}{, 151}.
 }
@@ -11632,6 +11672,8 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \item $\langle\,$RC_ThreeTableSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb120a}{120a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb120b}{120b}.}
 \item $\langle\,$RC_TwoTableSums\nobreak\ {\footnotesize \NWlink{nuweb116a}{116a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb110a}{110a}.}
 \item $\langle\,$RC_TwoTableSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb115b}{115b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb116a}{116a}.}
+\item $\langle\,$Rd Header\nobreak\ {\footnotesize \NWlink{nuweb155b}{155b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb17}{17}\NWlink{nuweb18}{, 18}\NWlink{nuweb19}{, 19}.
+}
 \item $\langle\,$R_colSums\nobreak\ {\footnotesize \NWlink{nuweb106c}{106c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb106a}{106a}.}
 \item $\langle\,$R_colSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb106b}{106b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb22b}{22b}\NWlink{nuweb106c}{, 106c}.
 }
@@ -11778,7 +11820,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \item \verb@C_get_LinearStatistic@: \NWlink{nuweb33b}{33b}\NWlink{nuweb45}{, 45}\NWlink{nuweb51}{, 51}\NWlink{nuweb54}{, 54}\NWlink{nuweb71}{, 71}, \underline{\NWlink{nuweb143d}{143d}}\NWlink{nuweb150a}{, 150a}.
 \item \verb@C_get_nresample@: \NWlink{nuweb39a}{39a}\NWlink{nuweb51}{, 51}\NWlink{nuweb52a}{, 52a}\NWlink{nuweb54}{, 54}\NWlink{nuweb56}{, 56}\NWlink{nuweb71}{, 71}, \underline{\NWlink{nuweb147b}{147b}}.
 \item \verb@C_get_P@: \NWlink{nuweb33a}{33a}\NWlink{nuweb39a}{, 39a}\NWlink{nuweb46}{, 46}\NWlink{nuweb52a}{, 52a}\NWlink{nuweb56}{, 56}\NWlink{nuweb71}{, 71}, \underline{\NWlink{nuweb142c}{142c}}\NWlink{nuweb144b}{, 144b}\NWlink{nuweb144c}{c}\NWlink{nuweb147b}{, 147b}.
-\item \verb@C_get_PermutedLinearStatistic@: \NWlink{nuweb39a}{39a}\NWlink{nuweb51}{, 51}\NWlink{nuweb54}{, 54}\NWlink{nuweb71}{, 71}, \underline{\NWlink{nuweb147c}{147c}}.
+\item \verb@C_get_PermutedLinearStatistic@: \NWlink{nuweb39a}{39a}\NWlink{nuweb51}{, 51}\NWlink{nuweb71}{, 71}, \underline{\NWlink{nuweb147c}{147c}}.
 \item \verb@C_get_Q@: \NWlink{nuweb33a}{33a}\NWlink{nuweb39a}{, 39a}\NWlink{nuweb46}{, 46}\NWlink{nuweb52a}{, 52a}\NWlink{nuweb71}{, 71}, \underline{\NWlink{nuweb143a}{143a}}\NWlink{nuweb144b}{, 144b}\NWlink{nuweb144c}{c}\NWlink{nuweb147b}{, 147b}.
 \item \verb@C_get_Sumweights@: \NWlink{nuweb34a}{34a}\NWlink{nuweb46}{, 46}, \underline{\NWlink{nuweb146b}{146b}}.
 \item \verb@C_get_Table@: \NWlink{nuweb41a}{41a}\NWlink{nuweb46}{, 46}, \underline{\NWlink{nuweb146c}{146c}}.
