@@ -6,6 +6,8 @@ endif
 
 libcoin.Rnw: libcoin.w
 	nuweb -r libcoin.w
+	cp libcoin.w inst/nuweb/
+	cp libcoin.h libcoin_internal.h libcoinAPI.h inst/include/
 	mv libcoin.tex libcoin.Rnw
 	mv NEWS.Rd inst/
 	mv *.Rd man/
