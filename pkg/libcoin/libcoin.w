@@ -4330,9 +4330,6 @@ return(ans);
 @}
 
 <<KronSums>>=
-r1 <- rep(1:ncol(x), ncol(y))
-r2 <- rep(1:ncol(y), each = ncol(x))
-
 a0 <- colSums(x[subset, r1] * y[subset, r2] * weights[subset])
 a1 <- .Call(libcoin:::R_KronSums, x, P, y, weights, subset, 0L)
 a2 <- .Call(libcoin:::R_KronSums, x, P, y, as.double(weights), as.double(subset), 0L)
@@ -7202,10 +7199,7 @@ static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_pack_sym, 1),
     {NULL, NULL, 0}
 };
-@}
 
-@o libcoin-init.c -cc
-@{
 void attribute_visible R_init_libcoin
 (
     DllInfo *dll
