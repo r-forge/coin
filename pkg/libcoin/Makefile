@@ -7,12 +7,9 @@ endif
 libcoin.Rnw: libcoin.w
 	nuweb -r libcoin.w
 	mv libcoin.tex libcoin.Rnw
-	mv *.h src
-	mv *.c src
-	mv Makevars src
-	mv *def src
-	mv *.R R
-	mv *.Rd man
+	mv *.Rd man/
+	mv *.R R/
+	mv *.c *.def *.h Makevars src/
 
 libcoin.R: libcoin.Rnw
 	R CMD Stangle libcoin.Rnw
