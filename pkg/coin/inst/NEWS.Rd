@@ -1,11 +1,11 @@
 \name{NEWS}
 \title{News for Package \pkg{coin}}
 
-\section{Changes in version 1.4-4 (2026-03-16)}{
+\section{Changes in version 1.4-4 (20YY-MM-DD)}{
   \subsection{Bug fixes}{
     \itemize{
       \item \code{zheng_trafo()} using \code{increment = 1} failed to print in
-            \R \eqn{\ge}{>=}4.2.0 (due to changes in \code{format}).
+            \R \eqn{\ge}{>=}4.2.0 (due to changes in \code{base::format()}).
 
       \item Supplying case weights to the sign and Wilcoxon signed-rank tests
             appeared to work, but were not taken into account; it now results in
@@ -14,14 +14,16 @@
   }
   \subsection{User-visible changes}{
     \itemize{
-      \item Documentation updates; use \code{REFERENCES.bib}
+      \item Documentation updates.
     }
   }
   \subsection{Other changes}{
     \itemize{
       \item Clarifying comments and more reasonable argument names
-            in coin/src/StreitbergRoehmel.c
-      \item Replace custom \code{R_outersum} with \code{outer}
+            in \file{coin/src/StreitbergRoehmel.c}.
+      \item Replace custom \code{R_outersum()} with \code{outer()}.
+      \item Bibliographic citations and references now use
+            \file{inst/REFERENCES.bib}.
     }
   }
 }
