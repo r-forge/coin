@@ -38,8 +38,8 @@ lmult(x, object)
 
   This function implements the permutation test framework by
   \bibcitet{libcoin::Strasser+Weber:1999}, see also
-  \bibcitet{lincoin::Hothorn+Hornik+vandeWiel+Zeileis:2006} and
-  \bibcitet{lincoin::Hothorn+Hornik+vandeWiel+Zeileis:2008}.
+  \bibcitet{libcoin::Hothorn+Hornik+vandeWiel+Zeileis:2006} and
+  \bibcitet{libcoin::Hothorn+Hornik+vandeWiel+Zeileis:2008}.
 
   The function, after minimal preprocessing, calls the underlying C code
   and computes the linear statistic, its expectation and covariance and,
