@@ -152,7 +152,7 @@ $\X$
 \begin{eqnarray*}
 H_0: D(\Y \mid \X) = D(\Y)
 \end{eqnarray*}
-against arbitrary alternatives. \cite{strasserweber1999} suggest to derive
+against arbitrary alternatives. \cite{Strasser+Weber:1999} suggest to derive
 scalar test statistics for testing $H_0$ from multivariate linear statistics
 of a specific linear form. Let $\A \subseteq \{1, \dots, N\}$ denote some subset of the
 observation numbers and consider the linear statistic
@@ -186,7 +186,7 @@ The conditional expectation $\mub(\A) \in \R^{PQ}$ and covariance
 $\Sigmab(\A) \in \R^{PQ \times PQ}$
 of $\T$ under $H_0$ given
 all permutations $\sigma \in S(\A)$ of the responses are derived by
-\cite{strasserweber1999}:
+\cite{Strasser+Weber:1999}:
 \begin{eqnarray}
 \mub(\A) & = & \E(\T(\A) \mid S(\A)) = \vec \left( \left( \sum_{i \in \A} w_i \x_i \right) \E(h \mid S(\A))^\top
 \right), \nonumber \\
@@ -872,9 +872,9 @@ lmult(x, object)
 \details{
 
   This function implements the permutation test framework by
-  \bibcitet{libcoin::strasserweber1999}, see also
-  \bibcitet{libcoin::Hothorn+Hornik+Wiel+Zeileis:2006} and 
-  \bibcitet{libcoin::Hothorn+Hornik+VanDeWiel:2008}.
+  \bibcitet{libcoin::Strasser+Weber:1999}, see also
+  \bibcitet{lincoin::Hothorn+Hornik+vandeWiel+Zeileis:2006} and
+  \bibcitet{lincoin::Hothorn+Hornik+vandeWiel+Zeileis:2008}.
 
   The function, after minimal preprocessing, calls the underlying C code
   and computes the linear statistic, its expectation and covariance and,
