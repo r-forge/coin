@@ -484,7 +484,7 @@ allowed in \code{ix} and \code{iy}). Thus, the first row of \code{X}
 corresponds to a missing value. If the first row is simply zero, missing
 values do not contribute to any of the sums computed later. Even more
 important is the fact that all entities, such as linear statistics etc., can
-be computed from the two-way tabulation (therefore the abbrevation ``2d'')
+be computed from the two-way tabulation (therefore the abbreviation ``2d'')
 over the $N$ elements of \code{ix} and \code{iy}. Once such a
 table was computed, the remaining computations can be performed in
 dimension $L_x \times L_y$, typically much smaller than $N$.
@@ -881,7 +881,7 @@ lmult(x, object)
   optionally, \code{nresample} samples from its permutation distribution.
 
   When both \code{ix} and \code{iy} are missing, the number of rows of
-  \code{X} and \code{Y} is the same, ie the number of observations.
+  \code{X} and \code{Y} is the same, i.e., the number of observations.
 
   When \code{X} is missing and \code{ix} a factor, the code proceeds as
   if \code{X} were a dummy matrix of \code{ix} without explicitly
@@ -1458,8 +1458,8 @@ LEVxyws <- LinStatExpCov(x, y, weights = weights, subset = subset, varonly = TRU
 
 The following tests compare the high-level \proglang{R} implementation
 (function \code{LSEC()}) with the 1d and 2d \proglang{C} level
-implementations in the two sitations with and without specification of
-\code{X} (ie, the dummy matrix in the latter case).
+implementations in the two situations with and without specification of
+\code{X} (i.e., the dummy matrix in the latter case).
 
 <<tests>>=
 ### with X given
@@ -1697,7 +1697,7 @@ RC_LinearStatistic(x, N, P, REAL(y), Q, weights, subset,
 
 We next extract memory from the return object and allocate some additional
 memory. The most important step is to tabulate blocks and to order the
-subset with respect to blocks. In absense of block, this just returns
+subset with respect to blocks. In absence of block, this just returns
 subset.
 
 @d Setup Memory and Subsets in Blocks
@@ -1837,7 +1837,7 @@ extern SEXP libcoin_R_PermutedLinearStatistic(
 @}
 
 The dimensions are extracted from the data in the same ways as above. The
-function differentiates between the absense and presense of blocks.
+function differentiates between the absence and presence of blocks.
 Case weights are removed by expanding subset accordingly. Once within-block
 permutations were set-up the Kronecker product of \code{X} and \code{Y} is
 computed. Note that this function returns the matrix of permuted linear
@@ -4117,7 +4117,7 @@ allowing for number of observations larger than \code{INT_MAX}
 for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
 @}
 
-After computions in the loop, we compute the next element
+After computations in the loop, we compute the next element
 
 @d continue subset loop
 @{
@@ -5876,7 +5876,7 @@ void C_setup_subset_block
     cumtable = R_Calloc(Nlevels, double);
     for (int k = 0; k < Nlevels; k++) cumtable[k] = 0.0;
 
-    /* table[0] are missings, ie block == 0 ! */
+    /* table[0] are missings, i.e. block == 0 ! */
     for (int k = 1; k < Nlevels; k++)
         cumtable[k] = cumtable[k - 1] + REAL(blockTable)[k - 1];
 
@@ -7015,7 +7015,7 @@ namesgets(ans, names);
 
 @d Initialise Zero
 @{
-/* set inital zeros */
+/* set initial zeros */
 for (int p = 0; p < PQ; p++) {
     C_get_LinearStatistic(ans)[p] = 0.0;
     C_get_Expectation(ans)[p] = 0.0;

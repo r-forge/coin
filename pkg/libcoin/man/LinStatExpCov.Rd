@@ -46,7 +46,7 @@ lmult(x, object)
   optionally, \code{nresample} samples from its permutation distribution.
 
   When both \code{ix} and \code{iy} are missing, the number of rows of
-  \code{X} and \code{Y} is the same, ie the number of observations.
+  \code{X} and \code{Y} is the same, i.e., the number of observations.
 
   When \code{X} is missing and \code{ix} a factor, the code proceeds as
   if \code{X} were a dummy matrix of \code{ix} without explicitly

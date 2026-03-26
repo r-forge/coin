@@ -6,6 +6,7 @@
 
 \section{Changes in Version 1.0-13 (20YY-MM-DD)}{
   \itemize{
+    \item Documentation updates.
     \item Makefile improvements.
   }
 }
