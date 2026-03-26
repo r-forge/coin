@@ -6,6 +6,7 @@
 
 \section{Changes in Version 1.0-13 (20YY-MM-DD)}{
   \itemize{
+    \item Remove the no longer needed \code{STRICT_R_HEADERS}.
     \item Documentation updates.
     \item Makefile improvements.
   }

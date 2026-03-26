@@ -1015,7 +1015,6 @@ level.
 
 @d R Includes
 @{
-#define STRICT_R_HEADERS
 #define USE_FC_LEN_T
 #include <float.h>        /* for DBL_MIN */
 #include <R.h>

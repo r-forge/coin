@@ -1275,7 +1275,6 @@ level.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@#define STRICT_R_HEADERS@\\
 \mbox{}\verb@#define USE_FC_LEN_T@\\
 \mbox{}\verb@#include <float.h>        /* for DBL_MIN */@\\
 \mbox{}\verb@#include <R.h>@\\
