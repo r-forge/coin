@@ -16,10 +16,10 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > 
-> pkgs <- c("free1way", "rms", "survival")
+> pkgs <- c("free1way.docreg", "rms", "survival")
 > if (!all(sapply(pkgs, require, character.only = TRUE)))
 +     quit()
-Loading required package: free1way
+Loading required package: free1way.docreg
 Loading required package: rms
 Loading required package: Hmisc
 
@@ -32,6 +32,13 @@ The following objects are masked from 'package:base':
 Loading required package: survival
 > 
 > library("free1way")
+
+Attaching package: 'free1way'
+
+The following objects are masked from 'package:stats':
+
+    free1way, power.free1way.test, ppplot, rfree1way
+
 > library("rms")
 > library("survival")
 > options(digits = 5)
@@ -308,4 +315,4 @@ attr(,"Attained level")
 > 
 > proc.time()
    user  system elapsed 
-  3.536   0.112   3.643 
+  3.724   0.176   3.906 

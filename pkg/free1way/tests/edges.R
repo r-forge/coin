@@ -1,5 +1,5 @@
 
-library("free1way")
+library("free1way.docreg")
 
 N <- 10
 nd <- data.frame(y = rnorm(N), x = gl(1, N))

@@ -1,9 +1,9 @@
 \documentclass[a4paper]{report}
 
 %\VignetteIndexEntry{Stratified K-sample Inference}
-%\VignetteDepends{free1way,multcomp,survival,Hmisc,coin,rms,latticeExtra,daewr}
+%\VignetteDepends{multcomp,survival,Hmisc,coin,rms,latticeExtra,daewr}
 %\VignetteKeywords{semiparametric model,conditional inference}}
-%\VignettePackage{free1way}
+%\VignettePackage{free1way.docreg}
 
 %% packages
 \usepackage{amsfonts,amstext,amsmath,amssymb,amsthm}
@@ -638,7 +638,7 @@ We start with an example involving $K = 3$ groups for a binary outcome and
 use a binary logistic regression model to estimate the two log-odds ratios
 $\delta_2$ and $\delta_3$ along with their estimated covariance
 <<glm>>=
-library("free1way")
+library("free1way.docreg")
 (x <- matrix(c(10, 5, 7, 11, 8, 9), nrow = 2))
 d <- expand.grid(y = relevel(gl(2, 1), "2"), t = gl(3, 1))
 d$x <- c(x)
@@ -1512,9 +1512,9 @@ ret$objective <- NULL
 We first set-up the target function (the negative log-likelihood, also
 dealing with right-censoring) and the corresponding gradient. We then add
 the profile negative log-likelihood, which in turn calls the two functions
-defined first
+defined first. We start with the log-likelihood, its gradient and Hessian
 
-@d profile
+@d logLik, gradient, Hessian
 @{
 fn <- function(par) 
 {
@@ -1547,6 +1547,13 @@ he <- function(par)
     }
     return(ret)
 }
+@}
+
+and define the profile log-likelihood based on these functions
+
+@d profile
+@{
+@<logLik, gradient, Hessian@>
 
 .profile <- function(start, fix = seq_len(K - 1)) 
 {
@@ -3836,6 +3843,33 @@ ret$method <- paste(ifelse(B > 1L, "Stratified", ""),
 class(ret) <- "power.htest"
 @}
 
+We can invert the power function for finding nominal levels, sample or effect sizes
+necessary to achieve a certain power. The option is available because the power approximation is
+relatively fast.
+
+@d power inversion
+@{
+if (is.null(n)) 
+    n <- ceiling(uniroot(function(n) {
+             @<power call@>
+         }, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)
+else if (is.null(delta)) {
+    ### 2-sample only
+    if (length(alloc_ratio) > 1L)
+        stop(gettextf("effect size can only be computed for two-sample problems in %s",
+                      "power.free1way.test"),
+             domain = NA)	
+    delta <- uniroot(function(delta) {
+             @<power call@>
+### <TH> interval depending on alternative, symmetry? </TH>
+        }, interval = c(0, 10), tol = tol, extendInt = "upX")$root
+    }
+else if (is.null(sig.level)) 
+    sig.level <- uniroot(function(sig.level) {
+            @<power call@>
+       }, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
+@}
+
 @d power
 @{
 power.free1way.test <- function(n = NULL, 
@@ -3858,25 +3892,7 @@ power.free1way.test <- function(n = NULL,
 
     @<r2dsim@>
 
-    if (is.null(n)) 
-        n <- ceiling(uniroot(function(n) {
-                 @<power call@>
-             }, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)
-    else if (is.null(delta)) {
-        ### 2-sample only
-        if (length(alloc_ratio) > 1L)
-            stop(gettextf("effect size can only be computed for two-sample problems in %s",
-                          "power.free1way.test"),
-                 domain = NA)	
-        delta <- uniroot(function(delta) {
-                 @<power call@>
-    ### <TH> interval depending on alternative, symmetry? </TH>
-            }, interval = c(0, 10), tol = tol, extendInt = "upX")$root
-        }
-    else if (is.null(sig.level)) 
-        sig.level <- uniroot(function(sig.level) {
-                @<power call@>
-            }, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
+    @<power inversion@>
 
     ### n is available now
     if (is.null(prob)) prob <- rep(1 / n, n)

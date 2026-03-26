@@ -2,7 +2,7 @@
 set.seed(29)
 options(digits = 5)
 
-pkgs <- c("free1way", "survival", "tram")
+pkgs <- c("free1way.docreg", "survival", "tram")
 if (!all(sapply(pkgs, require, character.only = TRUE)))
     quit()
 

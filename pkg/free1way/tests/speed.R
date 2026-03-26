@@ -1,5 +1,5 @@
 
-pkgs <- c("free1way", "rms")
+pkgs <- c("free1way.docreg", "rms")
 if (!all(sapply(pkgs, require, character.only = TRUE)))
     quit()
 

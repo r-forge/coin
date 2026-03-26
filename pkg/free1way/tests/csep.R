@@ -1,5 +1,5 @@
 
-library("free1way")
+library("free1way.docreg")
 
 ### complete separation
 N <- 5

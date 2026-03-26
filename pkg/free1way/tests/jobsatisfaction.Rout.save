@@ -16,10 +16,10 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > 
-> pkgs <- c("free1way", "coin", "multcomp")
+> pkgs <- c("free1way.docreg", "coin", "multcomp")
 > if (!all(sapply(pkgs, require, character.only = TRUE)))
 +     quit()
-Loading required package: free1way
+Loading required package: free1way.docreg
 Loading required package: coin
 Loading required package: survival
 Loading required package: multcomp
@@ -135,4 +135,4 @@ Linear Hypotheses:
 > 
 > proc.time()
    user  system elapsed 
-  0.877   0.051   0.924 
+  0.876   0.044   0.925 

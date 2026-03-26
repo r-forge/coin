@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > 
-> library("free1way")
+> library("free1way.docreg")
 > options(digits = 5)
 > set.seed(29)
 > 
@@ -152,4 +152,4 @@ attr(,"Attained level")
 > 
 > proc.time()
    user  system elapsed 
-  0.811   0.060   0.866 
+  0.792   0.067   0.855 

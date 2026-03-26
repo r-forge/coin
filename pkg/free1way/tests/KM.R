@@ -2,7 +2,7 @@
 ### check blockwise parameterisation and null parameter estimation
 ### against Kaplan-Meier
 
-pkgs <- c("free1way", "survival")
+pkgs <- c("free1way.docreg", "survival")
 if (!all(sapply(pkgs, require, character.only = TRUE)))
     quit()
 

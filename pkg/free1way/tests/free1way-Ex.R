@@ -1,4 +1,4 @@
-pkgname <- "free1way"
+pkgname <- "free1way.docreg"
 source(file.path(R.home("share"), "R", "examples-header.R"))
 options(warn = 1)
 library('free1way')

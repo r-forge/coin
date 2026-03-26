@@ -16,10 +16,10 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > 
-> pkgs <- c("free1way", "coin", "MASS", "tram")
+> pkgs <- c("free1way.docreg", "coin", "MASS", "tram")
 > if (!all(sapply(pkgs, require, character.only = TRUE)))
 +     quit()
-Loading required package: free1way
+Loading required package: free1way.docreg
 Loading required package: coin
 Loading required package: survival
 Loading required package: MASS
@@ -480,4 +480,4 @@ attr(,"Attained level")
 > 
 > proc.time()
    user  system elapsed 
-  3.737   0.105   3.839 
+  3.713   0.088   3.796 

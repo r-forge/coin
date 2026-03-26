@@ -1,4 +1,4 @@
-Package: free1way
+Package: free1way.docreg
 Title: Additional Documentation and Regression Tests for stats::free1way
 Date: 2026-03-25
 Version: 1.0-0

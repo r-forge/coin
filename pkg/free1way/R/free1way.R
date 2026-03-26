@@ -599,6 +599,8 @@
     
     # profile
     
+    # logLik, gradient, Hessian
+
     fn <- function(par) 
     {
         ret <- .snll(par, x = xlist, mu = mu)
@@ -630,6 +632,7 @@
         }
         return(ret)
     }
+    
 
     .profile <- function(start, fix = seq_len(K - 1)) 
     {
@@ -2144,6 +2147,8 @@ power.free1way.test <- function(n = NULL,
     }
     
 
+    # power inversion
+    
     if (is.null(n)) 
         n <- ceiling(uniroot(function(n) {
                  # power call
@@ -2164,7 +2169,7 @@ power.free1way.test <- function(n = NULL,
         if (length(alloc_ratio) > 1L)
             stop(gettextf("effect size can only be computed for two-sample problems in %s",
                           "power.free1way.test"),
-                 domain = NA)   
+                 domain = NA)       
         delta <- uniroot(function(delta) {
                  # power call
                  
@@ -2195,7 +2200,8 @@ power.free1way.test <- function(n = NULL,
                                     nsim = nsim, seed = seed, 
                                     tol = tol)$power - power
                 
-            }, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
+           }, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
+    
 
     ### n is available now
     if (is.null(prob)) prob <- rep(1 / n, n)

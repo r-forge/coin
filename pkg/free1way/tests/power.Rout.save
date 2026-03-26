@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > 
-> library("free1way")
+> library("free1way.docreg")
 > options(digits = 4)
 > 
 > args <- expand.grid(n = c(15, 50),
@@ -55,4 +55,4 @@ Type 'q()' to quit R.
 > 
 > proc.time()
    user  system elapsed 
- 22.622   0.103  22.725 
+ 22.806   0.079  22.885 

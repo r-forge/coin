@@ -15,10 +15,17 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> pkgname <- "free1way"
+> pkgname <- "free1way.docreg"
 > source(file.path(R.home("share"), "R", "examples-header.R"))
 > options(warn = 1)
 > library('free1way')
+
+Attaching package: 'free1way'
+
+The following objects are masked from 'package:stats':
+
+    free1way, power.free1way.test, ppplot, rfree1way
+
 > 
 > base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 > base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
@@ -361,7 +368,7 @@ groupsG2 0.6490714 0.8381977
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  2.214 0.068 2.292 0 0 
+Time elapsed:  2.223 0.052 2.287 0 0 
 > grDevices::dev.off()
 null device 
           1 
@@ -373,4 +380,4 @@ null device
 > quit('no')
 > proc.time()
    user  system elapsed 
-  2.284   0.091   2.380 
+  2.308   0.060   2.374 

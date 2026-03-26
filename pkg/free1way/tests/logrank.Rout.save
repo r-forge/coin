@@ -19,10 +19,10 @@ Type 'q()' to quit R.
 > set.seed(29)
 > options(digits = 5)
 > 
-> pkgs <- c("free1way", "survival", "tram")
+> pkgs <- c("free1way.docreg", "survival", "tram")
 > if (!all(sapply(pkgs, require, character.only = TRUE)))
 +     quit()
-Loading required package: free1way
+Loading required package: free1way.docreg
 Loading required package: survival
 Loading required package: tram
 Loading required package: mlt
@@ -224,4 +224,4 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 > 
 > proc.time()
    user  system elapsed 
-  1.330   0.079   1.405 
+  1.430   0.048   1.486 
