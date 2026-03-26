@@ -7203,7 +7203,10 @@ static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_pack_sym, 1),
     {NULL, NULL, 0}
 };
+@}
 
+@o libcoin-init.c -cc
+@{
 void attribute_visible R_init_libcoin
 (
     DllInfo *dll
