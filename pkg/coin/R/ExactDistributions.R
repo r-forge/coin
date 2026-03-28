@@ -64,8 +64,8 @@ SR_shift_2sample <- function(object, fact) {
             else
                 stop("cannot compute exact distribution")
 
-            ## update T (used old R_outersum, removed in 1.4-4 after r2522)
-            T <- c(t(outer(dens$T, T, "+")))
+            ## update T
+            T <- .Call(R_outersum, A = dens$T, B = T)
 
             ## make sure T is ordered and distinct
             n <- length(T)

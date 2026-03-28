@@ -55,6 +55,13 @@ extern SEXP R_maxstattrafo
     SEXP cutpoints
 );
 
+extern SEXP R_outersum
+(
+    SEXP A,
+    SEXP B
+);
+
+
 /* StreitbergRoehmel.c */
 extern SEXP R_dpermdist2
 (

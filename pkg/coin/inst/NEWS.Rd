@@ -21,7 +21,7 @@
     \itemize{
       \item Clarifying comments and more reasonable argument names
             in \file{coin/src/StreitbergRoehmel.c}.
-      \item Replace custom \code{R_outersum()} with \code{outer()}.
+
       \item Bibliographic citations and references now use
             \file{inst/REFERENCES.bib}.
     }

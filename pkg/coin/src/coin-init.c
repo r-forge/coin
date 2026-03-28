@@ -12,6 +12,7 @@ static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_MPinv_sym, 3),
     CALLDEF(R_unpack_sym, 3),
     CALLDEF(R_maxstattrafo, 2),
+    CALLDEF(R_outersum, 2),
     CALLDEF(R_dpermdist2, 2),
     CALLDEF(R_dpermdist1, 1),
     CALLDEF(R_split_up_2sample, 4),
