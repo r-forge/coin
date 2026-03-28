@@ -1,3 +1,5 @@
+\newcommand{\C}{\ifelse{latex}{\out{\textsf{C}}}{C}}
+
 \name{NEWS}
 \title{News for Package \pkg{coin}}
 
@@ -10,6 +12,8 @@
       \item Supplying case weights to the sign and Wilcoxon signed-rank tests
             appeared to work, but were not taken into account; it now results in
             an error.
+
+      \item Fix \code{rchk} warning in internal \C routines.
     }
   }
   \subsection{User-visible changes}{
