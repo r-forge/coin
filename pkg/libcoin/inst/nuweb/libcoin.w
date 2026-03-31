@@ -7319,6 +7319,11 @@ void attribute_visible R_init_libcoin
 */
 @}
 
+@d BibTeX Header
+@{@%
+@<Rd Header@>
+@}
+
 @o inst/NEWS.Rd
 @{@%
 @<Rd Header@>
@@ -7520,6 +7525,55 @@ void attribute_visible R_init_libcoin
   \itemize{
     \item \pkg{libcoin} published on CRAN.
   }
+}
+@}
+
+@o inst/REFERENCES.bib
+@{@%
+@<BibTeX Header@>
+@}
+
+@o inst/REFERENCES.bib
+@{@%
+@@article{Hothorn+Hornik+vandeWiel+Zeileis:2006,
+  author  = {Torsten Hothorn and Kurt Hornik and Mark A van de Wiel and Achim
+             Zeileis},
+  title   = {A {L}ego System for Conditional Inference},
+  journal = {The American Statistician},
+  year    = {2006},
+  volume  = {60},
+  number  = {3},
+  pages   = {257--263},
+  doi     = {10.1198/000313006X118430},
+}
+@}
+
+@o inst/REFERENCES.bib
+@{@%
+@@article{Hothorn+Hornik+vandeWiel+Zeileis:2008,
+  author  = {Torsten Hothorn and Kurt Hornik and Mark A van de Wiel and Achim
+             Zeileis},
+  title   = {Implementing a Class of Permutation Tests: The coin Package},
+  journal = {Journal of Statistical Software},
+  year    = {2008},
+  volume  = {28},
+  number  = {8},
+  pages   = {1--23},
+  doi     = {10.18637/jss.v028.i08},
+}
+@}
+
+@o inst/REFERENCES.bib
+@{@%
+@@article{Strasser+Weber:1999,
+  author  = {Helmut Strasser and Christian Weber},
+  title   = {The Asymptotic Theory of Permutation Statistics},
+  journal = {Mathematical Methods of Statistics},
+  year    = {1999},
+  volume  = {8},
+  number  = {2},
+  pages   = {220--250},
+  note    = {Preprint available from \url{https://epub.wu.ac.at/102}}
 }
 @}
 
