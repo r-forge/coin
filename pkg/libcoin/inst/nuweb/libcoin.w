@@ -1075,12 +1075,14 @@ $\ge$.
 #define Power1 						1
 #define Power2 						2
 #define Offset0 					0
-@| LinearStatistic_SLOT Expectation_SLOT Covariance_SLOT Variance_SLOT
-ExpectationX_SLOT varonly_SLOT dim_SLOT
-ExpectationInfluence_SLOT CovarianceInfluence_SLOT VarianceInfluence_SLOT
-Xfactor_SLOT tol_SLOT PermutedLinearStatistic_SLOT StandardisedPermutedLinearStatistic_SLOT
-TableBlock_SLOT Sumweights_SLOT Table_SLOT DoSymmetric DoCenter DoVarOnly Power1
-Power2 Offset0
+@| ALTERNATIVE_twosided ALTERNATIVE_less ALTERNATIVE_greater
+   TESTSTAT_maximum TESTSTAT_quadratic
+   LinearStatistic_SLOT Expectation_SLOT Covariance_SLOT Variance_SLOT
+   ExpectationX_SLOT varonly_SLOT dim_SLOT ExpectationInfluence_SLOT
+   CovarianceInfluence_SLOT VarianceInfluence_SLOT Xfactor_SLOT tol_SLOT
+   PermutedLinearStatistic_SLOT StandardisedPermutedLinearStatistic_SLOT
+   TableBlock_SLOT Sumweights_SLOT Table_SLOT
+   DoSymmetric DoCenter DoVarOnly Power1 Power2 Offset0
 @}
 
 The corresponding header file contains definitions of
@@ -1162,7 +1164,7 @@ $N$ is the number of observations
 @d R N Input
 @{
 SEXP N,
-@|N
+@| N
 @}
 
 which at \proglang{C} level is represented as \code{R_xlen_t} to allow for
@@ -1171,7 +1173,7 @@ $N > $ \code{INT_MAX}
 @d C integer N Input
 @{
 R_xlen_t N
-@|N
+@| N
 @}
 
 The regressors $\x_i, i = 1, \dots, N$
@@ -1179,7 +1181,7 @@ The regressors $\x_i, i = 1, \dots, N$
 @d R x Input
 @{
 SEXP x,
-@|x
+@| x
 @}
 
 are either represented as a real matrix with $N$ rows and $P$ columns
@@ -1187,7 +1189,7 @@ are either represented as a real matrix with $N$ rows and $P$ columns
 @d C integer P Input
 @{
 int P
-@|P
+@| P
 @}
 
 @d C real x Input
@@ -1195,7 +1197,7 @@ int P
 double *x,
 @<C integer N Input@>,
 @<C integer P Input@>,
-@|x
+@| x
 @}
 
 or as a factor (an integer at \proglang{C} level) at $P$ levels
@@ -1205,7 +1207,7 @@ or as a factor (an integer at \proglang{C} level) at $P$ levels
 int *x,
 @<C integer N Input@>,
 @<C integer P Input@>,
-@|x
+@| x
 @}
 
 The influence functions are also either a $N \times Q$ real matrix
@@ -1213,20 +1215,20 @@ The influence functions are also either a $N \times Q$ real matrix
 @d R y Input
 @{
 SEXP y,
-@|y
+@| y
 @}
 
 @d C integer Q Input
 @{
 int Q
-@|Q
+@| Q
 @}
 
 @d C real y Input
 @{
 double *y,
 @<C integer Q Input@>,
-@|y
+@| y
 @}
 
 or a factor at $Q$ levels
@@ -1235,7 +1237,7 @@ or a factor at $Q$ levels
 @{
 int *y,
 @<C integer Q Input@>,
-@|y
+@| y
 @}
 
 The case weights $w_i, i = 1, \dots, N$
@@ -1243,7 +1245,7 @@ The case weights $w_i, i = 1, \dots, N$
 @d R weights Input
 @{
 SEXP weights
-@|weights
+@| weights
 @}
 
 can be constant one (\code{XLENGTH(weights) == 0} or \code{weights = integer(0)})
@@ -1253,7 +1255,7 @@ or integer-valued, with \code{HAS_WEIGHTS == 0} in the former case
 @{
 int *weights,
 int HAS_WEIGHTS,
-@|weights, HAS_WEIGHTS
+@| weights HAS_WEIGHTS
 @}
 
 Case weights larger than \code{INT_MAX} are stored as double
@@ -1262,7 +1264,7 @@ Case weights larger than \code{INT_MAX} are stored as double
 @{
 double *weights,
 int HAS_WEIGHTS,
-@|weights, HAS_WEIGHTS
+@| weights HAS_WEIGHTS
 @}
 
 The sum of all case weights is a double
@@ -1270,7 +1272,7 @@ The sum of all case weights is a double
 @d C sumweights Input
 @{
 double sumweights
-@|sumweights
+@| sumweights
 @}
 
 Subsets $\A \subseteq \{1, \dots, N\}$ are \proglang{R} style indices
@@ -1278,7 +1280,7 @@ Subsets $\A \subseteq \{1, \dots, N\}$ are \proglang{R} style indices
 @d R subset Input
 @{
 SEXP subset
-@|subset
+@| subset
 @}
 
 are either not existent (\code{XLENGTH(subset) == 0}) or of length
@@ -1286,7 +1288,7 @@ are either not existent (\code{XLENGTH(subset) == 0}) or of length
 @d C integer Nsubset Input
 @{
 R_xlen_t Nsubset
-@|Nsubset
+@| Nsubset
 @}
 
 Optionally, one can specify a subset of the subset via
@@ -1295,7 +1297,7 @@ Optionally, one can specify a subset of the subset via
 @{
 R_xlen_t offset,
 @<C integer Nsubset Input@>
-@|offset
+@| offset
 @}
 
 where \code{offset} is a \proglang{C} style index for \code{subset}.
@@ -1306,7 +1308,7 @@ Subsets are stored either as integer
 @{
 int *subset,
 @<C subset range Input@>
-@|subset
+@| subset
 @}
 
 or double (to allow for indices larger than \code{INT_MAX})
@@ -1315,7 +1317,7 @@ or double (to allow for indices larger than \code{INT_MAX})
 @{
 double *subset,
 @<C subset range Input@>
-@|subset
+@| subset
 @}
 
 Blocks $\text{block}_i, i = 1, \dots, N$
@@ -1323,7 +1325,7 @@ Blocks $\text{block}_i, i = 1, \dots, N$
 @d R block Input
 @{
 SEXP block
-@|block
+@| block
 @}
 
 at $B$ levels
@@ -1331,7 +1333,7 @@ at $B$ levels
 @d C integer B Input
 @{
 int B
-@|B
+@| B
 @}
 
 are stored as a factor
@@ -1340,7 +1342,7 @@ are stored as a factor
 @{
 int *block,
 @<C integer B Input@>,
-@|block
+@| block
 @}
 
 The tabulation of block (potentially in subsets) is
@@ -1348,7 +1350,7 @@ The tabulation of block (potentially in subsets) is
 @d R blockTable Input
 @{
 SEXP blockTable
-@|blockTable
+@| blockTable
 @}
 
 where the table is of length $B + 1$ and the first element
@@ -1591,7 +1593,7 @@ calls a \proglang{C} level function for the computations.
     UNPROTECT(1);
     return(ans);
 }
-@|R_ExpectationCovarianceStatistic
+@| R_ExpectationCovarianceStatistic
 @}
 
 $P$, $Q$ and $B$ are first extracted from the data. The case where \code{X}
@@ -1675,7 +1677,7 @@ void RC_ExpectationCovarianceStatistic
     R_Free(ExpX); R_Free(VarX); R_Free(CovX);
     UNPROTECT(2);
 }
-@|RC_ExpectationCovarianceStatistic
+@| RC_ExpectationCovarianceStatistic
 @}
 
 The dimensions are available from the return object:
@@ -1899,7 +1901,7 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
     UNPROTECT(4);
     return(ans);
 }
-@|R_PermutedLinearStatistic
+@| R_PermutedLinearStatistic
 @}
 
 @d Setup Linear Statistic
@@ -2045,7 +2047,7 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic_2d(
     UNPROTECT(1);
     return(ans);
 }
-@|R_ExpectationCovarianceStatistic_2d
+@| R_ExpectationCovarianceStatistic_2d
 @}
 
 @d Setup Dimensions 2d
@@ -2207,7 +2209,7 @@ void RC_ExpectationCovarianceStatistic_2d
     R_Free(table2d);
     UNPROTECT(2);
 }
-@|RC_ExpectationCovarianceStatistic
+@| RC_ExpectationCovarianceStatistic
 @}
 
 @d 2d Memory
@@ -2329,7 +2331,7 @@ extern SEXP libcoin_R_PermutedLinearStatistic_2d(
     UNPROTECT(2);
     return(ans);
 }
-@|R_PermutedLinearStatistic_2d
+@| R_PermutedLinearStatistic_2d
 @}
 
 @d Convert Table to Integer
@@ -2697,7 +2699,7 @@ double C_maxstand_Covariance
     }
     return(ans);
 }
-@|C_maxstand_Covariance
+@| C_maxstand_Covariance
 @}
 
 @d C_maxstand_Variance
@@ -2720,7 +2722,7 @@ double C_maxstand_Variance
     }
     return(ans);
 }
-@|C_maxstand_Variance
+@| C_maxstand_Variance
 @}
 
 @d C_minstand_Covariance
@@ -2743,7 +2745,7 @@ double C_minstand_Covariance
     }
     return(ans);
 }
-@|C_minstand_Covariance
+@| C_minstand_Covariance
 @}
 
 @d C_minstand_Variance
@@ -2766,7 +2768,7 @@ double C_minstand_Variance
     }
     return(ans);
 }
-@|C_minstand_Variance
+@| C_minstand_Variance
 @}
 
 @d C_maxabsstand_Covariance
@@ -2790,7 +2792,7 @@ double C_maxabsstand_Covariance
     }
     return(ans);
 }
-@|C_maxabsstand_Covariance
+@| C_maxabsstand_Covariance
 @}
 
 @d C_maxabsstand_Variance
@@ -2813,7 +2815,7 @@ double C_maxabsstand_Variance
     }
     return(ans);
 }
-@|C_maxabsstand_Variance
+@| C_maxabsstand_Variance
 @}
 
 <<quadform>>=
@@ -2891,7 +2893,7 @@ extern SEXP libcoin_R_quadform(
     UNPROTECT(1);
     return(ans);
 }
-@|R_quadform
+@| R_quadform
 @}
 
 @d C_quadform
@@ -2914,7 +2916,7 @@ double C_quadform
 
     return(ans);
 }
-@|C_quadform
+@| C_quadform
 @}
 
 @d C_maxtype
@@ -2950,7 +2952,7 @@ double C_maxtype
     }
     return(ret);
 }
-@|C_maxtype
+@| C_maxtype
 @}
 
 @d C_standardise
@@ -2979,7 +2981,7 @@ void C_standardise
         }
     }
 }
-@|C_standardise
+@| C_standardise
 @}
 
 @d P-Values
@@ -3002,7 +3004,7 @@ double C_chisq_pvalue
 ) {
     return(pchisq(stat, (double) df, lower, give_log));
 }
-@|C_chisq_pvalue
+@| C_chisq_pvalue
 @}
 
 @d C_perm_pvalue
@@ -3031,7 +3033,7 @@ double C_perm_pvalue
     }
     return(ret);
 }
-@|C_perm_pvalue
+@| C_perm_pvalue
 @}
 
 @d C_norm_pvalue
@@ -3068,6 +3070,7 @@ double C_norm_pvalue
     }
     return(NA_REAL);
 }
+@| C_norm_pvalue
 @}
 
 @d C_maxtype_pvalue
@@ -3127,7 +3130,7 @@ double C_maxtype_pvalue
         return(1 - ans);        /* p-value */
     }
 }
-@|C_maxtype_pvalue
+@| C_maxtype_pvalue
 @}
 
 @d Setup mvtnorm Memory
@@ -3261,7 +3264,7 @@ void C_ordered_Xfactor
     R_Free(mvar); R_Free(mcovar); R_Free(mMPinv);
     if (nresample == 0) R_Free(blinstat);
 }
-@|C_ordered_Xfactor
+@| C_ordered_Xfactor
 @}
 
 @d Setup maxstat Variables
@@ -3448,7 +3451,7 @@ void C_unordered_Xfactor
     R_Free(mblinstat); R_Free(mvar); R_Free(mcovar); R_Free(mMPinv);
     if (nresample == 0) R_Free(blinstat);
 }
-@|C_unordered_Xfactor
+@| C_unordered_Xfactor
 @}
 
 @d Count Levels
@@ -3586,7 +3589,7 @@ void RC_LinearStatistic
     RC_KronSums(x, N, P, y, Q, !DoSymmetric, &center, &center, !DoCenter, weights,
                 subset, offset, Nsubset, PQ_ans);
 }
-@|RC_LinearStatistic
+@| RC_LinearStatistic
 @}
 
 \section{Expectation and Covariance}
@@ -3627,7 +3630,7 @@ void C_ExpectationLinearStatistic
             PQ_ans[q * P + p] += ExpX[p] * ExpInf[q];
     }
 }
-@|C_ExpectationLinearStatistic
+@| C_ExpectationLinearStatistic
 @}
 
 @d C_CovarianceLinearStatistic
@@ -3666,7 +3669,7 @@ void C_CovarianceLinearStatistic
         R_Free(PP_sym_tmp);
     }
 }
-@|C_CovarianceLinearStatistic
+@| C_CovarianceLinearStatistic
 @}
 
 @d C_VarianceLinearStatistic
@@ -3698,7 +3701,7 @@ void C_VarianceLinearStatistic
         R_Free(P_tmp);
     }
 }
-@|C_VarianceLinearStatistic
+@| C_VarianceLinearStatistic
 @}
 
 \subsection{Influence}
@@ -3750,7 +3753,7 @@ SEXP R_ExpectationInfluence
     UNPROTECT(1);
     return(ans);
 }
-@|R_ExpectationInfluence
+@| R_ExpectationInfluence
 @}
 
 @d RC_ExpectationInfluence Prototype
@@ -3779,7 +3782,7 @@ void RC_ExpectationInfluence
     for (int q = 0; q < Q; q++)
         P_ans[q] = P_ans[q] / sumweights;
 }
-@|RC_ExpectationInfluence
+@| RC_ExpectationInfluence
 @}
 
 <<CovarianceInfluence>>=
@@ -3854,7 +3857,7 @@ SEXP R_CovarianceInfluence
     UNPROTECT(2);
     return(ans);
 }
-@|R_CovarianceInfluence
+@| R_CovarianceInfluence
 @}
 
 @d RC_CovarianceInfluence Prototype
@@ -3890,7 +3893,7 @@ void RC_CovarianceInfluence
             PQ_ans[q] = PQ_ans[q] / sumweights;
     }
 }
-@|RC_CovarianceInfluence
+@| RC_CovarianceInfluence
 @}
 
 \subsection{X}
@@ -3923,7 +3926,7 @@ SEXP R_ExpectationX
     UNPROTECT(1);
     return(ans);
 }
-@|R_ExpectationX
+@| R_ExpectationX
 @}
 
 @d RC_ExpectationX Prototype
@@ -3955,7 +3958,7 @@ void RC_ExpectationX
         RC_colSums(REAL(x), N, P, Power1, &center, !DoCenter, weights, subset, offset, Nsubset, P_ans);
     }
 }
-@|RC_ExpectationX
+@| RC_ExpectationX
 @}
 
 <<ExpectationCovarianceX>>=
@@ -4047,7 +4050,7 @@ SEXP R_CovarianceX
     UNPROTECT(2);
     return(ans);
 }
-@|R_CovarianceX
+@| R_CovarianceX
 @}
 
 @d RC_CovarianceX Prototype
@@ -4091,7 +4094,7 @@ void RC_CovarianceX
         }
     }
 }
-@|RC_CovarianceX
+@| RC_CovarianceX
 @}
 
 \section{Computing Sums}
@@ -4182,7 +4185,7 @@ SEXP R_Sums
 
     return(ans);
 }
-@|R_Sums
+@| R_Sums
 @}
 
 @d RC_Sums Prototype
@@ -4225,7 +4228,7 @@ double RC_Sums
         }
     }
 }
-@|RC_Sums
+@| RC_Sums
 @}
 
 @d C_Sums_dweights_dsubset
@@ -4239,7 +4242,7 @@ double C_Sums_dweights_dsubset
     double *s, *w;
     @<Sums Body@>
 }
-@|C_Sums_dweights_dsubset
+@| C_Sums_dweights_dsubset
 @}
 
 @d C_Sums_iweights_dsubset
@@ -4254,7 +4257,7 @@ double C_Sums_iweights_dsubset
     int *w;
     @<Sums Body@>
 }
-@|C_Sums_iweights_dsubset
+@| C_Sums_iweights_dsubset
 @}
 
 @d C_Sums_iweights_isubset
@@ -4268,7 +4271,7 @@ double C_Sums_iweights_isubset
     int *s, *w;
     @<Sums Body@>
 }
-@|C_Sums_iweights_isubset
+@| C_Sums_iweights_isubset
 @}
 
 @d C_Sums_dweights_isubset
@@ -4283,7 +4286,7 @@ double C_Sums_dweights_isubset
     double *w;
     @<Sums Body@>
 }
-@|C_Sums_dweights_isubset
+@| C_Sums_dweights_isubset
 @}
 
 @d Sums Body
@@ -4390,7 +4393,7 @@ SEXP R_KronSums
     UNPROTECT(1);
     return(ans);
 }
-@|R_KronSums
+@| R_KronSums
 @}
 
 @d RC_KronSums Prototype
@@ -4415,7 +4418,7 @@ void RC_KronSums
         @<KronSums Double x@>
     }
 }
-@|RC_KronSums
+@| RC_KronSums
 @}
 
 @d RC KronSums Input
@@ -4509,7 +4512,7 @@ void C_KronSums_dweights_dsubset
     double *s, *w;
     @<KronSums Body@>
 }
-@|C_KronSums_dweights_dsubset
+@| C_KronSums_dweights_dsubset
 @}
 
 @d C_KronSums_iweights_dsubset
@@ -4525,7 +4528,7 @@ void C_KronSums_iweights_dsubset
     int *w;
     @<KronSums Body@>
 }
-@|C_KronSums_iweights_dsubset
+@| C_KronSums_iweights_dsubset
 @}
 
 @d C_KronSums_iweights_isubset
@@ -4540,7 +4543,7 @@ void C_KronSums_iweights_isubset
     int *s, *w;
     @<KronSums Body@>
 }
-@|C_KronSums_iweights_isubset
+@| C_KronSums_iweights_isubset
 @}
 
 @d C_KronSums_dweights_isubset
@@ -4556,7 +4559,7 @@ void C_KronSums_dweights_isubset
     double *w;
     @<KronSums Body@>
 }
-@|C_KronSums_dweights_isubset
+@| C_KronSums_dweights_isubset
 @}
 
 @d KronSums Body
@@ -4635,7 +4638,7 @@ void C_XfactorKronSums_dweights_dsubset
     double *s, *w;
     @<XfactorKronSums Body@>
 }
-@|C_XfactorKronSums_dweights_dsubset
+@| C_XfactorKronSums_dweights_dsubset
 @}
 
 @d C_XfactorKronSums_iweights_dsubset
@@ -4651,7 +4654,7 @@ void C_XfactorKronSums_iweights_dsubset
     int *w;
     @<XfactorKronSums Body@>
 }
-@|C_XfactorKronSums_iweights_dsubset
+@| C_XfactorKronSums_iweights_dsubset
 @}
 
 @d C_XfactorKronSums_iweights_isubset
@@ -4666,7 +4669,7 @@ void C_XfactorKronSums_iweights_isubset
     int *s, *w;
     @<XfactorKronSums Body@>
 }
-@|C_XfactorKronSums_iweights_isubset
+@| C_XfactorKronSums_iweights_isubset
 @}
 
 @d C_XfactorKronSums_dweights_isubset
@@ -4682,7 +4685,7 @@ void C_XfactorKronSums_dweights_isubset
     double *w;
     @<XfactorKronSums Body@>
 }
-@|C_XfactorKronSums_dweights_isubset
+@| C_XfactorKronSums_dweights_isubset
 @}
 
 @d XfactorKronSums Body
@@ -4772,7 +4775,7 @@ SEXP R_KronSums_Permutation
     UNPROTECT(1);
     return(ans);
 }
-@|R_KronSums_Permutation
+@| R_KronSums_Permutation
 @}
 
 @d RC_KronSums_Permutation Prototype
@@ -4816,7 +4819,7 @@ void RC_KronSums_Permutation
         }
     }
 }
-@|RC_KronSums_Permutation
+@| RC_KronSums_Permutation
 @}
 
 @d C_KronSums_Permutation_dsubset
@@ -4831,7 +4834,7 @@ void C_KronSums_Permutation_dsubset
 ) {
     @<KronSums Permutation Body@>
 }
-@|C_KronSums_Permutation_dsubset
+@| C_KronSums_Permutation_dsubset
 @}
 
 @d C_KronSums_Permutation_isubset
@@ -4846,7 +4849,7 @@ void C_KronSums_Permutation_isubset
 ) {
     @<KronSums Permutation Body@>
 }
-@|C_KronSums_Permutation_isubset
+@| C_KronSums_Permutation_isubset
 @}
 
 Because \code{subset} might not be ordered (in the presence of blocks) we
@@ -4884,7 +4887,7 @@ void C_XfactorKronSums_Permutation_dsubset
 ) {
     @<XfactorKronSums Permutation Body@>
 }
-@|C_XfactorKronSums_Permutation_dsubset
+@| C_XfactorKronSums_Permutation_dsubset
 @}
 
 @d C_XfactorKronSums_Permutation_isubset
@@ -4899,7 +4902,7 @@ void C_XfactorKronSums_Permutation_isubset
 ) {
     @<XfactorKronSums Permutation Body@>
 }
-@|C_XfactorKronSums_Permutation_isubset
+@| C_XfactorKronSums_Permutation_isubset
 @}
 
 @d XfactorKronSums Permutation Body
@@ -4969,7 +4972,7 @@ SEXP R_colSums
     UNPROTECT(1);
     return(ans);
 }
-@|R_colSums
+@| R_colSums
 @}
 
 @d RC_colSums Prototype
@@ -5010,7 +5013,7 @@ void RC_colSums
         }
     }
 }
-@|RC_colSums
+@| RC_colSums
 @}
 
 @d C colSums Input
@@ -5038,7 +5041,7 @@ void C_colSums_dweights_dsubset
     double *s, *w;
     @<colSums Body@>
 }
-@|C_colSums_dweights_dsubset
+@| C_colSums_dweights_dsubset
 @}
 
 @d C_colSums_iweights_dsubset
@@ -5054,7 +5057,7 @@ void C_colSums_iweights_dsubset
     int *w;
     @<colSums Body@>
 }
-@|C_colSums_iweights_dsubset
+@| C_colSums_iweights_dsubset
 @}
 
 @d C_colSums_iweights_isubset
@@ -5069,7 +5072,7 @@ void C_colSums_iweights_isubset
     int *s, *w;
     @<colSums Body@>
 }
-@|C_colSums_iweights_isubset
+@| C_colSums_iweights_isubset
 @}
 
 @d C_colSums_dweights_isubset
@@ -5085,7 +5088,7 @@ void C_colSums_dweights_isubset
     double *w;
     @<colSums Body@>
 }
-@|C_colSums_dweights_isubset
+@| C_colSums_dweights_isubset
 @}
 
 @d colSums Body
@@ -5187,7 +5190,7 @@ SEXP R_OneTableSums
     UNPROTECT(1);
     return(ans);
 }
-@|R_OneTableSums
+@| R_OneTableSums
 @}
 
 @d RC_OneTableSums Prototype
@@ -5228,7 +5231,7 @@ void RC_OneTableSums
         }
     }
 }
-@|RC_OneTableSums
+@| RC_OneTableSums
 @}
 
 @d C OneTableSums Input
@@ -5253,7 +5256,7 @@ void C_OneTableSums_dweights_dsubset
     double *s, *w;
     @<OneTableSums Body@>
 }
-@|C_OneTableSums_dweights_dsubset
+@| C_OneTableSums_dweights_dsubset
 @}
 
 @d C_OneTableSums_iweights_dsubset
@@ -5269,7 +5272,7 @@ void C_OneTableSums_iweights_dsubset
     int *w;
     @<OneTableSums Body@>
 }
-@|C_OneTableSums_iweights_dsubset
+@| C_OneTableSums_iweights_dsubset
 @}
 
 @d C_OneTableSums_iweights_isubset
@@ -5284,7 +5287,7 @@ void C_OneTableSums_iweights_isubset
     int *s, *w;
     @<OneTableSums Body@>
 }
-@|C_OneTableSums_iweights_isubset
+@| C_OneTableSums_iweights_isubset
 @}
 
 @d C_OneTableSums_dweights_isubset
@@ -5300,7 +5303,7 @@ void C_OneTableSums_dweights_isubset
     double *w;
     @<OneTableSums Body@>
 }
-@|C_OneTableSums_dweights_isubset
+@| C_OneTableSums_dweights_isubset
 @}
 
 @d OneTableSums Body
@@ -5383,7 +5386,7 @@ SEXP R_TwoTableSums
     UNPROTECT(2);
     return(ans);
 }
-@|R_TwoTableSums
+@| R_TwoTableSums
 @}
 
 
@@ -5425,7 +5428,7 @@ void RC_TwoTableSums
         }
     }
 }
-@|RC_TwoTableSums
+@| RC_TwoTableSums
 @}
 
 @d C TwoTableSums Input
@@ -5451,7 +5454,7 @@ void C_TwoTableSums_dweights_dsubset
     double *s, *w;
     @<TwoTableSums Body@>
 }
-@|C_TwoTableSums_dweights_dsubset
+@| C_TwoTableSums_dweights_dsubset
 @}
 
 @d C_TwoTableSums_iweights_dsubset
@@ -5467,7 +5470,7 @@ void C_TwoTableSums_iweights_dsubset
     int *w;
     @<TwoTableSums Body@>
 }
-@|C_TwoTableSums_iweights_dsubset
+@| C_TwoTableSums_iweights_dsubset
 @}
 
 @d C_TwoTableSums_iweights_isubset
@@ -5482,7 +5485,7 @@ void C_TwoTableSums_iweights_isubset
     int *s, *w;
     @<TwoTableSums Body@>
 }
-@|C_TwoTableSums_iweights_isubset
+@| C_TwoTableSums_iweights_isubset
 @}
 
 @d C_TwoTableSums_dweights_isubset
@@ -5498,7 +5501,7 @@ void C_TwoTableSums_dweights_isubset
     double *w;
     @<TwoTableSums Body@>
 }
-@|C_TwoTableSums_dweights_isubset
+@| C_TwoTableSums_dweights_isubset
 @}
 
 @d TwoTableSums Body
@@ -5587,7 +5590,7 @@ SEXP R_ThreeTableSums
     UNPROTECT(2);
     return(ans);
 }
-@|R_ThreeTableSums
+@| R_ThreeTableSums
 @}
 
 @d RC_ThreeTableSums Prototype
@@ -5628,7 +5631,7 @@ void RC_ThreeTableSums
         }
     }
 }
-@|RC_ThreeTableSums
+@| RC_ThreeTableSums
 @}
 
 @d C ThreeTableSums Input
@@ -5655,7 +5658,7 @@ void C_ThreeTableSums_dweights_dsubset
     double *s, *w;
     @<ThreeTableSums Body@>
 }
-@|C_ThreeTableSums_dweights_dsubset
+@| C_ThreeTableSums_dweights_dsubset
 @}
 
 @d C_ThreeTableSums_iweights_dsubset
@@ -5671,7 +5674,7 @@ void C_ThreeTableSums_iweights_dsubset
     int *w;
     @<ThreeTableSums Body@>
 }
-@|C_ThreeTableSums_iweights_dsubset
+@| C_ThreeTableSums_iweights_dsubset
 @}
 
 @d C_ThreeTableSums_iweights_isubset
@@ -5686,7 +5689,7 @@ void C_ThreeTableSums_iweights_isubset
     int *s, *w;
     @<ThreeTableSums Body@>
 }
-@|C_ThreeTableSums_iweights_isubset
+@| C_ThreeTableSums_iweights_isubset
 @}
 
 @d C_ThreeTableSums_dweights_isubset
@@ -5702,7 +5705,7 @@ void C_ThreeTableSums_dweights_isubset
     double *w;
     @<ThreeTableSums Body@>
 }
-@|C_ThreeTableSums_dweights_isubset
+@| C_ThreeTableSums_dweights_isubset
 @}
 
 @d ThreeTableSums Body
@@ -5797,7 +5800,7 @@ SEXP R_order_subset_wrt_block
     UNPROTECT(2);
     return(ans);
 }
-@|R_order_subset_wrt_block
+@| R_order_subset_wrt_block
 @}
 
 @d RC_order_subset_wrt_block Prototype
@@ -5838,7 +5841,7 @@ SEXP RC_order_subset_wrt_block
         return(ans);
     }
 }
-@|RC_order_subset_wrt_block
+@| RC_order_subset_wrt_block
 @}
 
 @d C_setup_subset
@@ -5857,7 +5860,7 @@ void C_setup_subset
         }
     }
 }
-@|C_setup_subset
+@| C_setup_subset
 @}
 
 @d C_setup_subset_block
@@ -5890,7 +5893,7 @@ void C_setup_subset_block
 
     R_Free(cumtable);
 }
-@|C_setup_subset_block
+@| C_setup_subset_block
 @}
 
 @d C_order_subset_wrt_block
@@ -5923,7 +5926,7 @@ void C_order_subset_wrt_block
 
     R_Free(cumtable);
 }
-@|C_order_subset_wrt_block
+@| C_order_subset_wrt_block
 @}
 
 @d RC_setup_subset Prototype
@@ -5975,7 +5978,7 @@ be a little bit more generous with memory here. The return value is always
     UNPROTECT(2);
     return(ans);
 }
-@|RC_setup_subset
+@| RC_setup_subset
 @}
 
 \subsection{Permutation Helpers}
@@ -6005,7 +6008,7 @@ void C_Permute
         subset[j] = subset[--n];
     }
 }
-@|C_Permute
+@| C_Permute
 @}
 
 @d C_doPermute
@@ -6020,7 +6023,7 @@ void C_doPermute
     Memcpy(Nsubset_tmp, subset, Nsubset);
     C_Permute(Nsubset_tmp, Nsubset, perm);
 }
-@|C_doPermute
+@| C_doPermute
 @}
 
 @d C_PermuteBlock
@@ -6045,7 +6048,7 @@ void C_PermuteBlock
         }
     }
 }
-@|C_PermuteBlock
+@| C_PermuteBlock
 @}
 
 @d C_doPermuteBlock
@@ -6062,7 +6065,7 @@ void C_doPermuteBlock
     Memcpy(Nsubset_tmp, subset, Nsubset);
     C_PermuteBlock(Nsubset_tmp, table, Nlevels, perm);
 }
-@|C_doPermuteBlock
+@| C_doPermuteBlock
 @}
 
 \subsection{Other Utils}
@@ -6105,7 +6108,7 @@ R_xlen_t NROW
     UNPROTECT(1);
     return(ret);
 }
-@|NROW
+@| NROW
 @}
 
 @d NCOL
@@ -6131,7 +6134,7 @@ int NCOL
     UNPROTECT(1);
     return(ret);
 }
-@|NCOL
+@| NCOL
 @}
 
 @d NLEVELS
@@ -6158,7 +6161,7 @@ int NLEVELS
     UNPROTECT(1);
     return(maxlev);
 }
-@|NLEVELS
+@| NLEVELS
 @}
 
 Check for integer overflow when computing $P (P + 1) / 2$ and $P Q$.
@@ -6179,7 +6182,7 @@ int PP12
 
     return((int) ans);
 }
-@|PP12
+@| PP12
 @}
 
 @d mPQB
@@ -6197,7 +6200,7 @@ int mPQB
 
     return((int) ans);
 }
-@|mPQB
+@| mPQB
 @}
 
 <<kronecker>>=
@@ -6289,7 +6292,7 @@ void C_kronecker
         }
     }
 }
-@|C_kronecker
+@| C_kronecker
 @}
 
 @d C_kronecker_sym
@@ -6326,7 +6329,7 @@ void C_kronecker_sym
         }
     }
 }
-@|C_kronecker_sym
+@| C_kronecker_sym
 @}
 
 @d C_KronSums_sym
@@ -6350,7 +6353,7 @@ void C_KronSums_sym_
         }
     }
 }
-@|C_KronSums_sym
+@| C_KronSums_sym
 @}
 
 <<MPinv>>=
@@ -6416,7 +6419,7 @@ extern SEXP libcoin_R_MPinv_sym(
     UNPROTECT(2);
     return(ans);
 }
-@|R_MPinv_sym
+@| R_MPinv_sym
 @}
 
 @d C_MPinv_sym
@@ -6557,7 +6560,7 @@ extern SEXP libcoin_R_unpack_sym(
     UNPROTECT(1);
     return ans;
 }
-@|R_unpack_sym
+@| R_unpack_sym
 @}
 
 <<pack>>=
@@ -6619,7 +6622,7 @@ extern SEXP libcoin_R_pack_sym(
     UNPROTECT(1);
     return ans;
 }
-@|R_pack_sym
+@| R_pack_sym
 @}
 
 \section{Memory}
@@ -6655,7 +6658,7 @@ extern SEXP libcoin_R_pack_sym(
 @d R LECV Input
 @{
 SEXP LECV
-@|LECV
+@| LECV
 @}
 
 @d C_get_P
@@ -6666,7 +6669,7 @@ int C_get_P
 ) {
     return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[0]);
 }
-@|C_get_P
+@| C_get_P
 @}
 
 @d C_get_Q
@@ -6677,7 +6680,7 @@ int C_get_Q
 ) {
     return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[1]);
 }
-@|C_get_Q
+@| C_get_Q
 @}
 
 @d C_get_varonly
@@ -6688,7 +6691,7 @@ int C_get_varonly
 ) {
     return(INTEGER(VECTOR_ELT(LECV, varonly_SLOT))[0]);
 }
-@|C_get_varonly
+@| C_get_varonly
 @}
 
 @d C_get_Xfactor
@@ -6699,7 +6702,7 @@ int C_get_Xfactor
 ) {
     return(INTEGER(VECTOR_ELT(LECV, Xfactor_SLOT))[0]);
 }
-@|C_get_Xfactor
+@| C_get_Xfactor
 @}
 
 @d C_get_LinearStatistic
@@ -6710,7 +6713,7 @@ double* C_get_LinearStatistic
 ) {
     return(REAL(VECTOR_ELT(LECV, LinearStatistic_SLOT)));
 }
-@|C_get_LinearStatistic
+@| C_get_LinearStatistic
 @}
 
 @d C_get_Expectation
@@ -6721,7 +6724,7 @@ double* C_get_Expectation
 ) {
     return(REAL(VECTOR_ELT(LECV, Expectation_SLOT)));
 }
-@|C_get_Expectation
+@| C_get_Expectation
 @}
 
 @d C_get_Variance
@@ -6745,7 +6748,7 @@ double* C_get_Variance
     }
     return(REAL(VECTOR_ELT(LECV, Variance_SLOT)));
 }
-@|C_get_Variance
+@| C_get_Variance
 @}
 
 @d C_get_Covariance
@@ -6761,7 +6764,7 @@ double* C_get_Covariance
         return(C_get_Variance(LECV));
     return(REAL(VECTOR_ELT(LECV, Covariance_SLOT)));
 }
-@|C_get_Covariance
+@| C_get_Covariance
 @}
 
 @d C_get_ExpectationX
@@ -6772,7 +6775,7 @@ double* C_get_ExpectationX
 ) {
     return(REAL(VECTOR_ELT(LECV, ExpectationX_SLOT)));
 }
-@|C_get_ExpectationX
+@| C_get_ExpectationX
 @}
 
 @d C_get_ExpectationInfluence
@@ -6783,7 +6786,7 @@ double* C_get_ExpectationInfluence
 ) {
     return(REAL(VECTOR_ELT(LECV, ExpectationInfluence_SLOT)));
 }
-@|C_get_ExpectationInfluence
+@| C_get_ExpectationInfluence
 @}
 
 @d C_get_CovarianceInfluence
@@ -6794,7 +6797,7 @@ double* C_get_CovarianceInfluence
 ) {
     return(REAL(VECTOR_ELT(LECV, CovarianceInfluence_SLOT)));
 }
-@|C_get_CovarianceInfluence
+@| C_get_CovarianceInfluence
 @}
 
 @d C_get_VarianceInfluence
@@ -6805,7 +6808,7 @@ double* C_get_VarianceInfluence
 ) {
     return(REAL(VECTOR_ELT(LECV, VarianceInfluence_SLOT)));
 }
-@|C_get_VarianceInfluence
+@| C_get_VarianceInfluence
 @}
 
 @d C_get_TableBlock
@@ -6818,7 +6821,7 @@ double* C_get_TableBlock
         error("object does not contain table block slot");
     return(REAL(VECTOR_ELT(LECV, TableBlock_SLOT)));
 }
-@|C_get_TableBlock
+@| C_get_TableBlock
 @}
 
 @d C_get_Sumweights
@@ -6831,7 +6834,7 @@ double* C_get_Sumweights
         error("object does not contain sumweights slot");
     return(REAL(VECTOR_ELT(LECV, Sumweights_SLOT)));
 }
-@|C_get_Sumweights
+@| C_get_Sumweights
 @}
 
 @d C_get_Table
@@ -6844,7 +6847,7 @@ double* C_get_Table
         error("Cannot extract table from object");
     return(REAL(VECTOR_ELT(LECV, Table_SLOT)));
 }
-@|C_get_Table
+@| C_get_Table
 @}
 
 @d C_get_dimTable
@@ -6858,7 +6861,7 @@ int* C_get_dimTable
     return(INTEGER(getAttrib(VECTOR_ELT(LECV, Table_SLOT),
                              R_DimSymbol)));
 }
-@|C_get_dimTable
+@| C_get_dimTable
 @}
 
 @d C_get_B
@@ -6871,7 +6874,7 @@ int C_get_B
         return(LENGTH(VECTOR_ELT(LECV, Sumweights_SLOT)));
     return(C_get_dimTable(LECV)[2]);
 }
-@|C_get_B
+@| C_get_B
 @}
 
 @d C_get_nresample
@@ -6883,7 +6886,7 @@ R_xlen_t C_get_nresample
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     return(XLENGTH(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)) / PQ);
 }
-@|C_get_nresample
+@| C_get_nresample
 @}
 
 @d C_get_PermutedLinearStatistic
@@ -6894,7 +6897,7 @@ double* C_get_PermutedLinearStatistic
 ) {
     return(REAL(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)));
 }
-@|C_get_PermutedLinearStatistic
+@| C_get_PermutedLinearStatistic
 @}
 
 @d C_get_tol
@@ -6905,7 +6908,7 @@ double C_get_tol
 ) {
     return(REAL(VECTOR_ELT(LECV, tol_SLOT))[0]);
 }
-@|C_get_tol
+@| C_get_tol
 @}
 
 @d Memory Input Checks
@@ -7057,7 +7060,7 @@ SEXP RC_init_LECV_1d
     UNPROTECT(2);
     return(ans);
 }
-@|RC_init_LECV_1d
+@| RC_init_LECV_1d
 @}
 
 @d RC_init_LECV_2d
@@ -7097,7 +7100,7 @@ SEXP RC_init_LECV_2d
     UNPROTECT(3);
     return(ans);
 }
-@|RC_init_LECV_2d
+@| RC_init_LECV_2d
 @}
 
 \chapter{Package Infrastructure}
