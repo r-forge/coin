@@ -19,7 +19,7 @@ libcoin.tex: libcoin.Rnw
 	R CMD Sweave libcoin.Rnw
 
 libcoin.pdf: libcoin.tex
-	$(TEXI2DVI) libcoin.tex
+	pdflatex --draftmode --quiet libcoin.tex
 	### NEED to run nuweb AGAIN to sort out page numbers
 	### WITHOUT regeneration of the output files
 	nuweb -or libcoin.w
