@@ -258,7 +258,7 @@ motivated this little experiment.
 
 \section{\proglang{R} User Interface}
 
-@o libcoin.R -cp
+@o R/libcoin.R -cp
 @{
 @<R Header@>
 @<LinStatExpCov@>
@@ -796,7 +796,7 @@ necessarily computing the corresponding linear statistics via
 @{(ix, iy = integer(0), block = integer(0), weights = integer(0),
  subset = integer(0), checkNAs = TRUE)@}
 
-@o ctabs.R -cp
+@o R/ctabs.R -cp
 @{
 @<R Header@>
 ctabs <-
@@ -835,7 +835,7 @@ max(abs(t1[-1, -1] - t2))
 
 \section{Manual Pages}
 
-@o LinStatExpCov.Rd
+@o man/LinStatExpCov.Rd
 @{
 @<Rd Header@>
 \name{LinStatExpCov}
@@ -912,7 +912,7 @@ doTest(LinStatExpCov(X, Y))
 \keyword{htest}
 @}
 
-@o doTest.Rd
+@o man/doTest.Rd
 @{
 @<Rd Header@>
 \name{doTest}
@@ -954,7 +954,7 @@ doTest@<doTest Prototype@>
 \keyword{htest}
 @}
 
-@o ctabs.Rd
+@o man/ctabs.Rd
 @{
 @<Rd Header@>
 \name{ctabs}
@@ -1005,7 +1005,7 @@ header files.
 
 \section{Header and Source Files}
 
-@o libcoin_internal.h -cc
+@o src/libcoin_internal.h -cc
 @{
 @<C Header@>
 @<R Includes@>
@@ -1088,7 +1088,7 @@ functions that can be called via \code{.Call()} from the \pkg{libcoin}
 package. In addition, packages linking to \pkg{libcoin} can access these
 function at \proglang{C} level (at your own risk, of course!).
 
-@o libcoin.h -cc
+@o src/libcoin.h -cc
 @{
 @<C Header@>
 #include "libcoin_internal.h"
@@ -1127,7 +1127,7 @@ extern @<R_pack_sym Prototype@>;
 The \proglang{C} file \file{libcoin.c} contains all \proglang{C}
 functions and corresponding \proglang{R} interfaces.
 
-@o libcoin.c -cc
+@o src/libcoin.c -cc
 @{
 @<C Header@>
 #include "libcoin_internal.h"
@@ -1555,7 +1555,7 @@ SEXP R_ExpectationCovarianceStatistic
 
 This function can be called from other packages.
 
-@o libcoinAPI.h -cc
+@o src/libcoinAPI.h -cc
 @{
 @<C Header@>
 #include <R_ext/Rdynload.h>
@@ -1825,7 +1825,7 @@ SEXP R_PermutedLinearStatistic
 
 This function can be called from other packages.
 
-@o libcoinAPI.h -cc
+@o src/libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_PermutedLinearStatistic(
     SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP nresample
@@ -1923,7 +1923,7 @@ SEXP R_StandardisePermutedLinearStatistic
 
 This function can be called from other packages.
 
-@o libcoinAPI.h -cc
+@o src/libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_StandardisePermutedLinearStatistic(
     SEXP LECV
@@ -1998,7 +1998,7 @@ SEXP R_ExpectationCovarianceStatistic_2d
 
 This function can be called from other packages.
 
-@o libcoinAPI.h -cc
+@o src/libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_ExpectationCovarianceStatistic_2d(
     SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP weights, SEXP subset, SEXP block,
@@ -2264,7 +2264,7 @@ SEXP R_PermutedLinearStatistic_2d
 
 This function can be called from other packages.
 
-@o libcoinAPI.h -cc
+@o src/libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_PermutedLinearStatistic_2d(
     SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP block, SEXP nresample,
@@ -2407,7 +2407,7 @@ SEXP R_QuadraticTest
 
 This function can be called from other packages.
 
-@o libcoinAPI.h -cc
+@o src/libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_QuadraticTest(
     SEXP LECV, SEXP pvalue, SEXP lower, SEXP give_log, SEXP PermutedStatistics
@@ -2514,7 +2514,7 @@ SEXP R_MaximumTest
 
 This function can be called from other packages.
 
-@o libcoinAPI.h -cc
+@o src/libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_MaximumTest(
     SEXP LECV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log,
@@ -2602,7 +2602,7 @@ SEXP R_MaximallySelectedTest
 
 This function can be called from other packages.
 
-@o libcoinAPI.h -cc
+@o src/libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_MaximallySelectedTest(
     SEXP LECV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log
@@ -2856,7 +2856,7 @@ SEXP R_quadform
 
 This function can be called from other packages.
 
-@o libcoinAPI.h -cc
+@o src/libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_quadform(
     SEXP linstat, SEXP expect, SEXP MPinv_sym
@@ -6221,7 +6221,7 @@ SEXP R_kronecker
 
 This function can be called from other packages.
 
-@o libcoinAPI.h -cc
+@o src/libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_kronecker(
     SEXP A, SEXP B
@@ -6379,7 +6379,7 @@ SEXP R_MPinv_sym
 
 This function can be called from other packages.
 
-@o libcoinAPI.h -cc
+@o src/libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_MPinv_sym(
     SEXP x, SEXP n, SEXP tol
@@ -6498,7 +6498,7 @@ SEXP R_unpack_sym
 
 This function can be called from other packages.
 
-@o libcoinAPI.h -cc
+@o src/libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_unpack_sym(
     SEXP x, SEXP names, SEXP diagonly
@@ -6583,7 +6583,7 @@ SEXP R_pack_sym
 
 This function can be called from other packages.
 
-@o libcoinAPI.h -cc
+@o src/libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_pack_sym(
     SEXP x
@@ -7102,7 +7102,7 @@ SEXP RC_init_LECV_2d
 
 \chapter{Package Infrastructure}
 
-@o AAA.R -cp
+@o R/AAA.R -cp
 @{
 @<R Header@>
 .onUnload <-
@@ -7149,13 +7149,13 @@ S3method(vcov, LinStatExpCov)
 
 Add flag \code{-g} to \code{PKG_CFLAGS} for \code{operf} profiling (this is
 not portable).
-@o Makevars -cc
+@o src/Makevars -cc
 @{
 PKG_CFLAGS=$(C_VISIBILITY)
 PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 @}
 
-@o libcoin-win.def -cc
+@o src/libcoin-win.def -cc
 @{
 LIBRARY libcoin.dll
 EXPORTS
@@ -7165,7 +7165,7 @@ EXPORTS
 Other packages can link against \pkg{libcoin}. A small example package
 is contained in \texttt{libcoin/inst/C_API_example}.
 
-@o libcoin-init.c -cc
+@o src/libcoin-init.c -cc
 @{
 @<C Header@>
 #include "libcoin.h"
@@ -7205,7 +7205,7 @@ static const R_CallMethodDef callMethods[] = {
 };
 @}
 
-@o libcoin-init.c -cc
+@o src/libcoin-init.c -cc
 @{
 void attribute_visible R_init_libcoin
 (
@@ -7316,7 +7316,7 @@ void attribute_visible R_init_libcoin
 */
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 @<Rd Header@>
 \newcommand{\C}{\ifelse{latex}{\out{\textsf{C}}}{C}}
@@ -7326,7 +7326,7 @@ void attribute_visible R_init_libcoin
 \title{NEWS file for the \pkg{libcoin} package}
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 1.0-13 (20YY-MM-DD)}{
   \itemize{
@@ -7338,7 +7338,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 1.0-12 (2026-03-16)}{
   \itemize{
@@ -7347,7 +7347,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 1.0-11 (2026-03-06)}{
   \itemize{
@@ -7356,7 +7356,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 1.0-10 (2023-09-26)}{
   \itemize{
@@ -7368,7 +7368,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 1.0-9 (2021-09-27)}{
   \itemize{
@@ -7380,7 +7380,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 1.0-8 (2021-02-08)}{
   \itemize{
@@ -7389,7 +7389,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 1.0-7 (2021-01-15)}{
   \itemize{
@@ -7399,7 +7399,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 1.0-6 (2020-08-13)}{
   \itemize{
@@ -7411,7 +7411,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 1.0-5 (2019-08-22)}{
   \itemize{
@@ -7427,7 +7427,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 1.0-4 (2019-02-28)}{
   \itemize{
@@ -7436,7 +7436,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 1.0-3 (2019-02-18)}{
   \itemize{
@@ -7445,7 +7445,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 1.0-2 (2018-12-13)}{
   \itemize{
@@ -7457,7 +7457,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 1.0-1 (2017-12-13)}{
   \itemize{
@@ -7466,7 +7466,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 1.0-0 (2017-12-12)}{
   \itemize{
@@ -7477,7 +7477,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 0.9-3 (2017-07-02)}{
   \itemize{
@@ -7487,7 +7487,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 0.9-2 (2017-04-04)}{
   \itemize{
@@ -7497,7 +7497,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 0.9-1 (2017-02-06)}{
   \itemize{
@@ -7511,7 +7511,7 @@ void attribute_visible R_init_libcoin
 }
 @}
 
-@o NEWS.Rd
+@o inst/NEWS.Rd
 @{
 \section{Changes in Version 0.9-0 (2016-12-09)}{
   \itemize{

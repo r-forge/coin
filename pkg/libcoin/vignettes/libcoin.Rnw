@@ -275,7 +275,7 @@ motivated this little experiment.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap1}\raggedright\small
-\NWtarget{nuweb3a}{} \verb@"libcoin.R"@\nobreak\ {\footnotesize {3a}}$\equiv$
+\NWtarget{nuweb3a}{} \verb@"R/libcoin.R"@\nobreak\ {\footnotesize {3a}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -994,7 +994,7 @@ necessarily computing the corresponding linear statistics via
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap15}\raggedright\small
-\NWtarget{nuweb15b}{} \verb@"ctabs.R"@\nobreak\ {\footnotesize {15b}}$\equiv$
+\NWtarget{nuweb15b}{} \verb@"R/ctabs.R"@\nobreak\ {\footnotesize {15b}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -1045,7 +1045,7 @@ max(abs(t1[-1, -1] - t2))
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap16}\raggedright\small
-\NWtarget{nuweb17}{} \verb@"LinStatExpCov.Rd"@\nobreak\ {\footnotesize {17}}$\equiv$
+\NWtarget{nuweb17}{} \verb@"man/LinStatExpCov.Rd"@\nobreak\ {\footnotesize {17}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -1134,7 +1134,7 @@ max(abs(t1[-1, -1] - t2))
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap17}\raggedright\small
-\NWtarget{nuweb18}{} \verb@"doTest.Rd"@\nobreak\ {\footnotesize {18}}$\equiv$
+\NWtarget{nuweb18}{} \verb@"man/doTest.Rd"@\nobreak\ {\footnotesize {18}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -1188,7 +1188,7 @@ max(abs(t1[-1, -1] - t2))
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap18}\raggedright\small
-\NWtarget{nuweb19}{} \verb@"ctabs.Rd"@\nobreak\ {\footnotesize {19}}$\equiv$
+\NWtarget{nuweb19}{} \verb@"man/ctabs.Rd"@\nobreak\ {\footnotesize {19}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -1251,7 +1251,7 @@ header files.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap19}\raggedright\small
-\NWtarget{nuweb20a}{} \verb@"libcoin_internal.h"@\nobreak\ {\footnotesize {20a}}$\equiv$
+\NWtarget{nuweb20a}{} \verb@"src/libcoin_internal.h"@\nobreak\ {\footnotesize {20a}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -1378,7 +1378,7 @@ function at \proglang{C} level (at your own risk, of course!).
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap23}\raggedright\small
-\NWtarget{nuweb22a}{} \verb@"libcoin.h"@\nobreak\ {\footnotesize {22a}}$\equiv$
+\NWtarget{nuweb22a}{} \verb@"src/libcoin.h"@\nobreak\ {\footnotesize {22a}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -1442,7 +1442,7 @@ functions and corresponding \proglang{R} interfaces.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap25}\raggedright\small
-\NWtarget{nuweb22c}{} \verb@"libcoin.c"@\nobreak\ {\footnotesize {22c}}$\equiv$
+\NWtarget{nuweb22c}{} \verb@"src/libcoin.c"@\nobreak\ {\footnotesize {22c}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2210,7 +2210,7 @@ This function can be called from other packages.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap53}\raggedright\small
-\NWtarget{nuweb30d}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {30d}}$\equiv$
+\NWtarget{nuweb30d}{} \verb@"src/libcoinAPI.h"@\nobreak\ {\footnotesize {30d}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2660,7 +2660,7 @@ This function can be called from other packages.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap67}\raggedright\small
-\NWtarget{nuweb36c}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {36c}}$\equiv$
+\NWtarget{nuweb36c}{} \verb@"src/libcoinAPI.h"@\nobreak\ {\footnotesize {36c}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2809,7 +2809,7 @@ This function can be called from other packages.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap71}\raggedright\small
-\NWtarget{nuweb38c}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {38c}}$\equiv$
+\NWtarget{nuweb38c}{} \verb@"src/libcoinAPI.h"@\nobreak\ {\footnotesize {38c}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2949,7 +2949,7 @@ This function can be called from other packages.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap76}\raggedright\small
-\NWtarget{nuweb40b}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {40b}}$\equiv$
+\NWtarget{nuweb40b}{} \verb@"src/libcoinAPI.h"@\nobreak\ {\footnotesize {40b}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3356,7 +3356,7 @@ This function can be called from other packages.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap87}\raggedright\small
-\NWtarget{nuweb47b}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {47b}}$\equiv$
+\NWtarget{nuweb47b}{} \verb@"src/libcoinAPI.h"@\nobreak\ {\footnotesize {47b}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3602,7 +3602,7 @@ This function can be called from other packages.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap95}\raggedright\small
-\NWtarget{nuweb50c}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {50c}}$\equiv$
+\NWtarget{nuweb50c}{} \verb@"src/libcoinAPI.h"@\nobreak\ {\footnotesize {50c}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3761,7 +3761,7 @@ This function can be called from other packages.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap99}\raggedright\small
-\NWtarget{nuweb53}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {53}}$\equiv$
+\NWtarget{nuweb53}{} \verb@"src/libcoinAPI.h"@\nobreak\ {\footnotesize {53}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3888,7 +3888,7 @@ This function can be called from other packages.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap102}\raggedright\small
-\NWtarget{nuweb55b}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {55b}}$\equiv$
+\NWtarget{nuweb55b}{} \verb@"src/libcoinAPI.h"@\nobreak\ {\footnotesize {55b}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4266,7 +4266,7 @@ This function can be called from other packages.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap112}\raggedright\small
-\NWtarget{nuweb61a}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {61a}}$\equiv$
+\NWtarget{nuweb61a}{} \verb@"src/libcoinAPI.h"@\nobreak\ {\footnotesize {61a}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9641,7 +9641,7 @@ This function can be called from other packages.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap273}\raggedright\small
-\NWtarget{nuweb133a}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {133a}}$\equiv$
+\NWtarget{nuweb133a}{} \verb@"src/libcoinAPI.h"@\nobreak\ {\footnotesize {133a}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9874,7 +9874,7 @@ This function can be called from other packages.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap279}\raggedright\small
-\NWtarget{nuweb137a}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {137a}}$\equiv$
+\NWtarget{nuweb137a}{} \verb@"src/libcoinAPI.h"@\nobreak\ {\footnotesize {137a}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10044,7 +10044,7 @@ This function can be called from other packages.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap283}\raggedright\small
-\NWtarget{nuweb139b}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {139b}}$\equiv$
+\NWtarget{nuweb139b}{} \verb@"src/libcoinAPI.h"@\nobreak\ {\footnotesize {139b}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10167,7 +10167,7 @@ This function can be called from other packages.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap286}\raggedright\small
-\NWtarget{nuweb141b}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {141b}}$\equiv$
+\NWtarget{nuweb141b}{} \verb@"src/libcoinAPI.h"@\nobreak\ {\footnotesize {141b}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11052,7 +11052,7 @@ This function can be called from other packages.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap316}\raggedright\small
-\NWtarget{nuweb152a}{} \verb@"AAA.R"@\nobreak\ {\footnotesize {152a}}$\equiv$
+\NWtarget{nuweb152a}{} \verb@"R/AAA.R"@\nobreak\ {\footnotesize {152a}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11135,7 +11135,7 @@ Add flag \code{-g} to \code{PKG_CFLAGS} for \code{operf} profiling (this is
 not portable).
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap319}\raggedright\small
-\NWtarget{nuweb153b}{} \verb@"Makevars"@\nobreak\ {\footnotesize {153b}}$\equiv$
+\NWtarget{nuweb153b}{} \verb@"src/Makevars"@\nobreak\ {\footnotesize {153b}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11153,7 +11153,7 @@ not portable).
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap320}\raggedright\small
-\NWtarget{nuweb153c}{} \verb@"libcoin-win.def"@\nobreak\ {\footnotesize {153c}}$\equiv$
+\NWtarget{nuweb153c}{} \verb@"src/libcoin-win.def"@\nobreak\ {\footnotesize {153c}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11175,7 +11175,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap321}\raggedright\small
-\NWtarget{nuweb154}{} \verb@"libcoin-init.c"@\nobreak\ {\footnotesize {154}}$\equiv$
+\NWtarget{nuweb154}{} \verb@"src/libcoin-init.c"@\nobreak\ {\footnotesize {154}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11228,7 +11228,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap322}\raggedright\small
-\NWtarget{nuweb155}{} \verb@"libcoin-init.c"@\nobreak\ {\footnotesize {155}}$\equiv$
+\NWtarget{nuweb155}{} \verb@"src/libcoin-init.c"@\nobreak\ {\footnotesize {155}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11391,7 +11391,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap326}\raggedright\small
-\NWtarget{nuweb157b}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {157b}}$\equiv$
+\NWtarget{nuweb157b}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {157b}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11414,7 +11414,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap327}\raggedright\small
-\NWtarget{nuweb157c}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {157c}}$\equiv$
+\NWtarget{nuweb157c}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {157c}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11439,7 +11439,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap328}\raggedright\small
-\NWtarget{nuweb158a}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {158a}}$\equiv$
+\NWtarget{nuweb158a}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {158a}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11461,7 +11461,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap329}\raggedright\small
-\NWtarget{nuweb158b}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {158b}}$\equiv$
+\NWtarget{nuweb158b}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {158b}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11483,7 +11483,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap330}\raggedright\small
-\NWtarget{nuweb158c}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {158c}}$\equiv$
+\NWtarget{nuweb158c}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {158c}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11508,7 +11508,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap331}\raggedright\small
-\NWtarget{nuweb158d}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {158d}}$\equiv$
+\NWtarget{nuweb158d}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {158d}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11533,7 +11533,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap332}\raggedright\small
-\NWtarget{nuweb158e}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {158e}}$\equiv$
+\NWtarget{nuweb158e}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {158e}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11555,7 +11555,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap333}\raggedright\small
-\NWtarget{nuweb159a}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {159a}}$\equiv$
+\NWtarget{nuweb159a}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {159a}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11578,7 +11578,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap334}\raggedright\small
-\NWtarget{nuweb159b}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {159b}}$\equiv$
+\NWtarget{nuweb159b}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {159b}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11603,7 +11603,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap335}\raggedright\small
-\NWtarget{nuweb159c}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {159c}}$\equiv$
+\NWtarget{nuweb159c}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {159c}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11632,7 +11632,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap336}\raggedright\small
-\NWtarget{nuweb159d}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {159d}}$\equiv$
+\NWtarget{nuweb159d}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {159d}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11654,7 +11654,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap337}\raggedright\small
-\NWtarget{nuweb160a}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {160a}}$\equiv$
+\NWtarget{nuweb160a}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {160a}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11676,7 +11676,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap338}\raggedright\small
-\NWtarget{nuweb160b}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {160b}}$\equiv$
+\NWtarget{nuweb160b}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {160b}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11701,7 +11701,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap339}\raggedright\small
-\NWtarget{nuweb160c}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {160c}}$\equiv$
+\NWtarget{nuweb160c}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {160c}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11723,7 +11723,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap340}\raggedright\small
-\NWtarget{nuweb160d}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {160d}}$\equiv$
+\NWtarget{nuweb160d}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {160d}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11747,7 +11747,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap341}\raggedright\small
-\NWtarget{nuweb160e}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {160e}}$\equiv$
+\NWtarget{nuweb160e}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {160e}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11770,7 +11770,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap342}\raggedright\small
-\NWtarget{nuweb161a}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {161a}}$\equiv$
+\NWtarget{nuweb161a}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {161a}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11793,7 +11793,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap343}\raggedright\small
-\NWtarget{nuweb161b}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {161b}}$\equiv$
+\NWtarget{nuweb161b}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {161b}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11820,7 +11820,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap344}\raggedright\small
-\NWtarget{nuweb161c}{} \verb@"NEWS.Rd"@\nobreak\ {\footnotesize {161c}}$\equiv$
+\NWtarget{nuweb161c}{} \verb@"inst/NEWS.Rd"@\nobreak\ {\footnotesize {161c}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -11846,25 +11846,25 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 
 
 {\small\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \verb@"AAA.R"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb152a}{152a}.}
-\item \verb@"ctabs.R"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb15b}{15b}.}
-\item \verb@"ctabs.Rd"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb19}{19}.}
 \item \verb@"DESCRIPTION"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb152b}{152b}.}
-\item \verb@"doTest.Rd"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb18}{18}.}
-\item \verb@"libcoin-init.c"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb154}{154}\NWlink{nuweb155}{, 155}.
+\item \verb@"inst/NEWS.Rd"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb157b}{157b}\NWlink{nuweb157c}{c}\NWlink{nuweb158a}{, 158a}\NWlink{nuweb158b}{b}\NWlink{nuweb158c}{c}\NWlink{nuweb158d}{d}\NWlink{nuweb158e}{e}\NWlink{nuweb159a}{, 159a}\NWlink{nuweb159b}{b}\NWlink{nuweb159c}{c}\NWlink{nuweb159d}{d}\NWlink{nuweb160a}{, 160a}\NWlink{nuweb160b}{b}\NWlink{nuweb160c}{c}\NWlink{nuweb160d}{d}\NWlink{nuweb160e}{e}\NWlink{nuweb161a}{, 161a}\NWlink{nuweb161b}{b}\NWlink{nuweb161c}{c}.
 }
-\item \verb@"libcoin-win.def"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb153c}{153c}.}
-\item \verb@"libcoin.c"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb22c}{22c}.}
-\item \verb@"libcoin.h"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb22a}{22a}.}
-\item \verb@"libcoin.R"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb3a}{3a}.}
-\item \verb@"libcoinAPI.h"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb30d}{30d}\NWlink{nuweb36c}{, 36c}\NWlink{nuweb38c}{, 38c}\NWlink{nuweb40b}{, 40b}\NWlink{nuweb47b}{, 47b}\NWlink{nuweb50c}{, 50c}\NWlink{nuweb53}{, 53}\NWlink{nuweb55b}{, 55b}\NWlink{nuweb61a}{, 61a}\NWlink{nuweb133a}{, 133a}\NWlink{nuweb137a}{, 137a}\NWlink{nuweb139b}{, 139b}\NWlink{nuweb141b}{, 141b}.
-}
-\item \verb@"libcoin_internal.h"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb20a}{20a}.}
-\item \verb@"LinStatExpCov.Rd"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb17}{17}.}
-\item \verb@"Makevars"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb153b}{153b}.}
+\item \verb@"man/ctabs.Rd"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb19}{19}.}
+\item \verb@"man/doTest.Rd"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb18}{18}.}
+\item \verb@"man/LinStatExpCov.Rd"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb17}{17}.}
 \item \verb@"NAMESPACE"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb153a}{153a}.}
-\item \verb@"NEWS.Rd"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb157b}{157b}\NWlink{nuweb157c}{c}\NWlink{nuweb158a}{, 158a}\NWlink{nuweb158b}{b}\NWlink{nuweb158c}{c}\NWlink{nuweb158d}{d}\NWlink{nuweb158e}{e}\NWlink{nuweb159a}{, 159a}\NWlink{nuweb159b}{b}\NWlink{nuweb159c}{c}\NWlink{nuweb159d}{d}\NWlink{nuweb160a}{, 160a}\NWlink{nuweb160b}{b}\NWlink{nuweb160c}{c}\NWlink{nuweb160d}{d}\NWlink{nuweb160e}{e}\NWlink{nuweb161a}{, 161a}\NWlink{nuweb161b}{b}\NWlink{nuweb161c}{c}.
+\item \verb@"R/AAA.R"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb152a}{152a}.}
+\item \verb@"R/ctabs.R"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb15b}{15b}.}
+\item \verb@"R/libcoin.R"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb3a}{3a}.}
+\item \verb@"src/libcoin-init.c"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb154}{154}\NWlink{nuweb155}{, 155}.
 }
+\item \verb@"src/libcoin-win.def"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb153c}{153c}.}
+\item \verb@"src/libcoin.c"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb22c}{22c}.}
+\item \verb@"src/libcoin.h"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb22a}{22a}.}
+\item \verb@"src/libcoinAPI.h"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb30d}{30d}\NWlink{nuweb36c}{, 36c}\NWlink{nuweb38c}{, 38c}\NWlink{nuweb40b}{, 40b}\NWlink{nuweb47b}{, 47b}\NWlink{nuweb50c}{, 50c}\NWlink{nuweb53}{, 53}\NWlink{nuweb55b}{, 55b}\NWlink{nuweb61a}{, 61a}\NWlink{nuweb133a}{, 133a}\NWlink{nuweb137a}{, 137a}\NWlink{nuweb139b}{, 139b}\NWlink{nuweb141b}{, 141b}.
+}
+\item \verb@"src/libcoin_internal.h"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb20a}{20a}.}
+\item \verb@"src/Makevars"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb153b}{153b}.}
 \end{list}}
 
 \section*{Fragments}

@@ -5,14 +5,11 @@ else
 endif
 
 libcoin.Rnw: libcoin.w
+	mkdir -p inst/include inst/nuweb man R src
 	nuweb -r libcoin.w
+	cp src/*.h inst/include/
 	cp libcoin.w inst/nuweb/
-	cp libcoin.h libcoin_internal.h libcoinAPI.h inst/include/
 	mv libcoin.tex libcoin.Rnw
-	mv NEWS.Rd inst/
-	mv *.Rd man/
-	mv *.R R/
-	mv *.c *.def *.h Makevars src/
 
 libcoin.R: libcoin.Rnw
 	R CMD Stangle libcoin.Rnw
@@ -28,8 +25,9 @@ libcoin.pdf: libcoin.tex
 	nuweb -or libcoin.w
 	mv libcoin.tex libcoin.Rnw
 	R CMD Sweave libcoin.Rnw
+	mkdir -p vignettes
+	cp libcoin.Rnw vignettes/
 	$(TEXI2DVI) libcoin.tex
-	cp libcoin.Rnw vignettes
 
 all: libcoin.pdf
 
