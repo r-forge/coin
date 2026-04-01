@@ -5,7 +5,7 @@ else
 endif
 
 libcoin.Rnw: libcoin.w
-	mkdir -p inst/include inst/nuweb man R src
+	mkdir -p inst/C_API_example/{man,R,src} inst/{include,nuweb} man R src
 	nuweb -r libcoin.w
 	cp src/*.h inst/include/
 	cp libcoin.w inst/nuweb/

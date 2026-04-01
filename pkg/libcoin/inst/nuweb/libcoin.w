@@ -7603,6 +7603,148 @@ void attribute_visible R_init_libcoin
 }
 @}
 
+@o inst/C_API_example/DESCRIPTION
+@{@%
+@<R Header@>
+Package: libcoinEx
+Version: 1.0-0
+Date: 2016-12-07
+Title: A 'libcoin' C API Usage Example
+Authors@@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
+                  email = "Torsten.Hothorn@@R-project.org")
+Description: Example use of the 'libcoin' C API.
+Depends: R (>= 3.3.0)
+Imports: libcoin (>= 0.9-0)
+LinkingTo: libcoin
+License: GPL-2
+@}
+
+@o inst/C_API_example/NAMESPACE
+@{@%
+@<R Header@>
+useDynLib(libcoinEx, .registration = TRUE)
+
+import("libcoin")
+export(ExpectationCovarianceStatistic)
+@}
+
+@o inst/C_API_example/man/ExpectationCovarianceStatistic.Rd
+@{@%
+@<Rd Header@>
+\name{ExpectationCovarianceStatistic}
+\alias{ExpectationCovarianceStatistic}
+\title{
+  \pkg{libcoin} C API Example
+}
+\description{
+  A working example of calling compiled code from the \pkg{libcoin} package.
+}
+\usage{
+ExpectationCovarianceStatistic(x, y)
+}
+\arguments{
+  \item{x}{A numeric matrix.}
+  \item{y}{A numeric matrix.}
+}
+\details{
+  This function calls the C function  \code{R_ExpectationCovarianceStatistic}, a
+  simple wrapper for the C function
+  \code{libcoin_R_ExpectationCovarianceStatistic} defined in the \pkg{libcoin}
+  package.
+
+  For more information on this approach, consult section 5.4.2 of the Writing R
+  Extensions manual.
+}
+\value{
+  A list.
+}
+\examples{
+n <- 100
+p <- 4
+q <- 2
+X <- matrix(runif(p * n), nc = p)
+Y <- matrix(runif(q * n), nc = q)
+ExpectationCovarianceStatistic(X, Y)
+}
+@}
+
+@o inst/C_API_example/R/ExpectationCovarianceStatistic.R
+@{@%
+@<R Header@>
+ExpectationCovarianceStatistic <- function(x, y) {
+    .Call(R_ExpectationCovarianceStatistic,
+          x, y, integer(0), integer(0), integer(0), 0L,
+          sqrt(.Machine$double.eps))
+}
+@}
+
+@o inst/C_API_example/src/Makevars -cp
+@{@%
+@<R Header@>
+PKG_CFLAGS=$(C_VISIBILITY)
+PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
+@}
+
+@o inst/C_API_example/src/libcoinEx-win.def
+@{@%
+@<def Header@>
+LIBRARY libcoinEx.dll
+EXPORTS
+  R_init_libcoinEx
+@}
+
+@o inst/C_API_example/src/libcoinEx.h
+@{@%
+@<C Header@>
+#include <Rinternals.h>
+
+extern SEXP R_ExpectationCovarianceStatistic
+(
+    const SEXP x,
+    const SEXP y,
+    const SEXP weights,
+    const SEXP subset,
+    const SEXP block,
+    const SEXP varonly,
+    const SEXP tol
+);
+@}
+
+@o inst/C_API_example/src/libcoinEx-init.c
+@{@%
+@<C Header@>
+#include "libcoinEx.h"
+#include <R_ext/Rdynload.h>
+#include <R_ext/Visibility.h>
+
+#define CALLDEF(name, n) {#name, (DL_FUNC) &name, n}
+
+static const R_CallMethodDef callMethods[] = {
+    CALLDEF(R_ExpectationCovarianceStatistic, 7),
+    {NULL, NULL, 0}
+};
+
+void attribute_visible R_init_libcoinEx(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, callMethods, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+    R_forceSymbols(dll, TRUE);
+}
+@}
+
+@o inst/C_API_example/src/R_ExpectationCovarianceStatistic.c
+@{@%
+@<C Header@>
+#include <R_ext/Rdynload.h>  /* required by R */
+#include <libcoinAPI.h>
+
+SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
+                                      SEXP block, SEXP varonly, SEXP tol)
+{
+    return(libcoin_R_ExpectationCovarianceStatistic(x, y, weights, subset,
+                                                    block, varonly, tol));
+}
+@}
+
 \chapter*{Index}
 
 \section*{Files}
