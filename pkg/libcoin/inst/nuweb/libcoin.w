@@ -7607,15 +7607,18 @@ void attribute_visible R_init_libcoin
 @{@%
 @<R Header@>
 Package: libcoinEx
-Version: 1.0-0
-Date: 2016-12-07
 Title: A 'libcoin' C API Usage Example
-Authors@@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
-                  email = "Torsten.Hothorn@@R-project.org")
+Version: 1.0-0
+Authors@@R: c(person("Torsten", "Hothorn", role = c("aut", "cre"),
+                    email = "Torsten.Hothorn@@R-project.org",
+                    comment = c(ORCID = "0000-0001-8301-0471")),
+             person("Henric", "Winell", role = "aut",
+                    comment = c(ORCID = "0000-0001-7995-3047")))
 Description: Example use of the 'libcoin' C API.
-Depends: R (>= 3.3.0)
-Imports: libcoin (>= 0.9-0)
+Depends: R (>= 3.4.0)
+Imports: libcoin
 LinkingTo: libcoin
+NeedsCompilation: yes
 License: GPL-2
 @}
 
