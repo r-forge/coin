@@ -6,7 +6,7 @@
 %\VignetteEncoding{UTF-8}
 \usepackage{Sweave}
 
-\newcommand{\Fge}[1]{{#1}_{\ge}}
+\newcommand{\Fge}[1]{\overline{#1}}
 
 \title{Exact Pvals and Cints for Wilcoxon Tests}
 \author{Kurt Hornik}
