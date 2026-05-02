@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2026-03-25 r89697) -- "Unsuffered Consequences"
+R version 4.6.0 (2026-04-24) -- "Because it was There"
 Copyright (C) 2026 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -18,14 +18,7 @@ Type 'q()' to quit R.
 > pkgname <- "free1way.docreg"
 > source(file.path(R.home("share"), "R", "examples-header.R"))
 > options(warn = 1)
-> library('free1way')
-
-Attaching package: 'free1way'
-
-The following objects are masked from 'package:stats':
-
-    free1way, power.free1way.test, ppplot, rfree1way
-
+> library('free1way.docreg')
 > 
 > base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 > base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
@@ -368,7 +361,7 @@ groupsG2 0.6490714 0.8381977
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  2.223 0.052 2.287 0 0 
+Time elapsed:  2.702 0.041 2.742 0 0 
 > grDevices::dev.off()
 null device 
           1 
@@ -380,4 +373,4 @@ null device
 > quit('no')
 > proc.time()
    user  system elapsed 
-  2.308   0.060   2.374 
+  2.785   0.053   2.831 

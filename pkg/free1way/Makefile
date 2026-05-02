@@ -8,6 +8,7 @@ free1way.Rnw:	free1way.w
 	mv free1way.R R
 	mv linkfun.R R
 	mv utils.R R
+	cp free1way.w inst/nuweb
 
 free1way.R: free1way.Rnw
 	Stangle free1way.Rnw

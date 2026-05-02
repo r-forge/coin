@@ -3130,7 +3130,7 @@ logLik(free1way(time ~ me | id, data = d, link = "loglog"))
 
 Maybe proportional-hazards model better?
 
-\section{MnNemar Test}
+\section{McNemar Test}
 
 
 <<McNemar>>=

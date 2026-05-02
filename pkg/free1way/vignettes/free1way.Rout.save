@@ -1,12 +1,12 @@
 
-> yr <- format(dt <- as.Date(packageDescription("free1way")$Date), 
+> yr <- format(dt <- as.Date(packageDescription("free1way.docreg")$Date), 
 +     "%Y")
 
-> vs <- packageDescription("free1way")$Version
+> vs <- packageDescription("free1way.docreg")$Version
 
 > title <- "Semiparametrically Efficient Population and Permutation Inference in \n       Distribution-free Stratified $K$-sample Oneway Layouts"
 
-> DOI <- paste0("10.32614/CRAN.package.", packageDescription("free1way")$Package)
+> DOI <- paste0("10.32614/CRAN.package.", packageDescription("free1way.docreg")$Package)
 
 > Nsim <- 100
 
@@ -1995,4 +1995,4 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 38.350   0.143  38.689 
+ 42.649   0.195  42.864 

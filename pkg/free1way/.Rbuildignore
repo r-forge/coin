@@ -2,3 +2,5 @@ README.txt
 R/
 man/
 NAMESPACE
+Makefile
+free1way.w

@@ -1,6 +1,6 @@
 Package: free1way.docreg
-Title: Additional Documentation and Regression Tests for stats::free1way
-Date: 2026-03-25
+Title: Additional Documentation and Regression Tests for `stats::free1way'
+Date: 2026-05-02
 Version: 1.0-0
 Authors@R: c(person(given = "Torsten", family = "Hothorn", role = c("aut", "cre"),
                     email = "Torsten.Hothorn@R-project.org"),

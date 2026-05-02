@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2026-03-25 r89697) -- "Unsuffered Consequences"
+R version 4.6.0 (2026-04-24) -- "Because it was There"
 Copyright (C) 2026 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -480,4 +480,4 @@ attr(,"Attained level")
 > 
 > proc.time()
    user  system elapsed 
-  3.713   0.088   3.796 
+  4.115   0.089   4.225 

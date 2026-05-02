@@ -121,11 +121,11 @@ urlcolor={linkcolor}%
 
 
 <<citation, echo = FALSE>>=
-yr <- format(dt <- as.Date(packageDescription("free1way")$Date), "%Y")
-vs <- packageDescription("free1way")$Version
+yr <- format(dt <- as.Date(packageDescription("free1way.docreg")$Date), "%Y")
+vs <- packageDescription("free1way.docreg")$Version
 title <- "Semiparametrically Efficient Population and Permutation Inference in 
        Distribution-free Stratified $K$-sample Oneway Layouts"
-DOI <- paste0("10.32614/CRAN.package.", packageDescription("free1way")$Package)
+DOI <- paste0("10.32614/CRAN.package.", packageDescription("free1way.docreg")$Package)
 @@
 
 
@@ -3130,7 +3130,7 @@ logLik(free1way(time ~ me | id, data = d, link = "loglog"))
 
 Maybe proportional-hazards model better?
 
-\section{MnNemar Test}
+\section{McNemar Test}
 
 
 <<McNemar>>=
@@ -4124,6 +4124,6 @@ for insights and valuable discussions.
 @u
 
 \bibliographystyle{plainnat}
-\bibliography{\Sexpr{gsub("\\.bib", "", system.file("REFERENCES.bib", package = "free1way"))}}
+\bibliography{\Sexpr{gsub("\\.bib", "", system.file("REFERENCES.bib", package = "free1way.docreg"))}}
 
 \end{document}

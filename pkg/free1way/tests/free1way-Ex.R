@@ -1,7 +1,7 @@
 pkgname <- "free1way.docreg"
 source(file.path(R.home("share"), "R", "examples-header.R"))
 options(warn = 1)
-library('free1way')
+library('free1way.docreg')
 
 base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
