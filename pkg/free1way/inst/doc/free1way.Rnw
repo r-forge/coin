@@ -578,6 +578,7 @@ Over the last five
 pkgs <- c("ordinalCont", "lattice", "MASS", "multcomp")
 if (!all(sapply(pkgs, require, character.only = TRUE)))
     stop("")
+set.seed(290875)
 @
 
 <<pain, echo = FALSE>>=
@@ -611,9 +612,9 @@ wilcox.test(vas ~ laser, data = pain, subset = time == "12 weeks",
 
 <<polr>>=
 pain$vasF <- ordered(pain$vas)
-p7 <- polr(vasF ~ laser, data = pain, subset = time == "7 weeks")
+system.time(p7 <- polr(vasF ~ laser, data = pain, subset = time == "7 weeks", Hess = TRUE))
 summary(p7)
-p12 <- polr(vasF ~ laser, data = pain, subset = time == "12 weeks")
+system.time(p12 <- polr(vasF ~ laser, data = pain, subset = time == "12 weeks", Hess = TRUE))
 summary(p12)
 @
 
@@ -626,6 +627,29 @@ f12 <- free1way(vas ~ laser, data = pain, subset = time == "12 weeks",
                exact = TRUE)
 summary(f12, test = "Permutation")
 summary(f12)
+@
+
+\begin{figure}
+<<gof, fig.width = 6, fig.height = 4>>=
+layout(matrix(1:2, nrow = 1))
+x <- subset(pain, subset = time == "7 weeks")
+with(split(x$vas, x$laser), ppplot(Placebo, Active, conf.level = .95, main = "7 weeks"))
+x <- subset(pain, subset = time == "12 weeks")
+with(split(x$vas, x$laser), ppplot(Placebo, Active, conf.level = .95, main = "12 weeks"))
+@
+\end{figure}
+
+<<power>>=
+(pt <- power.free1way.test(delta = coef(f7), power = .8, sig.level = .05))
+@
+
+<<simulation, cache = TRUE>>=
+ex <- expression({
+    df <- rfree1way(n = pt$n, delta = pt[["log-odds ratio"]])
+    summary(free1way(y ~ groups, data = df), test = "Permutation")$p.value
+})
+pvals <- replicate(1000, eval(ex))
+mean(pvals < .05)
 @
 
 <<free1wayS>>=
@@ -660,7 +684,7 @@ friedman.test(vas ~ time | id, data = painA)
 <<together>>=
 pain$tc <- with(pain, interaction(laser, time))
 levels(pain$tc)[1:2] <- "Baseline"
-m <- free1way(vas ~ tc | id, data = pain)
+system.time(m <- free1way(vas ~ tc | id, data = pain))
 summary(m)
 @
 
