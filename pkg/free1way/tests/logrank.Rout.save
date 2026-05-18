@@ -115,6 +115,7 @@ Perm Z = 0.0152, p-value = 0.99
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > perm_test(m)
+Loading required namespace: coin
 
 	Asymptotic Permutation Transformation Score Test
 
@@ -223,4 +224,4 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 > 
 > proc.time()
    user  system elapsed 
-  1.385   0.097   1.479 
+  1.747   0.087   1.829 
