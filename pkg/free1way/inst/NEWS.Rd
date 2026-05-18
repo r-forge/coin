@@ -2,7 +2,7 @@
 \name{NEWS}
 \title{NEWS file for the \pkg{free1way.docreg} package}
 
-\section{Changes in Version 1.0-0 (2026-05-02)}{
+\section{Changes in Version 1.0-0 (2026-05-18)}{
   \itemize{
     \item Function \code{free1way} implementing semiparametrically efficient inference
           procedures (likelihood- and permutation-based) in distribution-free
